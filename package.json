@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "scripts": {
     "client": "cd client && npm start",
+    "dev": "concurrently --kill-others-on-fail \"npm run-script server\" \"npm run-script client\"",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"npm run-script server\" \"npm run-script client\""
+    "start": "node server.js",
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -14,6 +16,4 @@
     "concurrently": "^4.0.1",
     "nodemon": "^1.18.6"
   },
-  "start": "node server.js",
-  "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
 }
