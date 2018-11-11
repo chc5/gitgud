@@ -11,12 +11,12 @@ import './App.css';
 
 class App extends Component {
 
-	constructor(props) {
-		super(props);
-		this.history = createHistory();
+  constructor(props) {
+    super(props);
+    this.history = createHistory();
   }
 
-	render() {
+  render() {
     return (
       <div className="App">
         <Router history={this.history}>
