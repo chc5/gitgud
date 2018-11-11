@@ -12,14 +12,10 @@ import './App.css';
 class App extends Component {
 
 	constructor(props) {
-    super(props);
-    this.history = createHistory();
+		super(props);
+		this.history = createHistory();
   }
-	
-  componentDidMount() {
-  
-	}
-	
+
 	render() {
     return (
       <div className="App">
