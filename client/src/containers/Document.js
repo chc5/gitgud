@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateTextField } from '../actions/index';
+import { updateTextField } from '../actions/actions_text_field';
 
 // UI Imports
 import { Input, Layout } from 'antd';
@@ -10,9 +10,6 @@ const { TextArea } = Input;
 const { Header, Footer, Sider, Content } = Layout;
 
 class Document extends Component{
-  // constructor(props){
-  //   super(props);
-  // }
   render(){
     return(
       <Layout>
