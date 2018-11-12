@@ -1,17 +1,43 @@
+// React-Redux Imports
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateTextField } from '../actions/index';
+
+// UI Imports
+import { Input, Layout } from 'antd';
+const { TextArea } = Input;
+const { Header, Footer, Sider, Content } = Layout;
 
 class Document extends Component{
+  // constructor(props){
+  //   super(props);
+  // }
   render(){
     return(
-      <div>
-        Document testing
-      </div>
+      <Layout>
+        <Header>Header</Header>
+        <Layout>
+          <Sider>Sider</Sider>
+          <Content>
+            <TextArea
+              value={ this.props.textField }
+              onChange={event => this.props.updateTextField(event.target.value)}
+            />
+          </Content>
+        </Layout>
+        <Footer>Footer</Footer>
+      </Layout>
     );
   }
 }
 
-// mapStateToProps = null;
-// mapDispatchToProps = null;
+function mapStateToProps({ textField }){
+  return { textField };
+}
 
-export default connect(null) (Document);
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({ updateTextField }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (Document);
