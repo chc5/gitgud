@@ -6,6 +6,7 @@ const MONGO_URL = process.env.MONGODB_URI || MONGO_LOCAL_URL;
 
 
 let database;
+// Connect to mongodb
 mongoose.connect(MONGO_URL, { useNewUrlParser: true}, (err) => {
   if (err) {
     console.log('Database Error---------------------------', err);
@@ -14,6 +15,7 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true}, (err) => {
   }
 });
 
+// Retrieve db connection
 database = mongoose.connection;
 database.on('error', err => {
   console.log('Error getting db connection', err);    
