@@ -2,8 +2,8 @@ const User = require('../database/models/user');
 
 const signup  = (req, res) => {
   let userinst = new User({
-    username: req.body.user,
-    password: req.body.pass
+    username: req.body.userName,
+    password: req.body.password
   });
   userinst.save(function (err) {
     if (err) {
@@ -18,14 +18,14 @@ const signup  = (req, res) => {
 };
 
 const login = (req, res) => {
-  const {user, pass} = req.body;
-  User.findOne({username:user}, function (err, existingUser){
+  const {userName, password} = req.body;
+  User.findOne({username:userName}, function (err, existingUser){
     if (err || !existingUser) {
       return res.status(401).send(err || {error: "User not found"});
       // for login testing purposes, this is not good xd
     }
     if (existingUser) {
-      existingUser.checkPassword(pass, function(err, match) {
+      existingUser.checkPassword(password, function(err, match) {
         if (err || !match) {
           return res.status(401).send(err || {error: "Invalid pass"});
         }
