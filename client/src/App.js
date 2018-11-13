@@ -6,7 +6,6 @@ import Home from "./containers/Home";
 import Signup from "./containers/Signup";
 import Login from "./containers/Login";
 import createHistory from "history/createBrowserHistory";
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
