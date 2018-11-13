@@ -5,14 +5,24 @@ const signup  = (req, res) => {
     username: req.body.userName,
     password: req.body.password
   });
-  userinst.save(function (err) {
-    if (err) {
-      console.log('Couldnt add user', err);
-      res.send("error adding user");
+  User.findOne({username:userinst.username}, function (err, existingUser){
+    if (err || existingUser) {
+      return res.status(401).send(err || {error: "User already exists"});
+    }
+    if (!existingUser) {
+      userinst.save(function (err) {
+        if (err) {
+          console.log('Couldnt add user', err);
+          res.send("error adding user");
+        }
+        else {
+          console.log('Successfully added user');
+          res.send("added user");
+        }
+      });
     }
     else {
-      console.log('Successfully added user');
-      res.send("added user");
+      res.send("how did you see this");
     }
   });
 };
