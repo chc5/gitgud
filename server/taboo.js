@@ -3,12 +3,12 @@ mongoose.promise = Promise;
 const Schema = mongoose.Schema;
 const date = require('date-and-time');
 
-const tabooWordsSchema = new Schema({
+const TabooWordsSchema = new Schema({
   word: {type: String, required: true},
-  suggesterId: {type: Number, required: true},
+  suggesterId: {type: Number, ref: 'User'},
   date: {type: Date, default: Date.now},
-  approverId: Number
+  approverId: {type: Number, ref: 'User'}
 })
 
-const taboo = mongoose.model('TabooWords', tabooWordsSchema);
+const taboo = mongoose.model('TabooWords', TabooWordsSchema);
 module.exports = taboo;
