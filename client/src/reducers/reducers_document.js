@@ -6,7 +6,7 @@ export default function(state = "", action){
     case CREATE_DOCUMENT:
       return state;
     case RETRIEVE_DOCUMENT:
-      return state;
+      return action.type.text;
     case UPDATE_DOCUMENT:
       return state;
     case DELETE_DOCUMENT:

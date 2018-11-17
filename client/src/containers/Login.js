@@ -46,7 +46,7 @@ class Login extends Component {
             type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
-          Or <a href="">Register Now!</a>
+          Or <a href="./signup">Register Now!</a>
         </FormItem>
       </Form>
     );
