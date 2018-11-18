@@ -1,4 +1,4 @@
-import { CREATE_DOCUMENT, DELETE_DOCUMENT, RETRIEVE_DOCUMENT_LIST }
+import { RETRIEVE_DOCUMENT_LIST }
   from '../actions/actions_document';
 
 export default function(state = [], action){

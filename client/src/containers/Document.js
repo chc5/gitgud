@@ -7,8 +7,9 @@ import { retrieveDocument, updateDocument } from '../actions/actions_document';
 // UI Imports
 import { Input, Layout, Button } from 'antd';
 import './Document.css';
+import NavigationBar from "./NavigationBar";
 const { TextArea } = Input;
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Footer, Content } = Layout;
 
 class Document extends Component{
   constructor(props){
@@ -24,17 +25,17 @@ class Document extends Component{
   render(){
     return(
       <Layout>
-        <Header><Button onClick={this.save}>Save</Button></Header>
+        <NavigationBar />
         <Layout>
+          <Header><Button onClick={this.save}>Save</Button></Header>
           <Content>
-            <textarea
+            <TextArea
               value={ this.props.textField }
               onChange={event => this.props.updateTextField(event.target.value)}
-            >
-            </textarea>
+             />
           </Content>
+          <Footer>Footer</Footer>
         </Layout>
-        <Footer>Footer</Footer>
       </Layout>
     );
   }

@@ -2,6 +2,9 @@ import axios from 'axios';
 
 import { UPDATE_TEXT_FIELD } from './actions_text_field';
 
+// Document List CONST
+export const RETRIEVE_DOCUMENT_LIST = "RETRIEVE_DOCUMENT_LIST";
+
 // CRUD CONST
 export const CREATE_DOCUMENT = "CREATE_DOCUMENT";
 export const RETRIEVE_DOCUMENT = "RETRIEVE_DOCUMENT";
@@ -72,6 +75,27 @@ export function deleteDocument(documentId){
         type: DELETE_DOCUMENT,
         payload: response
       }))
+      .catch((response) => dispatch({
+        type: CRUD_DOC_ERROR,
+        payload: response
+      }))
+  }
+}
+
+export function retrieveAllDocument(documentId){
+  let url = `/api/docs/retrieveAll/${documentId}`;
+  return (dispatch) => {
+    axios.post(url)
+      .then((response) => {
+        dispatch({
+          type: RETRIEVE_DOCUMENT_LIST,
+          payload: response
+        });
+        dispatch({
+          type: UPDATE_TEXT_FIELD,
+          payload: response
+        })
+      })
       .catch((response) => dispatch({
         type: CRUD_DOC_ERROR,
         payload: response
