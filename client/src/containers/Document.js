@@ -24,14 +24,14 @@ class Document extends Component{
   render(){
     return(
       <Layout>
-        <Header>Header</Header>
+        <Header><Button onClick={this.save}>Save</Button></Header>
         <Layout>
-          <Sider><Button onClick={this.save}>Save</Button></Sider>
           <Content>
-            <TextArea
+            <textarea
               value={ this.props.textField }
               onChange={event => this.props.updateTextField(event.target.value)}
-            />
+            >
+            </textarea>
           </Content>
         </Layout>
         <Footer>Footer</Footer>
