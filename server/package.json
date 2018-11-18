@@ -2,8 +2,10 @@
   "name": "gitgud-server",
   "version": "0.1.0",
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "mongoose": "^5.3.11",
     "morgan": "^1.9.1"
   },
   "scripts": {
