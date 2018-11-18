@@ -1,4 +1,5 @@
 const User = require('../database/models/user');
+const authentication = require('../authentication');
 
 /*
  * Retrieves username and password from request
@@ -27,38 +28,28 @@ const signup  = (req, res) => {
         }
       });
     }
-    else {
-      res.send("how did you see this");
-    }
   });
 };
 
-/*
- * Retrieves username and password from request
- * Checks if username exists
- * Checks if given password matches password from db
- */
 const login = (req, res) => {
-  const {userName, password} = req.body;
-  // Check if username exists in db
-  User.findOne({username:userName}, function (err, existingUser){
-    if (err || !existingUser) {
-      return res.status(401).send(err || {error: "User not found"});
-      // for login testing purposes, this is not good xd
-    }
-    if (existingUser) {
-      // username exists, so check if password matches
-      existingUser.checkPassword(password, function(err, match) {
-        if (err || !match) {
-          return res.status(401).send(err || {error: "Invalid pass"});
-        }
-        res.send("Correct log in");
-      });
-    }
-    else {
-      res.send("how did you see this");
-    }
-  });
+  console.log("login status for " + req.user.username + " is " + req.isAuthenticated());
+  if(req.isAuthenticated()){
+    res.send("logged in");
+  }
+  else {
+    res.send("failed to log in");
+  }
+};
+const logout = (req, res) => {
+  if(req.user) {
+    console.log("logged out " + req.user.username)
+    req.logout();
+    req.session.destroy();
+    res.send({message:"logging out"});
+  }
+  else {
+    res.send({message:"user not logged in"});
+  }
 };
 
-module.exports = {signup, login};
+module.exports = {signup, login, logout};
