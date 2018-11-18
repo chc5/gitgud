@@ -34,7 +34,11 @@ const signup  = (req, res) => {
 const login = (req, res) => {
   console.log("login status for " + req.user.username + " is " + req.isAuthenticated());
   if(req.isAuthenticated()){
-    res.send("logged in");
+    res.json({
+      userInfo:{  
+        username:req.user.username
+      }
+    });
   }
   else {
     res.send("failed to log in");
