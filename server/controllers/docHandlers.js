@@ -16,16 +16,5 @@ const savedoc = (req, res) => {
   res.send("Doc saved");     
 };
 
-const gettaboowords = static function() {
-  Taboo.find({}, function (err, results) {
-    if (err) {
-      throw err;
-    }
-    else {
-      console.log(results);
-      return results;
-    }
-  })
-};
 
-module.exports = {savedoc, gettaboowords};
+module.exports = {savedoc};

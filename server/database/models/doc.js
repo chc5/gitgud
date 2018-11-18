@@ -7,11 +7,9 @@ const DocSchema = new Schema({
   content: {type: String, required:true},
   owner_id: {type: Schema.Types.ObjectId, ref: 'User'},
   locked: Boolean,
-  revisions:[
-    {type: Schema.Types.ObjectId, ref: 'Revision'}
-  ],
+  revisions:[new Schema(changes:Schema.Types.Mixed)],
   date_created: {type: Date, default: Data.now}
-})
+});
 
 DocSchema.methods.findAllTabooIdx = function(taboo_words){
   //A String is considered a word if there is a space
