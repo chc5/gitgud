@@ -1,13 +1,12 @@
 const mongoose = require('mongoose');
 mongoose.promise = Promise;
 const Schema = mongoose.Schema;
-const date = require('date-and-time');
 
 const TabooWordsSchema = new Schema({
   word: {type: String, required: true},
-  suggesterId: {type: Number, ref: 'User'},
+  suggesterId: {type: Schema.Types.ObjectId, ref: 'User'},
   date: {type: Date, default: Date.now},
-  approverId: {type: Number, ref: 'User'}
+  approverId: {type: Schema.Types.ObjectId, ref: 'User'}
 })
 
 const taboo = mongoose.model('TabooWords', TabooWordsSchema);
