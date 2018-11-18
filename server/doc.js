@@ -10,9 +10,7 @@ const DocSchema = new Schema({
   revisions:[
     {type: Schema.Types.ObjectId, ref: 'Revision'}
   ],
-  date_created: {type: Date, 
-    default: Data.now
-  }
+  date_created: {type: Date, default: Data.now}
 })
 
 DocSchema.methods.findAllTabooIdx = function(taboo_words){
@@ -20,8 +18,7 @@ DocSchema.methods.findAllTabooIdx = function(taboo_words){
   //Checks all the words and see if any are in taboo words and replaces those words
   //returns indexes of all taboo words, format at each index: [start, end + 1]
   idx_list = [];
-//  for(let i = 0; i < taboo_words.length; i++){
-  for (let taboo_word in taboo_words){
+  for (let taboo_word of taboo_words){
     let current_idx = 0;
     let start_idx = 0;
     while((start_idx = this.content.indexOf(taboo_word, current_idx)) > -1){

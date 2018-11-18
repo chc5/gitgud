@@ -7,25 +7,25 @@ const savedoc = (req, res) => {
     content: req.body.text,
     owner_id: req.body.owner_id,
     locked: false,
-    revision_id: 0,
   });
 
   docinst.save(function (err, doc) {
     if (err) return console.error(err);
       console.log(doc.name + " saved to Document collection.");
-  });     
+  });
+  res.send("Doc saved");     
 };
 
-const gettaboowords = (req, res) => {
+const gettaboowords = static function() {
   Taboo.find({}, function (err, results) {
     if (err) {
       throw err;
     }
     else {
       console.log(results);
-      res.send(results);
+      return results;
     }
   })
 };
 
-module.exports = {inputdoc, gettaboowords};
+module.exports = {savedoc, gettaboowords};
