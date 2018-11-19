@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { signup } from '../actions/actions_account_registration';
@@ -17,7 +18,7 @@ class Signup extends Component{
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.signup(this.state);
+    this.props.signup(this.state, this.props.history);
   }
   render(){
     return(
@@ -65,7 +66,7 @@ class Signup extends Component{
               </Button>
             </FormItem>
             <FormItem>
-              Already have an account? <a href="./signup">signup Here!</a>
+              Already have an account? <a href="./login">Login Here!</a>
             </FormItem>
           </Form>
         </Layout>
@@ -79,4 +80,4 @@ function mapDispatchToProps (dispatch){
   return bindActionCreators({ signup }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps) (Signup);
+export default withRouter(connect(null, mapDispatchToProps) (Signup));

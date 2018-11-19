@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Layout, Breadcrumb } from 'antd';
+import { Layout } from 'antd';
 
 import NavigationBar from './NavigationBar';
 const { Header, Content } = Layout;
