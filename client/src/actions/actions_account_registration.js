@@ -13,4 +13,11 @@ export function login(data){
   }
 }
 
-// export function signup()
+export function signup(data){
+  console.log(data);
+  const request = axios.post(`/api/account/signup`, data);
+  return {
+    type: SIGNUP,
+    payload: request
+  }
+}

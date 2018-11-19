@@ -6,10 +6,11 @@
   border: none;
   height: 100%;
 }
-.ant-input{
-  width: 100%;
- -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
- -moz-box-sizing: border-box;    /* Firefox, other Gecko */
- box-sizing: border-box;         /* Opera/IE 8+ */
- rows: 10;
+.text-area{
+  width: 80%;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+  rows: 1;
+  height:5000px;
 }

@@ -24,9 +24,9 @@ class Login extends Component {
 
   render() {
     return (
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: '100vh' }} className="container">
         <NavigationBar />
-        <Layout>
+        <Layout className="login-layout">
           <Form onSubmit={this.handleSubmit} className="login-form">
             <FormItem>
               <Input
@@ -50,6 +50,8 @@ class Login extends Component {
                 type="primary" htmlType="submit" className="login-form-button">
                 Log in
               </Button>
+            </FormItem>
+            <FormItem>
               Or <a href="./signup">Register Now!</a>
             </FormItem>
           </Form>

@@ -3,26 +3,26 @@ import { connect } from 'react-redux';
 
 // UI Imports
 import 'antd/dist/antd.css';
-import './Login.css';
-import { Form, Icon, Input, Button, Layout } from 'antd';
+import './Signup.css';
+import { Form, Icon, Input, Button, Checkbox, Layout } from 'antd';
 import NavigationBar from './NavigationBar';
 const FormItem = Form.Item;
 
 class Signup extends Component{
   constructor(props){
     super(props);
-    this.state = { userName: "", password: ""};
+    this.state = { userName: "", password: "", password_2: "", ordinaryUserSignUp: false };
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.login(this.state);
+    this.props.signup(this.state);
   }
   render(){
     return(
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: '100vh' }} className="container">
         <NavigationBar />
-        <Layout>
-          <Form onSubmit={this.handleSubmit} className="login-form">
+        <Layout className="signup-layout">
+          <Form onSubmit={this.handleSubmit} className="signup-form">
             <FormItem>
               <Input
                 prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -41,11 +41,29 @@ class Signup extends Component{
                />
             </FormItem>
             <FormItem>
+              <Input
+                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                type="password"
+                placeholder="Reenter Password"
+                value={this.state.password_2}
+                onChange={event => this.setState({ password_2: event.target.value })}
+               />
+            </FormItem>
+            <FormItem>
+              Do you wish to sign up to become Ordinary User?
+              <Checkbox
+                checked={this.state.ordinaryUserSignUp}
+                onChange={event => this.setState({ ordinaryUserSignUp: !this.state.ordinaryUserSignUp })}
+                />
+            </FormItem>
+            <FormItem>
               <Button
-                type="primary" htmlType="submit" className="login-form-button">
+                type="primary" htmlType="submit" className="signup-form-button">
                 Register
               </Button>
-              Already have an account? <a href="./signup">Login Here!</a>
+            </FormItem>
+            <FormItem>
+              Already have an account? <a href="./signup">signup Here!</a>
             </FormItem>
           </Form>
         </Layout>

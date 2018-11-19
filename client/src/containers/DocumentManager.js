@@ -1,23 +1,28 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { retrieveAllDocument, createDocument, deleteDocument } from '../actions/actions_document';
 
 // UI Imports
-import { Layout, Breadcrumb } from 'antd';
+import { Layout, List } from 'antd';
 
 import NavigationBar from './NavigationBar';
 const { Header, Content } = Layout;
 
 class DocumentManager extends Component{
-
-  state = {
-    collapsed: false,
-  };
-
-  onCollapse = (collapsed) => {
-    console.log(collapsed);
-    this.setState({ collapsed });
+  constructor(props){
+    super(props);
+    this.state = {
+      collapsed: false,
+      data: [
+        'Document # 1: hohoho.txt',
+        'Document # 2: pohoho.txt',
+        'Document # 3: fohoho.txt',
+        'Document # 4: gohoho.txt',
+        'Document # 5: zohoho.txt',
+      ]
+    }
   }
 
   render(){
@@ -25,15 +30,16 @@ class DocumentManager extends Component{
       <Layout style={{ minHeight: '100vh' }}>
         <NavigationBar />
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }} />
+          <Header style={{ background: '#fff', padding: 0 }}>
+            Document Manager
+          </Header>
           <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-              Bill is a cat.
-            </div>
+            <List
+              size="large"
+              bordered
+              dataSource={this.state.data}
+              renderItem={item => (<List.Item>{item}</List.Item>)}
+            />
           </Content>
         </Layout>
       </Layout>
@@ -49,4 +55,4 @@ function mapDispatchToProps(dispatch){
   return bindActionCreators({ retrieveAllDocument, createDocument, deleteDocument }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (DocumentManager);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps) (DocumentManager));

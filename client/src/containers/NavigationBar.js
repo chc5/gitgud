@@ -48,8 +48,8 @@ class NavigationBar extends Component{
           {!this.props.userInfo
             ? (
                 <Menu.Item key="5" onClick={() => this.props.history.push(`/login`)}>
-                <Icon type="login" />
-                <span>Login</span>
+                  <Icon type="login" />
+                  <span>Login</span>
                 </Menu.Item>
               )
             : (
@@ -58,6 +58,14 @@ class NavigationBar extends Component{
                 <span>Logout</span>
                 </Menu.Item>
               )
+          }
+          {!this.props.userInfo
+            ? (<Menu.Item key="6" onClick={() => this.props.history.push(`/signup`)}>
+                  <Icon type="plus" />
+                  <span>Signup</span>
+                </Menu.Item>
+              )
+            : null
           }
         </Menu>
       </Sider>

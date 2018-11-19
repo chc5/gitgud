@@ -32,6 +32,7 @@ class Document extends Component{
             <TextArea
               value={ this.props.textField }
               onChange={event => this.props.updateTextField(event.target.value)}
+              className="text-area"
              />
           </Content>
           <Footer>Footer</Footer>

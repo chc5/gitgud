@@ -82,8 +82,8 @@ export function deleteDocument(documentId){
   }
 }
 
-export function retrieveAllDocument(documentId){
-  let url = `/api/docs/retrieveAll/${documentId}`;
+export function retrieveAllDocument(){
+  let url = `/api/docs/retrieveAll`;
   return (dispatch) => {
     axios.post(url)
       .then((response) => {
