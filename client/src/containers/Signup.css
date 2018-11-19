@@ -2,19 +2,19 @@
   width:100%;
   height: 100%;
 }
-.login-layout{
+.signup-layout{
   width: 100%;
   height: 100%;
   text-align: center;
 }
-.login-form {
+.signup-form {
   width:100%;
   height:100%;
   padding: 10%;
 }
-.login-form-forgot {
+.signup-form-forgot {
   float: right;
 }
-.login-form-button {
+.signup-form-button {
   width: 25%;
 }
