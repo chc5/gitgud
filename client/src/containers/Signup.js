@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { signup } from '../actions/actions_account_registration';
 
 // UI Imports
 import 'antd/dist/antd.css';
@@ -73,6 +75,8 @@ class Signup extends Component{
 }
 
 // mapStateToProps = null;
-// mapDispatchToProps = null;
+function mapDispatchToProps (dispatch){
+  return bindActionCreators({ signup }, dispatch);
+}
 
-export default connect(null) (Signup);
+export default connect(null, mapDispatchToProps) (Signup);

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-// import { bindActionCreators } from 'redux';
-
+import { bindActionCreators } from 'redux';
+import { logout } from '../actions/actions_account_registration';
 // UI Imports
 import { Layout, Menu, Icon } from 'antd';
 
@@ -53,14 +53,14 @@ class NavigationBar extends Component{
                 </Menu.Item>
               )
             : (
-                <Menu.Item key="5">
-                <Icon type="logout" />
-                <span>Logout</span>
+                <Menu.Item key="6" onClick={() => this.props.logout()}>
+                  <Icon type="logout" />
+                  <span>Logout</span>
                 </Menu.Item>
               )
           }
           {!this.props.userInfo
-            ? (<Menu.Item key="6" onClick={() => this.props.history.push(`/signup`)}>
+            ? (<Menu.Item key="7" onClick={() => this.props.history.push(`/signup`)}>
                   <Icon type="plus" />
                   <span>Signup</span>
                 </Menu.Item>
@@ -76,6 +76,9 @@ class NavigationBar extends Component{
 function mapStateToProps({ userInfo }){
   return { userInfo };
 }
-// mapDispatchToProps = null;
 
-export default withRouter(connect(mapStateToProps)(NavigationBar));
+function mapDispatchToProps (dispatch){
+  return bindActionCreators({ logout }, dispatch);
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavigationBar));
