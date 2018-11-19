@@ -17,11 +17,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('combined'));
 
 app.use(session({
+  // secret is used to sign the session
   secret: secretToken,
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({ mongooseConnection: db})
 }));
+
+// use authentication as a middleware for all requests
 app.use(authentication.initialize());
 app.use(authentication.session());
 
