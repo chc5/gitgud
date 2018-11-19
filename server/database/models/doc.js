@@ -8,8 +8,8 @@ const DocSchema = new Schema({
   content: {type: String, required:true},
   owner_id: {type: Schema.Types.ObjectId, ref: 'User'},
   locked: Boolean,
-  revisions:[new Schema(changes:Schema.Types.Mixed)],
-  date_created: {type: Date, default: Data.now}
+  revisions: [Schema.Types.Mixed],
+  date_created: {type: Date, default: Date.now}
 });
 
 DocSchema.methods.findAllTabooIdx = function(cb){
@@ -30,7 +30,7 @@ DocSchema.methods.findAllTabooIdx = function(cb){
       }
     }
     cb(null,idx_list);
-  }
+  });
 };
 
 const doc = mongoose.model('Document', DocSchema); 
