@@ -29,7 +29,7 @@ class Document extends Component{
         <Layout>
           <Header><Button onClick={this.save}>Save</Button></Header>
           <Content>
-            <TextArea
+            <textarea
               value={ this.props.textField }
               onChange={event => this.props.updateTextField(event.target.value)}
               className="text-area"
