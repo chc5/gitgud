@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Layout, Breadcrumb } from 'antd';
+import { Layout } from 'antd';
 
 import NavigationBar from './NavigationBar';
 const { Header, Content } = Layout;
@@ -13,7 +13,10 @@ class Home extends Component{
         <NavigationBar />
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
-            Home
+            {this.props.userInfo
+              ? (<span>Welcome, { this.props.userInfo.username }</span>)
+              : (<span>Home</span>)
+            }
           </Header>
           <Content style={{ margin: '0 16px' }}>
             List of stuff here.
@@ -24,7 +27,8 @@ class Home extends Component{
   }
 }
 
-// mapStateToProps = null;
-// mapDispatchToProps = null;
+function mapStateToProps({ userInfo }){
+  return { userInfo };
+}
 
-export default connect(null) (Home);
+export default connect(mapStateToProps) (Home);
