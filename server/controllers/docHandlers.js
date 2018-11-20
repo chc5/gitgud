@@ -16,11 +16,11 @@ const createDoc = (req, res) => {
 
     docinst.save(function (err, doc) {
       if (err) {
-        res.send("Could not create doc");
+        res.status(500).json({error:"Couldn't create doc"});
       }
       else {
         console.log(doc.title + " saved to Document collection.");
-        res.send("Doc created");     
+        res.status(200).json({msg:"Doc created"});     
       }
     });
   }
@@ -28,18 +28,18 @@ const createDoc = (req, res) => {
 const retrieveDoc = (req, res) => {
   Doc.findOne({_id:req.params.documentId}, function(err, result){
     if (err) {
-      res.send("Could not retrieve document");
+      res.status(500).json({error:"Couldn't retrieve document"});
     }
-    res.json(result);
+    res.status(200).json({document:result});
   });
 };
 
 const getDocList = (req, res) => {
   Doc.find({}, function(err, results){
     if (err) {
-      res.send("Could not retrieve documents");
+      res.status(500).json({error:"Couldn't retrieve documents"});
     }
-    res.json({documentList:results});
+    res.status(200).json({documentList:results});
   });
 };
 
@@ -52,10 +52,10 @@ const updateDoc = (req, res) => {
     // TODO : change in future to only store changes
     Doc.updateOne({_id:req.params.documentId}, { $push: {revisions:req.body.textField}}, function(err, result){
       if (err) {
-        res.send("Could not update doc");
+        res.status(500).json({error:"Couldn't update doc"});
       }
       else {
-        res.send("Updated doc");
+        res.status(200).json({msg:"Updated doc"});
       }
     });
   }
@@ -68,10 +68,10 @@ const deleteDoc = (req, res) => {
     // TODO: only delete if user owns document?
     Doc.deleteOne({_id:req.params.documentId}, function(err){
       if (err) {
-        res.send("Could not delete doc");
+        res.status(500).json({error:"Couldn't delete doc"});
       }
       else {
-        res.send("Deleted doc");
+        res.status(200).json({msg:"Deleted doc"});
       }
     });
   }
