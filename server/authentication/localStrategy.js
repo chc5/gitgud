@@ -3,6 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const strategy = new LocalStrategy(
   {
+    // POST field
     usernameField: 'userName'
   },
   function (username, password, done) {
