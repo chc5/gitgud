@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { signup } from '../actions/actions_account_registration';
 
 // UI Imports
 import 'antd/dist/antd.css';
@@ -15,7 +18,7 @@ class Signup extends Component{
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.signup(this.state);
+    this.props.signup(this.state, this.props.history);
   }
   render(){
     return(
@@ -63,7 +66,7 @@ class Signup extends Component{
               </Button>
             </FormItem>
             <FormItem>
-              Already have an account? <a href="./signup">signup Here!</a>
+              Already have an account? <a href="./login">Login Here!</a>
             </FormItem>
           </Form>
         </Layout>
@@ -73,6 +76,8 @@ class Signup extends Component{
 }
 
 // mapStateToProps = null;
-// mapDispatchToProps = null;
+function mapDispatchToProps (dispatch){
+  return bindActionCreators({ signup }, dispatch);
+}
 
-export default connect(null) (Signup);
+export default withRouter(connect(null, mapDispatchToProps) (Signup));

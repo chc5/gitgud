@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { login } from '../actions/actions_account_registration';
@@ -19,7 +20,7 @@ class Login extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.login(this.state);
+    this.props.login(this.state, this.props.history);
   }
 
   render() {
@@ -65,4 +66,4 @@ function mapDispatchToProps(dispatch){
   return bindActionCreators({ login }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps) (Login);
+export default  withRouter(connect(null, mapDispatchToProps) (Login));
