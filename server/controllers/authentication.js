@@ -13,18 +13,18 @@ const signup  = (req, res) => {
   // Check if username exists in db
   User.findOne({username:userinst.username}, function (err, existingUser){
     if (err || existingUser) {
-      return res.status(401).send(err || {error: "User already exists"});
+      return res.status(401).json(err || {error: "User already exists"});
     }
     // Register user if it does not exist
     if (!existingUser) {
       userinst.save(function (err) {
         if (err) {
           console.log('Couldnt add user', err);
-          res.send("error adding user");
+          res.status(500).json({error:"Couldn't add user"});
         }
         else {
           console.log('Successfully added user');
-          res.send("added user");
+          res.status(200).json({msg:"added user"});
         }
       });
     }
@@ -41,7 +41,7 @@ const login = (req, res) => {
     });
   }
   else {
-    res.send("failed to log in");
+    res.status(401).json({error:"Not logged in"});
   }
 };
 const logout = (req, res) => {
@@ -49,10 +49,10 @@ const logout = (req, res) => {
     console.log("logged out " + req.user.username)
     req.logout();
     req.session.destroy();
-    res.send({message:"logging out"});
+    res.status(200).json({msg:"Logged out"});
   }
   else {
-    res.send({message:"user not logged in"});
+    res.status(400).json({error:"Not logged in"});
   }
 };
 
