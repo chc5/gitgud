@@ -39,7 +39,7 @@ class ComplaintManager extends Component{
               dataSource={this.state.data}
               renderItem={item => (
                 <List.Item
-                  onClick={() => this.props.history.push(`/docs/${item}`)}
+                  onClick={() => this.props.history.push(`/complaints/${item}`)}
                   >
                   {item}
                 </List.Item>

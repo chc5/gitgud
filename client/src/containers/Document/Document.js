@@ -14,12 +14,12 @@ class Document extends Component{
   constructor(props){
     super(props);
     let parsedUrl = new URL(window.location.href);
-    this.props.retrieveDocument(parsedUrl.pathname.split('/')[1]);
+    this.props.retrieveDocument(parsedUrl.pathname.split('/')[2]);
     this.save = this.save.bind(this);
   }
   save(event){
     console.log("hi")
-    this.props.updateDocument(0, this.props.textField);
+    this.props.updateDocument(this.props.document._id, this.props.textField);
   }
   render(){
     return(
@@ -40,8 +40,8 @@ class Document extends Component{
   }
 }
 
-function mapStateToProps({ textField }){
-  return { textField };
+function mapStateToProps({ document, textField }){
+  return { document, textField };
 }
 
 function mapDispatchToProps(dispatch){
