@@ -35,7 +35,6 @@ class Document extends Component{
               className="text-area"
              />
           </Content>
-          <Footer>Footer</Footer>
         </Layout>
       </Layout>
     );
