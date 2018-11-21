@@ -1,5 +1,5 @@
 import { UPDATE_NAV_KEY, UPDATE_NAV_COLLAPSE }
-  from '../actions/actions_navigation_bar';
+  from '../actions/actions_nav_bar';
 
 export default function(state = { key: [], collapsed: true }, action){
   switch(action.type){

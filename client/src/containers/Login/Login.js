@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { login } from '../actions/actions_account_registration';
+import { login } from '../../actions/actions_account_registration';
 
 // UI Imports
 import 'antd/dist/antd.css';
 import './Login.css';
 import { Form, Icon, Input, Button, Layout } from 'antd';
-import NavigationBar from './NavigationBar';
+import NavBar from '../NavBar/NavBar';
 const FormItem = Form.Item;
 
 // https://ant.design/components/form/
@@ -26,7 +26,7 @@ class Login extends Component {
   render() {
     return (
       <Layout style={{ minHeight: '100vh' }} className="container">
-        <NavigationBar />
+        <NavBar />
         <Layout className="login-layout">
           <Form onSubmit={this.handleSubmit} className="login-form">
             <FormItem>

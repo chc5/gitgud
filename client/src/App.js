@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Router, Route, Switch } from "react-router-dom";
-import Document from "./containers/Document";
-import DocumentManager from "./containers/DocumentManager";
-import Home from "./containers/Home";
-import Signup from "./containers/Signup";
-import Login from "./containers/Login";
+import Document from "./containers/Document/Document";
+import DocumentManager from "./containers/DocumentManager/DocumentManager";
+import Home from "./containers/Home/Home";
+import Signup from "./containers/Signup/Signup";
+import Login from "./containers/Login/Login";
 import createHistory from "history/createBrowserHistory";
 import './App.css';
 

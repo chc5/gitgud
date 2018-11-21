@@ -2,25 +2,32 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { logout } from '../actions/actions_account_registration';
-import { updateNavKey, updateNavCollapse }
-  from '../actions/actions_navigation_bar';
+import { logout } from '../../actions/actions_account_registration';
+import { updateNavKey, updateNavCollapse } from '../../actions/actions_nav_bar';
 
 // UI Imports
 import { Layout, Menu, Icon } from 'antd';
+import "./NavBar.css";
 
 const { Sider } = Layout;
 
+// Navigation Bar for the entire website.
 class NavBar extends Component{
   render(){
     return(
       <Sider
         collapsible
-        collapsed={this.props.navigationBar.collapsed}
+        collapsed={this.props.navBar.collapsed}
         onCollapse={this.props.updateNavCollapse}
       >
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={this.props.navigationBar.key} mode="inline">
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={this.props.navBar.key}
+          mode="inline"
+          className="nav-bar"
+          >
+
           <Menu.Item
             key="1"
             onClick={() => {
@@ -100,8 +107,8 @@ class NavBar extends Component{
   }
 }
 
-function mapStateToProps({ userInfo, navigationBar }){
-  return { userInfo, navigationBar };
+function mapStateToProps({ userInfo, navBar }){
+  return { userInfo, navBar };
 }
 
 function mapDispatchToProps (dispatch){

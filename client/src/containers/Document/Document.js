@@ -2,14 +2,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateTextField } from '../actions/actions_text_field';
-import { retrieveDocument, updateDocument } from '../actions/actions_document';
+import { updateTextField } from '../../actions/actions_text_field';
+import { retrieveDocument, updateDocument } from '../../actions/actions_document';
 // UI Imports
-import { Input, Layout, Button } from 'antd';
+import { Layout, Button } from 'antd';
 import './Document.css';
-import NavigationBar from "./NavigationBar";
-const { TextArea } = Input;
-const { Header, Footer, Content } = Layout;
+import NavBar from "../NavBar/NavBar";
+const { Header, Content } = Layout;
 
 class Document extends Component{
   constructor(props){
@@ -25,7 +24,7 @@ class Document extends Component{
   render(){
     return(
       <Layout>
-        <NavigationBar />
+        <NavBar />
         <Layout>
           <Header><Button onClick={this.save}>Save</Button></Header>
           <Content>

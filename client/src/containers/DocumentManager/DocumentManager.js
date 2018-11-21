@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { retrieveAllDocument, createDocument, deleteDocument } from '../actions/actions_document';
+import { retrieveAllDocument, createDocument, deleteDocument }
+  from '../../actions/actions_document';
 
 // UI Imports
 import { Layout, List } from 'antd';
 
-import NavigationBar from './NavigationBar';
+import NavBar from '../NavBar/NavBar';
 const { Header, Content } = Layout;
 
 class DocumentManager extends Component{
@@ -28,7 +29,7 @@ class DocumentManager extends Component{
   render(){
     return(
       <Layout style={{ minHeight: '100vh' }}>
-        <NavigationBar />
+        <NavBar />
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
             Document Manager
@@ -38,7 +39,13 @@ class DocumentManager extends Component{
               size="large"
               bordered
               dataSource={this.state.data}
-              renderItem={item => (<List.Item>{item}</List.Item>)}
+              renderItem={item => (
+                <List.Item
+                  onClick={() => this.props.history.push(`/docs/${item}`)}
+                  >
+                  {item}
+                </List.Item>
+              )}
             />
           </Content>
         </Layout>
