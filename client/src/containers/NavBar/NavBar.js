@@ -50,15 +50,23 @@ class NavBar extends Component{
           </Menu.Item>
           <Menu.Item
             key="3"
+            onClick={() => {
+              this.props.history.push(`/profiles`);
+              this.props.updateNavKey("3");
+            }}
             >
             <Icon type="user" />
-            <span>User Settings</span>
+            <span>User Profiles</span>
           </Menu.Item>
           <Menu.Item
             key="4"
+            onClick={() => {
+              this.props.history.push(`/taboos`);
+              this.props.updateNavKey("4");
+            }}
             >
-            <Icon type="setting" />
-            <span>Setting</span>
+            <Icon type="safety-certificate" />
+            <span>Taboo Words Banned</span>
           </Menu.Item>
           {!this.props.userInfo
             ? (

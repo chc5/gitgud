@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 
 // UI Imports
 import { Layout, List } from 'antd';
-
 import NavBar from '../NavBar/NavBar';
 const { Header, Content } = Layout;
 

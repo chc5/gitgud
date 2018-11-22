@@ -9,9 +9,8 @@ import 'antd/dist/antd.css';
 import './Login.css';
 import { Form, Icon, Input, Button, Layout } from 'antd';
 import NavBar from '../NavBar/NavBar';
-const FormItem = Form.Item;
-
 // https://ant.design/components/form/
+const FormItem = Form.Item;
 
 class Login extends Component {
   constructor(props){
