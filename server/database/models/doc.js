@@ -5,7 +5,7 @@ const TabooWords = require('./taboo');
 
 const DocSchema = new Schema({
   title: {type: String, required:true},
-  content: {type: String, required:true},
+  content: {type: String},
   owner_id: {type: Schema.Types.ObjectId, ref: 'User'},
   locked: Boolean,
   revisions: [Schema.Types.Mixed],
