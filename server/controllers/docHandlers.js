@@ -27,19 +27,23 @@ const createDoc = (req, res) => {
 };
 const retrieveDoc = (req, res) => {
   Doc.findOne({_id:req.params.documentId}, function(err, result){
-    if (err) {
-      res.status(500).json({error:"Unable to retrieve your document"});
+    if (err || !result) {
+      return res.status(404).json({error:"Unable to retrieve your document"});
     }
-    res.status(200).json({document:result});
+    if (result) {
+      res.status(200).json({document:result});
+    }
   });
 };
 
 const getDocList = (req, res) => {
   Doc.find({}, function(err, results){
-    if (err) {
-      res.status(500).json({error:"Unable to retrieve your documents"});
+    if (err || !results) {
+      return res.status(404).json({error:"Unable to retrieve your documents"});
     }
-    res.status(200).json({documentList:results});
+    if (results) {
+      res.status(200).json({documentList:results});
+    }
   });
 };
 

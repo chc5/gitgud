@@ -13,7 +13,7 @@ const signup  = (req, res) => {
   // Check if username exists in db
   User.findOne({username:userinst.username}, function (err, existingUser){
     if (err || existingUser) {
-      return res.status(401).json(err || {error: "Unable to create this account"});
+      return res.status(401).json({error: "Unable to create this account"});
     }
     // Register user if it does not exist
     if (!existingUser) {
