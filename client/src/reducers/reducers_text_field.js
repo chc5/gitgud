@@ -1,11 +1,16 @@
-import { UPDATE_TEXT_FIELD } from '../actions/actions_text_field';
-import { RETRIEVE_DOCUMENT } from '../actions/actions_document';
+import {
+  UPDATE_TEXT_FIELD
+} from '../constants/types_ui';
+import {
+  RETRIEVE_DOCUMENT
+} from '../constants/types_document_action';
 // console.log(UPDATE_TEXT_FIELD);
-export default function(state = "Insert here.", action){
+export default function(state = "", action){
   switch(action.type){
     case UPDATE_TEXT_FIELD:
       return action.payload.data;
     case RETRIEVE_DOCUMENT:
+      console.log(action);
       return action.payload.document.content;
     default:
       return state;

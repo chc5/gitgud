@@ -1,4 +1,8 @@
-import { LOGGED_IN, LOGGED_OUT } from '../actions/actions_account_registration';
+import {
+  LOGGED_IN,
+  LOGGED_OUT
+} from '../constants/types_account_action';
+
 export default function(state = null, action){
   switch(action.type){
     case LOGGED_IN:

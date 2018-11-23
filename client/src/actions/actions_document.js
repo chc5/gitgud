@@ -1,25 +1,24 @@
 import axios from 'axios';
 
-import { UPDATE_TEXT_FIELD } from './actions_text_field';
+import {
+  CRUD_DOC_ERROR
+} from '../constants/types_error';
 
-// Document List CONST
-export const RETRIEVE_DOCUMENT_LIST = "RETRIEVE_DOCUMENT_LIST";
+import {
+  CREATE_DOCUMENT,
+  RETRIEVE_DOCUMENT,
+  UPDATE_DOCUMENT,
+  DELETE_DOCUMENT,
+  RETRIEVE_DOCUMENT_LIST
+} from '../constants/types_document_action';
 
-// CRUD CONST
-export const CREATE_DOCUMENT = "CREATE_DOCUMENT";
-export const RETRIEVE_DOCUMENT = "RETRIEVE_DOCUMENT";
-export const UPDATE_DOCUMENT = "UPDATE_DOCUMENT";
-export const DELETE_DOCUMENT = "DELETE_DOCUMENT";
-
-// ERROR CONST
-export const CRUD_DOC_ERROR = "CRUD_DOC_ERROR";
 
 
 
 export function createDocument(docName, history){
   let url = `/api/docs/create`;
   return (dispatch) => {
-    axios.post(url, { title: docName, content: "\n"})
+    axios.post(url, { title: docName, content: "" })
       .then((response) => dispatch({
         type: CREATE_DOCUMENT,
         payload: response

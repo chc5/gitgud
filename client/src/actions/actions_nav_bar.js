@@ -1,5 +1,7 @@
-export const UPDATE_NAV_KEY = "UPDATE_NAV_KEY";
-export const UPDATE_NAV_COLLAPSE = "UPDATE_NAV_COLLAPSE";
+import {
+  UPDATE_NAV_KEY,
+  UPDATE_NAV_COLLAPSE
+} from '../constants/types_ui';
 
 export function updateNavKey(key){
   console.log("Changing the navigation bar's key state");
