@@ -1,10 +1,12 @@
 import axios from 'axios';
 
-// CRUD
-export const CREATE_USER = "CREATE_USER";
-export const RETRIEVE_USER = "RETRIEVE_USER";
-export const UPDATE_USER = "UPDATE_USER";
-export const DELETE_USER = "DELETE_USER";
+import {
+  CREATE_USER,
+  RETRIEVE_USER,
+  UPDATE_USER,
+  DELETE_USER,
+  RETRIEVE_USER_LIST
+} from '../constants/types_user_action';
 
 export function createUser(name){
   let url = `/`;

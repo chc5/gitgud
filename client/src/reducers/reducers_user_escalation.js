@@ -1,5 +1,9 @@
-import { CREATE_USER, RETRIEVE_USER, UPDATE_USER, DELETE_USER }
-  from '../actions/actions_user_escalation';
+import {
+  CREATE_USER,
+  RETRIEVE_USER,
+  UPDATE_USER,
+  DELETE_USER
+} from '../constants/types_user_action';
 
 export default function(state = "", action){
   switch(action.type){
