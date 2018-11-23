@@ -1,5 +1,6 @@
-
-export const UPDATE_TEXT_FIELD = "UPDATE_TEXT_FIELD";
+import {
+  UPDATE_TEXT_FIELD
+} from '../constants/types_ui';
 
 export function updateTextField(textField){
   return {

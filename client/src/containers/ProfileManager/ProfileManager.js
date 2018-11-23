@@ -39,7 +39,7 @@ class ProfileManager extends Component{
               dataSource={this.state.data}
               renderItem={item => (
                 <List.Item
-                  onClick={() => this.props.history.push(`/docs/${item}`)}
+                  onClick={() => this.props.history.push(`/profiles/${item}`)}
                   >
                   {item}
                 </List.Item>

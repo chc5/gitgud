@@ -4,12 +4,15 @@
   line-height: 90px;
   display: inline-block;
   text-align: center;
+  cursor: pointer;
 }
 .login-card{
   width: 50%;
   display: inline-block;
+  cursor: pointer;
 }
 .signup-card{
   width: 50%;
   display: inline-block;
+  cursor: pointer;
 }

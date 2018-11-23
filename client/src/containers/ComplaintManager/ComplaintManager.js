@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 
 // UI Imports
 import { Layout, List } from 'antd';
-
 import NavBar from '../NavBar/NavBar';
 const { Header, Content } = Layout;
 
@@ -39,7 +38,7 @@ class ComplaintManager extends Component{
               dataSource={this.state.data}
               renderItem={item => (
                 <List.Item
-                  onClick={() => this.props.history.push(`/docs/${item}`)}
+                  onClick={() => this.props.history.push(`/complaints/${item}`)}
                   >
                   {item}
                 </List.Item>

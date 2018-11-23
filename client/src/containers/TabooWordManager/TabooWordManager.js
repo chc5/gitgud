@@ -39,7 +39,7 @@ class TabooWordManager extends Component{
               dataSource={this.state.data}
               renderItem={item => (
                 <List.Item
-                  onClick={() => this.props.history.push(`/docs/${item}`)}
+                  onClick={() => this.props.history.push(`/taboos/${item}`)}
                   >
                   {item}
                 </List.Item>

@@ -1,25 +1,24 @@
 import axios from 'axios';
 
-import { UPDATE_TEXT_FIELD } from './actions_text_field';
+import {
+  CRUD_DOC_ERROR
+} from '../constants/types_error';
 
-// Document List CONST
-export const RETRIEVE_DOCUMENT_LIST = "RETRIEVE_DOCUMENT_LIST";
-
-// CRUD CONST
-export const CREATE_DOCUMENT = "CREATE_DOCUMENT";
-export const RETRIEVE_DOCUMENT = "RETRIEVE_DOCUMENT";
-export const UPDATE_DOCUMENT = "UPDATE_DOCUMENT";
-export const DELETE_DOCUMENT = "DELETE_DOCUMENT";
-
-// ERROR CONST
-export const CRUD_DOC_ERROR = "CRUD_DOC_ERROR";
+import {
+  CREATE_DOCUMENT,
+  RETRIEVE_DOCUMENT,
+  UPDATE_DOCUMENT,
+  DELETE_DOCUMENT,
+  RETRIEVE_DOCUMENT_LIST
+} from '../constants/types_document_action';
 
 
 
-export function createDocument(name){
-  let url = `/api/docs/create/${name}`;
+
+export function createDocument(docName, history){
+  let url = `/api/docs/create`;
   return (dispatch) => {
-    axios.post(url)
+    axios.post(url, { title: docName, content: "" })
       .then((response) => dispatch({
         type: CREATE_DOCUMENT,
         payload: response
@@ -32,18 +31,15 @@ export function createDocument(name){
 }
 
 export function retrieveDocument(documentId){
+  console.log(documentId);
   let url = `/api/docs/retrieve/${documentId}`;
   return (dispatch) => {
     axios.post(url)
       .then((response) => {
         dispatch({
           type: RETRIEVE_DOCUMENT,
-          payload: response
+          payload: response.data
         });
-        dispatch({
-          type: UPDATE_TEXT_FIELD,
-          payload: response
-        })
       })
       .catch((response) => dispatch({
         type: CRUD_DOC_ERROR,
@@ -53,9 +49,10 @@ export function retrieveDocument(documentId){
 }
 
 export function updateDocument(documentId, textField){
+  console.log("update", documentId);
   let url = `/api/docs/update/${documentId}`;
   return (dispatch) => {
-    axios.post(url)
+    axios.post(url, { textField })
       .then((response) => dispatch({
         type: UPDATE_DOCUMENT,
         payload: response
@@ -91,10 +88,6 @@ export function retrieveAllDocument(){
           type: RETRIEVE_DOCUMENT_LIST,
           payload: response
         });
-        dispatch({
-          type: UPDATE_TEXT_FIELD,
-          payload: response
-        })
       })
       .catch((response) => dispatch({
         type: CRUD_DOC_ERROR,

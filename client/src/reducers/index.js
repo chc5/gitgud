@@ -6,12 +6,14 @@ import ErrorReducer from './reducers_error';
 import DocumentListReducer from './reducers_doc_list';
 import UserInfoReducer from './reducers_user_info';
 import NavBarReducer from './reducers_nav_bar';
+import UserEscalationReducer from './reducers_user_escalation';
 
 const rootReducer = combineReducers({
   textField: TextFieldReducer,
   error: ErrorReducer,
   document: DocumentReducer,
   documentList: DocumentListReducer,
+  userEscalation: UserEscalationReducer,
   userInfo: UserInfoReducer,
   navBar: NavBarReducer
 });
