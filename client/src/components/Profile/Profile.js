@@ -4,7 +4,7 @@ class Profile extends Component{
   render(){
     return(
       <div>
-        Hello World From Profile! 
+        Hello World From Profile!
       </div>
     );
   }
