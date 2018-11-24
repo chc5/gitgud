@@ -37,13 +37,13 @@ DocSchema.methods.findAllTabooIdx = function(cb){
 
 DocSchema.methods.getVersion = function(revisionId, cb){
   if (this.revisions.indexOf(revisionId) < 0 ) {
-    return cb({err:"Could not retrieve document version"});
+    return cb({error:"Could not retrieve document version"});
   }
   // Apply changes and call cb with correct content
   // Currently returns the changes of revision since we store the entire content
   Revisions.findById(revisionId, "changes", function(err, result){
     if (err) {
-      return cb({err:"Could not retrieve document version"});
+      return cb({error:"Could not retrieve document version"});
     }
     cb(null, result);
   }); 
