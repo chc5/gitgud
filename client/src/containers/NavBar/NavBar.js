@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { logout } from '../../actions/actions_account_registration';
 import { updateNavKey, updateNavCollapse } from '../../actions/actions_nav_bar';
-
+import Notice from '../../components/Notice/Notice';
 // UI Imports
 import { Layout, Menu, Icon } from 'antd';
 import "./NavBar.css";
@@ -20,7 +20,7 @@ class NavBar extends Component{
         collapsed={this.props.navBar.collapsed}
         onCollapse={this.props.updateNavCollapse}
       >
-        <div className="logo" />
+        <Notice />
         <Menu
           theme="dark"
           defaultSelectedKeys={this.props.navBar.key}

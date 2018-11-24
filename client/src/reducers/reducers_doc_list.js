@@ -5,8 +5,7 @@ import {
 export default function(state = [], action){
   switch(action.type){
     case RETRIEVE_DOCUMENT_LIST:
-      console.log(action);
-      return action.payload.data.documentList;
+      return action.payload.documentList;
     default:
       return state;
   }
