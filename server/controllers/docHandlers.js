@@ -83,7 +83,11 @@ const updateDoc = (req, res) => {
         Doc.updateOne({_id:revision.doc_id}, { $push:{revisions:revision._id}, content:req.body.textField}, function(docErr, result){
           if (docErr) {
             res.status(500).json({error:"Unable to save this document"});
-            Revision.deleteOne({_id:revision._id});
+            Revision.deleteOne({_id:revision._id}, function(err){
+              if (err) {
+                console.log("Error deleting revision after failed update");
+              }
+            });
           }
           else {
             res.status(200).json({msg:"Document has been saved"});
@@ -107,7 +111,7 @@ const deleteDoc = (req, res) => {
       else {
         Revision.deleteMany({_id:{$in:document.revisions}}, function(err){
           if (err) {
-            console.log("Error deleting revisions");
+            console.log("Error deleting revisions after document deletion");
           }
         }); 
         res.status(200).json({msg:"Document has been deleted"});
