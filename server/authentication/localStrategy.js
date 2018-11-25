@@ -12,11 +12,11 @@ const strategy = new LocalStrategy(
         return done(err);
       }
       if (!user) {
-        return done(null, false, { message: 'Incorrect login'});
+        return done(null, false, {error: "Incorrect login credentials"});
       }
       user.checkPassword(password, function(err, match){
         if (err || !match) {
-          return done(null, false, { message: 'Incorrect login'});
+          return done(null, false, {error: "Incorrect login credentials"});
         }
         return done(null, user);
       });

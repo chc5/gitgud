@@ -5,7 +5,7 @@ const Revision = require('../database/models/revision');
 
 const createDoc = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     let docinst = new Doc({
@@ -64,7 +64,7 @@ const getDocList = (req, res) => {
 
 const updateDoc = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     // add entire text field into revision collection
@@ -100,7 +100,7 @@ const updateDoc = (req, res) => {
 
 const deleteDoc = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     // TODO: only delete if user owns document?
