@@ -6,6 +6,7 @@ import ErrorReducer from './reducers_error';
 import DocumentListReducer from './reducers_doc_list';
 import UserInfoReducer from './reducers_user_info';
 import NavBarReducer from './reducers_nav_bar';
+import NotificationReducer from './reducers_notification';
 import UserEscalationReducer from './reducers_user_escalation';
 
 const rootReducer = combineReducers({
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   documentList: DocumentListReducer,
   userEscalation: UserEscalationReducer,
   userInfo: UserInfoReducer,
-  navBar: NavBarReducer
+  navBar: NavBarReducer,
+  notification: NotificationReducer
 });
 
 export default rootReducer;

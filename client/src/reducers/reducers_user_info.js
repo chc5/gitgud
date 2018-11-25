@@ -12,11 +12,10 @@ const initState = JSON.parse(sessionStorage.getItem(USER_INFO_STORAGE)) || null;
 const reducer = (state = initState, action) => {
   switch(action.type){
     case LOGGED_IN:
-      const userInfo = action.payload.data.userInfo;
+      const userInfo = action.payload.userInfo;
       const jsonstring = JSON.stringify(userInfo);
       sessionStorage.setItem(USER_INFO_STORAGE, jsonstring);
-      console.log("check curr storage", sessionStorage.getItem(USER_INFO_STORAGE));
-      return action.payload.data.userInfo;
+      return action.payload.userInfo;
     case LOGGED_OUT:
       sessionStorage.removeItem(USER_INFO_STORAGE);
       return null;

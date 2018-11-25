@@ -18,20 +18,19 @@ import {
 export function createDocument(docName, history){
   let url = `/api/docs/create`;
   return (dispatch) => {
-    axios.post(url, { title: docName, content: "" })
+    axios.post(url, { title: docName })
       .then((response) => dispatch({
         type: CREATE_DOCUMENT,
-        payload: response
+        payload: response.data
       }))
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
+        payload: error.response.data
       }))
   }
 }
 
 export function retrieveDocument(documentId){
-  console.log(documentId);
   let url = `/api/docs/retrieve/${documentId}`;
   return (dispatch) => {
     axios.post(url)
@@ -41,26 +40,25 @@ export function retrieveDocument(documentId){
           payload: response.data
         });
       })
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
+        payload: error.response.data
       }))
   }
 }
 
 export function updateDocument(documentId, textField){
-  console.log("update", documentId);
   let url = `/api/docs/update/${documentId}`;
   return (dispatch) => {
     axios.post(url, { textField })
       .then((response) => dispatch({
         type: UPDATE_DOCUMENT,
-        payload: response
+        payload: response.data
       }))
-      .catch((response) => dispatch({
+      .catch((error) => {dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
-      }))
+        payload: error.response.data
+      })})
   }
 }
 
@@ -70,11 +68,11 @@ export function deleteDocument(documentId){
     axios.post(url)
       .then((response) => dispatch({
         type: DELETE_DOCUMENT,
-        payload: response
+        payload: response.data
       }))
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
+        payload: error.response.data
       }))
   }
 }
@@ -86,12 +84,12 @@ export function retrieveAllDocument(){
       .then((response) => {
         dispatch({
           type: RETRIEVE_DOCUMENT_LIST,
-          payload: response
+          payload: response.data
         });
       })
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
+        payload: error.response.data
       }))
   }
 }

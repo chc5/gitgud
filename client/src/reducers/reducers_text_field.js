@@ -10,7 +10,6 @@ export default function(state = "", action){
     case UPDATE_TEXT_FIELD:
       return action.payload.data;
     case RETRIEVE_DOCUMENT:
-      console.log(action);
       return action.payload.document.content;
     default:
       return state;
