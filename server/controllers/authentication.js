@@ -40,9 +40,9 @@ const login = (req, res, next) => {
     if (!user) {
       return res.status(401).json({error:info.error});
     }
-    req.logIn(user, function(logInErr){
-      if (logInErr) {
-        return next(logInErr);
+    req.login(user, function(loginErr){
+      if (loginErr) {
+        return next(loginErr);
       }
       console.log("log in status of " + req.user.username + " is " + req.isAuthenticated());
       return res.status(200).json({
