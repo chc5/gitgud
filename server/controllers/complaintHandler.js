@@ -4,14 +4,14 @@ const authentication = require('../authentication');
 
 const createDocComplaint = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     let doccomplaintinst = new DocComplaint({
       content: req.body.text,
       fromUserId: req.user._id,
       revisionId: req.body.revisionId,
-      docId: req.body.docId 
+      docId: req.body.documentId 
     });
     
     doccomplaintinst.save(function (err, doccomp) {
@@ -50,7 +50,7 @@ const getDocComplaintList = (req, res) => {
 
 const deleteDocComplaint = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     DocComplaint.deleteOne({_id:req.params.complaintId}, function(err){
@@ -65,7 +65,7 @@ const deleteDocComplaint = (req, res) => {
 }
 
 const getUnprocessedDocComplaints = (req, res) => {
-  DocComplaint.find({processed: false, docId: req.body.docId}, function(err, results){
+  DocComplaint.find({processed: false, docId: req.body.documentId}, function(err, results){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve Unprocessed Document Complaints."});
     }
@@ -77,7 +77,7 @@ const getUnprocessedDocComplaints = (req, res) => {
 
 const processDocComplaint = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     DocComplaint.updateOne({_id: req.body.docComplaintId}, {processed: true}, function(err, result) {
@@ -94,7 +94,7 @@ const processDocComplaint = (req, res) => {
 
 const createUserComplaint = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     let usercomplaintinst = new UserComplaint({
@@ -139,7 +139,7 @@ const getUserComplaintList = (req, res) => {
 
 const deleteUserComplaint = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     UserComplaint.deleteOne({_id:req.params.complaintId}, function(err){
@@ -155,7 +155,7 @@ const deleteUserComplaint = (req, res) => {
 
 const processUserComplaint = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     UserComplaint.updateOne({_id: req.body.userComplaintId}, {processed: true}, function(err, result) {
@@ -172,7 +172,7 @@ const processUserComplaint = (req, res) => {
 
 const getCurrentUserComplaints = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     const currUsrComplaintsQuery = {targetUserId:req.user_id};
@@ -192,7 +192,7 @@ const getCurrentUserComplaints = (req, res) => {
 
 const getCurrentUserSentComplaints = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     const currUsrSentComplaintsQuery = {fromUserId:req.user_id};
