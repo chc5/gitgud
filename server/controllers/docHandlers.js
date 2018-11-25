@@ -1,6 +1,6 @@
 const Doc = require('../database/models/doc');
 const Taboo = require('../database/models/taboo');
-const authentication = ('../authentication');
+const authentication = require('../authentication');
 
 const createDoc = (req, res) => {
   if(!req.isAuthenticated()){
