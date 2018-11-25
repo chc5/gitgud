@@ -11,5 +11,5 @@ const DocComplaintSchema = new Schema({
   docId: {type: Schema.Types.ObjectId, ref: 'Document'}
 })
 
-const docComplaint = mongoose.model('DocComplaints', DocComplaintSchema);
+const docComplaint = mongoose.model('DocComplaint', DocComplaintSchema);
 module.exports = docComplaint;

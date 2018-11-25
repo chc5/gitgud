@@ -10,5 +10,5 @@ const UserComplaintSchema = new Schema({
   targetUserId: {type: Schema.Types.ObjectId, ref: 'User'}
 })
 
-const userComplaint = mongoose.model('UserComplaints', UserComplaintSchema);
+const userComplaint = mongoose.model('UserComplaint', UserComplaintSchema);
 module.exports = userComplaint;
