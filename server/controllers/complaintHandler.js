@@ -8,7 +8,7 @@ const createDocComplaint = (req, res) => {
   }
   else {
     let doccomplaintinst = new DocComplaint({
-      text: req.body.text,
+      content: req.body.text,
       fromUserId: req.user._id,
       revisionId: req.body.revisionId,
       docId: req.body.docId 
@@ -26,7 +26,7 @@ const createDocComplaint = (req, res) => {
   }
 }
 
-const retrieveDocComplaint = (req, res) => {
+const getDocComplaint = (req, res) => {
   DocComplaint.findOne({_id:req.params.complaintId}, function(err, result){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve the Document Complaint."});
@@ -64,7 +64,7 @@ const deleteDocComplaint = (req, res) => {
   }
 }
 
-const retrieveUnprocessedDocComplaints = (req, res) => {
+const getUnprocessedDocComplaints = (req, res) => {
   DocComplaint.find({processed: false, docId: req.body.docId}, function(err, results){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve Unprocessed Document Complaints."});
@@ -81,8 +81,8 @@ const processDocComplaint = (req, res) => {
   }
   else {
     DocComplaint.updateOne({_id: req.body.docComplaintId}, {processed: true}, function(err, result) {
-      if(err || !result){
-        res.status(404).json({error:"Could not retrieve the Document Complaint for updating."});
+      if(err){
+        res.status(500).json({error:"Could not process the Document Complaint."});
       }
       else {
         console.log("Document Complaint in DocComplaint collection updated.");
@@ -98,7 +98,7 @@ const createUserComplaint = (req, res) => {
   }
   else {
     let usercomplaintinst = new UserComplaint({
-      text: req.body.text,
+      content: req.body.text,
       fromUserId: req.user._id,
       targetUserId: req.body.targetUserId 
     });
@@ -115,7 +115,7 @@ const createUserComplaint = (req, res) => {
   }
 }
 
-const retrieveUserComplaint = (req, res) => {
+const getUserComplaint = (req, res) => {
   UserComplaint.findOne({_id:req.params.complaintId}, function(err, result){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve the user complaint."});
@@ -159,8 +159,8 @@ const processUserComplaint = (req, res) => {
   }
   else {
     UserComplaint.updateOne({_id: req.body.userComplaintId}, {processed: true}, function(err, result) {
-      if(err || !result){
-        res.status(404).json({error:"Could not retrieve the User Complaint for updating."});
+      if(err){
+        res.status(500).json({error:"Could not process the User Complaint."});
       }
       else {
         console.log("User Complaint in UserComplaint collection updated.");
@@ -175,12 +175,9 @@ const getCurrentUserComplaints = (req, res) => {
     res.redirect('/');
   }
   else {
-    let currUsrComplaintsquery;
-    if(req.body.getProcessed){
-      currUsrComplaintsquery = {targetUserId:req.user._id};
-    }
-    else{
-      currUsrComplaintsquery = {targetUserId:req.user._id, processed: false};
+    const currUsrComplaintsQuery = {targetUserId:req.user_id};
+    if (!req.body.getProcessed) {
+      currUsrComplaintsQuery.processed = false;
     }
     UserComplaint.find(currUsrComplaintsquery, function(err, results) {
       if (err || !result) {
@@ -198,12 +195,9 @@ const getCurrentUserSentComplaints = (req, res) => {
     res.redirect('/');
   }
   else {
-    let currUsrSentComplaintsquery;
-    if(req.body.getProcessed){
-      currUsrSentComplaintsquery = {fromUserId:req.user._id};
-    }
-    else{
-      currUsrSentComplaintsquery = {fromUserId:req.user._id, processed: false};
+    const currUsrSentComplaintsQuery = {fromUserId:req.user_id};
+    if (!req.body.getProcessed) {
+      currUsrSentComplaintsQuery.processed = false;
     }
     UserComplaint.find(currUsrSentComplaintsquery, function(err, results) {
       if (err || !result) {
@@ -216,4 +210,4 @@ const getCurrentUserSentComplaints = (req, res) => {
   }
 }
 
-module.exports = {createDocComplaint, retrieveDocComplaint, getDocComplaintList, deleteDocComplaint, retrieveUnprocessedDocComplaints, processDocComplaint, createUserComplaint, retrieveUserComplaint, getUserComplaintList, deleteUserComplaint, retrieveUnprocessedUserComplaints, processUserComplaint, getCurrentUserComplaints, getCurrentUserSentComplaints};
+module.exports = {createDocComplaint, getDocComplaint, getDocComplaintList, deleteDocComplaint, getUnprocessedDocComplaints, processDocComplaint, createUserComplaint, getUserComplaint, getUserComplaintList, deleteUserComplaint, processUserComplaint, getCurrentUserComplaints, getCurrentUserSentComplaints};
