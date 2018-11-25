@@ -23,9 +23,9 @@ export function createDocument(docName, history){
         type: CREATE_DOCUMENT,
         payload: response.data
       }))
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
+        payload: error.response.data
       }))
   }
 }
@@ -40,9 +40,9 @@ export function retrieveDocument(documentId){
           payload: response.data
         });
       })
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
+        payload: error.response.data
       }))
   }
 }
@@ -55,9 +55,9 @@ export function updateDocument(documentId, textField){
         type: UPDATE_DOCUMENT,
         payload: response.data
       }))
-      .catch((response) => {dispatch({
+      .catch((error) => {dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
+        payload: error.response.data
       })})
   }
 }
@@ -70,9 +70,9 @@ export function deleteDocument(documentId){
         type: DELETE_DOCUMENT,
         payload: response.data
       }))
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
+        payload: error.response.data
       }))
   }
 }
@@ -87,9 +87,9 @@ export function retrieveAllDocument(){
           payload: response.data
         });
       })
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: CRUD_DOC_ERROR,
-        payload: response
+        payload: error.response.data
       }))
   }
 }
