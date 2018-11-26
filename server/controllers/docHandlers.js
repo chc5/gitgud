@@ -1,11 +1,11 @@
 const Doc = require('../database/models/doc');
 const Taboo = require('../database/models/taboo');
-const authentication = ('../authentication');
+const authentication = require('../authentication');
 const Revision = require('../database/models/revision');
 
 const createDoc = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     let docinst = new Doc({
@@ -51,7 +51,7 @@ const retrieveDoc = (req, res) => {
   });
 };
 
-const getDocList = (req, res) => {
+const retrieveDocList = (req, res) => {
   Doc.find({}, function(err, results){
     if (err || !results) {
       return res.status(404).json({error:"Unable to retrieve your documents"});
@@ -64,7 +64,7 @@ const getDocList = (req, res) => {
 
 const updateDoc = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     // add entire text field into revision collection
@@ -100,7 +100,7 @@ const updateDoc = (req, res) => {
 
 const deleteDoc = (req, res) => {
   if(!req.isAuthenticated()){
-    res.redirect('/');
+    res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
     // TODO: only delete if user owns document?
@@ -120,4 +120,4 @@ const deleteDoc = (req, res) => {
   }
 };
 
-module.exports = {createDoc, retrieveDoc, getDocList, updateDoc, deleteDoc};
+module.exports = {createDoc, retrieveDoc, retrieveDocList, updateDoc, deleteDoc};
