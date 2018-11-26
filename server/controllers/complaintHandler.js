@@ -26,7 +26,7 @@ const createDocComplaint = (req, res) => {
   }
 }
 
-const getDocComplaint = (req, res) => {
+const retrieveDocComplaint = (req, res) => {
   DocComplaint.findOne({_id:req.params.complaintId}, function(err, result){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve the Document Complaint."});
@@ -37,7 +37,7 @@ const getDocComplaint = (req, res) => {
   });
 };
 
-const getDocComplaintList = (req, res) => {
+const retrieveDocComplaintList = (req, res) => {
   DocComplaint.find({}, function(err, results){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve Document Complaints."});
@@ -64,7 +64,7 @@ const deleteDocComplaint = (req, res) => {
   }
 }
 
-const getUnprocessedDocComplaints = (req, res) => {
+const retrieveUnprocessedDocComplaints = (req, res) => {
   DocComplaint.find({processed: false, docId: req.body.documentId}, function(err, results){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve Unprocessed Document Complaints."});
@@ -115,7 +115,7 @@ const createUserComplaint = (req, res) => {
   }
 }
 
-const getUserComplaint = (req, res) => {
+const retrieveUserComplaint = (req, res) => {
   UserComplaint.findOne({_id:req.params.complaintId}, function(err, result){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve the user complaint."});
@@ -126,7 +126,7 @@ const getUserComplaint = (req, res) => {
   });
 };
 
-const getUserComplaintList = (req, res) => {
+const retrieveUserComplaintList = (req, res) => {
   UserComplaint.find({}, function(err, results){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve User Complaints."});
@@ -170,7 +170,7 @@ const processUserComplaint = (req, res) => {
   }
 }
 
-const getCurrentUserComplaints = (req, res) => {
+const retrieveCurrentUserComplaints = (req, res) => {
   if(!req.isAuthenticated()){
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
@@ -190,7 +190,7 @@ const getCurrentUserComplaints = (req, res) => {
   }
 }
 
-const getCurrentUserSentComplaints = (req, res) => {
+const retrieveCurrentUserSentComplaints = (req, res) => {
   if(!req.isAuthenticated()){
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
@@ -210,4 +210,4 @@ const getCurrentUserSentComplaints = (req, res) => {
   }
 }
 
-module.exports = {createDocComplaint, getDocComplaint, getDocComplaintList, deleteDocComplaint, getUnprocessedDocComplaints, processDocComplaint, createUserComplaint, getUserComplaint, getUserComplaintList, deleteUserComplaint, processUserComplaint, getCurrentUserComplaints, getCurrentUserSentComplaints};
+module.exports = {createDocComplaint, retrieveDocComplaint, retrieveDocComplaintList, deleteDocComplaint, retrieveUnprocessedDocComplaints, processDocComplaint, createUserComplaint, retrieveUserComplaint, retrieveUserComplaintList, deleteUserComplaint, processUserComplaint, retrieveCurrentUserComplaints, retrieveCurrentUserSentComplaints};

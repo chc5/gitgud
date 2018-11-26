@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { Router, Route, Switch } from "react-router-dom";
-import Document from "./containers/Document";
-import DocumentManager from "./containers/DocumentManager";
-import Home from "./containers/Home";
-import Signup from "./containers/Signup";
-import Login from "./containers/Login";
+import Complaint from "./components/Complaint/Complaint";
+import ComplaintManager from "./containers/ComplaintManager/ComplaintManager";
+import Document from "./containers/Document/Document";
+import DocumentManager from "./containers/DocumentManager/DocumentManager";
+import Home from "./containers/Home/Home";
+import Login from "./containers/Login/Login";
+import Profile from "./components/Profile/Profile";
+import ProfileManager from "./containers/ProfileManager/ProfileManager";
+import Signup from "./containers/Signup/Signup";
+import TabooWordManager from "./containers/TabooWordManager/TabooWordManager";
 import createHistory from "history/createBrowserHistory";
 import './App.css';
 
@@ -22,10 +27,15 @@ class App extends Component {
           <div className="container">
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route path="/login" component={Login} />
-              <Route path="/signup" component={Signup} />
+              <Route path="/complaints/:id" component={Complaint} />
+              <Route path="/complaints" component={ComplaintManager} />
               <Route path="/docs/:id" component={Document} />
               <Route path="/docs" component={DocumentManager} />
+              <Route path="/login" component={Login} />
+              <Route path="/profiles/:id" component={Profile} />
+              <Route path="/profiles" component={ProfileManager} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/taboos" component={TabooWordManager} />
             </Switch>
           </div>
         </Router>

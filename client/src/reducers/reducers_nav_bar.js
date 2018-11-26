@@ -1,5 +1,7 @@
-import { UPDATE_NAV_KEY, UPDATE_NAV_COLLAPSE }
-  from '../actions/actions_navigation_bar';
+import {
+  UPDATE_NAV_KEY,
+  UPDATE_NAV_COLLAPSE
+} from '../constants/types_ui';
 
 export default function(state = { key: [], collapsed: true }, action){
   switch(action.type){

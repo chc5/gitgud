@@ -2,13 +2,15 @@ const mongoose = require('mongoose');
 mongoose.promise = Promise;
 const Schema = mongoose.Schema;
 const TabooWords = require('./taboo');
+const Revisions = require('./revision');
 
 const DocSchema = new Schema({
   title: {type: String, required:true},
-  content: {type: String},
+  content: {type: String, default:''},
+  original_content: {type: String, default:''},
   owner_id: {type: Schema.Types.ObjectId, ref: 'User'},
   locked: Boolean,
-  revisions: [Schema.Types.Mixed],
+  revisions: [{type: Schema.Types.ObjectId, ref: 'Revision'}],
   date_created: {type: Date, default: Date.now}
 });
 
@@ -33,5 +35,18 @@ DocSchema.methods.findAllTabooIdx = function(cb){
   });
 };
 
+DocSchema.methods.getVersion = function(revisionId, cb){
+  if (this.revisions.indexOf(revisionId) < 0 ) {
+    return cb({error:"Could not retrieve document version"});
+  }
+  // Apply changes and call cb with correct content
+  // Currently returns the changes of revision since we store the entire content
+  Revisions.findById(revisionId, "changes", function(err, result){
+    if (err) {
+      return cb({error:"Could not retrieve document version"});
+    }
+    cb(null, result);
+  }); 
+};
 const doc = mongoose.model('Document', DocSchema); 
 module.exports = doc;

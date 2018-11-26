@@ -13,46 +13,55 @@ const signup  = (req, res) => {
   // Check if username exists in db
   User.findOne({username:userinst.username}, function (err, existingUser){
     if (err || existingUser) {
-      return res.status(401).json(err || {error: "User already exists"});
+      return res.status(401).json({error: "Unable to signup user"});
     }
     // Register user if it does not exist
     if (!existingUser) {
       userinst.save(function (err) {
         if (err) {
           console.log('Couldnt add user', err);
-          res.status(500).json({error:"Couldn't add user"});
+          res.status(500).json({error:"Unable to signup user"});
         }
         else {
           console.log('Successfully added user');
-          res.status(200).json({msg:"added user"});
+          res.status(200).json({msg:"You have successfully signed up. Please log in."});
         }
       });
     }
   });
 };
 
-const login = (req, res) => {
-  console.log("login status for " + req.user.username + " is " + req.isAuthenticated());
-  if(req.isAuthenticated()){
-    res.json({
-      userInfo:{  
-        username:req.user.username
+const login = (req, res, next) => {
+  // callback is passed into done of local strategy callback
+  authentication.authenticate('local', function(err, user, info){
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).json({error:info.error});
+    }
+    req.login(user, function(loginErr){
+      if (loginErr) {
+        return next(loginErr);
       }
+      console.log("log in status of " + req.user.username + " is " + req.isAuthenticated());
+      return res.status(200).json({
+        userInfo:{  
+          username:req.user.username
+        }
+      });
     });
-  }
-  else {
-    res.status(401).json({error:"Not logged in"});
-  }
+  })(req, res, next);
 };
 const logout = (req, res) => {
   if(req.user) {
     console.log("logged out " + req.user.username)
     req.logout();
     req.session.destroy();
-    res.status(200).json({msg:"Logged out"});
+    res.status(200).json({msg:"You have been logged out"});
   }
   else {
-    res.status(400).json({error:"Not logged in"});
+    res.status(400).json({error:"You were not logged in"});
   }
 };
 

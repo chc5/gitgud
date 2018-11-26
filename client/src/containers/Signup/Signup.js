@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { signup } from '../actions/actions_account_registration';
+import { signup } from '../../actions/actions_account_registration';
 
 // UI Imports
 import 'antd/dist/antd.css';
 import './Signup.css';
 import { Form, Icon, Input, Button, Checkbox, Layout } from 'antd';
-import NavigationBar from './NavigationBar';
+import NavBar from '../NavBar/NavBar';
 const FormItem = Form.Item;
 
 class Signup extends Component{
@@ -23,7 +23,7 @@ class Signup extends Component{
   render(){
     return(
       <Layout style={{ minHeight: '100vh' }} className="container">
-        <NavigationBar />
+        <NavBar />
         <Layout className="signup-layout">
           <Form onSubmit={this.handleSubmit} className="signup-form">
             <FormItem>
