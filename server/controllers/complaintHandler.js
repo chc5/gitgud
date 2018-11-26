@@ -14,7 +14,7 @@ const createDocComplaint = (req, res) => {
       docId: req.body.documentId 
     });
     
-    doccomplaintinst.save(function (err, doccomp) {
+    doccomplaintinst.save(function (err, docComplaint) {
       if (err) {
         res.status(500).json({error:"Could not create the Document Complaint."});
       }
@@ -39,7 +39,7 @@ const retrieveDocComplaint = (req, res) => {
 
 const retrieveDocComplaintList = (req, res) => {
   DocComplaint.find({}, function(err, results){
-    if (err || !result) {
+    if (err || !results) {
       res.status(404).json({error:"Could not retrieve Document Complaints."});
     }
     else {
@@ -64,13 +64,17 @@ const deleteDocComplaint = (req, res) => {
   }
 }
 
-const retrieveUnprocessedDocComplaints = (req, res) => {
-  DocComplaint.find({processed: false, docId: req.body.documentId}, function(err, results){
-    if (err || !result) {
-      res.status(404).json({error:"Could not retrieve Unprocessed Document Complaints."});
+const retrieveDocComplaintsForDoc = (req, res) => {
+  const docComplaintsQuery = {docId:req.body.documentId};
+  if (!req.body.getProcessed || req.body.getProcessed==="false") {
+    docComplaintsQuery.processed = false;
+  }
+  DocComplaint.find(docComplaintsQuery, function(err, results){
+    if (err || !results) {
+      res.status(404).json({error:"Could not retrieve Document Complaints."});
     }
     else {
-      res.status(200).json({unprocessedDocComplaints:results});
+      res.status(200).json({docComplaintList:results});
     }
   });
 }
@@ -80,13 +84,13 @@ const processDocComplaint = (req, res) => {
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
-    DocComplaint.updateOne({_id: req.body.docComplaintId}, {processed: true}, function(err, result) {
+    DocComplaint.updateOne({_id: req.params.complaintId}, {processed: true}, function(err, result) {
       if(err){
         res.status(500).json({error:"Could not process the Document Complaint."});
       }
       else {
         console.log("Document Complaint in DocComplaint collection updated.");
-        res.status(200).json({msg:"Document Complaint Updated."});
+        res.status(200).json({msg:"Document Complaint processed."});
       }
     });
   }
@@ -103,7 +107,7 @@ const createUserComplaint = (req, res) => {
       targetUserId: req.body.targetUserId 
     });
     
-    usercomplaintinst.save(function (err, usercomp) {
+    usercomplaintinst.save(function (err, userComplaint) {
       if (err) {
         res.status(500).json({error:"Could not create the User Complaint."});
       }
@@ -128,7 +132,7 @@ const retrieveUserComplaint = (req, res) => {
 
 const retrieveUserComplaintList = (req, res) => {
   UserComplaint.find({}, function(err, results){
-    if (err || !result) {
+    if (err || !results) {
       res.status(404).json({error:"Could not retrieve User Complaints."});
     }
     else {
@@ -158,13 +162,13 @@ const processUserComplaint = (req, res) => {
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
-    UserComplaint.updateOne({_id: req.body.userComplaintId}, {processed: true}, function(err, result) {
+    UserComplaint.updateOne({_id: req.params.complaintId}, {processed: true}, function(err, result) {
       if(err){
         res.status(500).json({error:"Could not process the User Complaint."});
       }
       else {
         console.log("User Complaint in UserComplaint collection updated.");
-        res.status(200).json({msg:"User Complaint Updated."});
+        res.status(200).json({msg:"User Complaint processed."});
       }
     });
   }
@@ -175,16 +179,16 @@ const retrieveCurrentUserComplaints = (req, res) => {
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
-    const currUsrComplaintsQuery = {targetUserId:req.user_id};
-    if (!req.body.getProcessed) {
+    const currUsrComplaintsQuery = {targetUserId:req.user._id};
+    if (!req.body.getProcessed || req.body.getProcessed==="false") {
       currUsrComplaintsQuery.processed = false;
     }
-    UserComplaint.find(currUsrComplaintsquery, function(err, results) {
-      if (err || !result) {
+    UserComplaint.find(currUsrComplaintsQuery, function(err, results) {
+      if (err || !results) {
         res.status(404).json({error:"Could not retrieve current User Complaints."});
       }
       else {
-        res.status(200).json({currentUserComplaintList:results});
+        res.status(200).json({userComplaintList:results});
       }
     });
   }
@@ -195,19 +199,20 @@ const retrieveCurrentUserSentComplaints = (req, res) => {
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
-    const currUsrSentComplaintsQuery = {fromUserId:req.user_id};
-    if (!req.body.getProcessed) {
+    const currUsrSentComplaintsQuery = {fromUserId:req.user._id};
+    if (!req.body.getProcessed || req.body.getProcessed==="false") {
       currUsrSentComplaintsQuery.processed = false;
     }
-    UserComplaint.find(currUsrSentComplaintsquery, function(err, results) {
-      if (err || !result) {
+    UserComplaint.find(currUsrSentComplaintsQuery, function(err, results) {
+      if (err || !results) {
         res.status(404).json({error:"Could not retrieve User Complaints sent by current User."});
       }
       else {
-        res.status(200).json({currentUserComplaintList:results});
+        res.status(200).json({userComplaintList:results});
       }
     });
   }
 }
 
-module.exports = {createDocComplaint, retrieveDocComplaint, retrieveDocComplaintList, deleteDocComplaint, retrieveUnprocessedDocComplaints, processDocComplaint, createUserComplaint, retrieveUserComplaint, retrieveUserComplaintList, deleteUserComplaint, processUserComplaint, retrieveCurrentUserComplaints, retrieveCurrentUserSentComplaints};
+module.exports = {createDocComplaint, retrieveDocComplaint, retrieveDocComplaintList,
+  deleteDocComplaint, retrieveDocComplaintsForDoc, processDocComplaint, createUserComplaint, retrieveUserComplaint, retrieveUserComplaintList, deleteUserComplaint, processUserComplaint, retrieveCurrentUserComplaints, retrieveCurrentUserSentComplaints};
