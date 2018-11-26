@@ -1,6 +1,6 @@
 const Doc = require('../database/models/doc');
 const Taboo = require('../database/models/taboo');
-const authentication = ('../authentication');
+const authentication = require('../authentication');
 const Revision = require('../database/models/revision');
 
 const createDoc = (req, res) => {
