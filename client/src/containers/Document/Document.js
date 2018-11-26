@@ -17,7 +17,6 @@ class Document extends Component{
     this.save = this.save.bind(this);
   }
   save(event){
-    console.log("hi")
     this.props.updateDocument(this.props.document._id, this.props.textField);
   }
   render(){
