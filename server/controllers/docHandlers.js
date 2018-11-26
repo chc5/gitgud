@@ -51,7 +51,7 @@ const retrieveDoc = (req, res) => {
   });
 };
 
-const getDocList = (req, res) => {
+const retrieveDocList = (req, res) => {
   Doc.find({}, function(err, results){
     if (err || !results) {
       return res.status(404).json({error:"Unable to retrieve your documents"});
@@ -120,4 +120,4 @@ const deleteDoc = (req, res) => {
   }
 };
 
-module.exports = {createDoc, retrieveDoc, getDocList, updateDoc, deleteDoc};
+module.exports = {createDoc, retrieveDoc, retrieveDocList, updateDoc, deleteDoc};
