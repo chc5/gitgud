@@ -14,3 +14,9 @@
   box-sizing: border-box;         /* Opera/IE 8+ */
   height: 85vh;
 }
+.doc-icon{
+  font-size:25px;
+}
+.col:hover{
+  background-color: white;
+}

@@ -5,10 +5,10 @@ import { bindActionCreators } from 'redux';
 import { retrieveAllDocument, createDocument, deleteDocument }
   from '../../actions/actions_document';
 // UI Imports
-import { Layout, List, Icon } from 'antd';
-
+import { Layout, List, Icon, Row, Col } from 'antd';
+import './DocumentManager.css';
 import NavBar from '../NavBar/NavBar';
-const { Content } = Layout;
+const { Header, Content } = Layout;
 
 class DocumentManager extends Component{
   constructor(props){
@@ -27,10 +27,20 @@ class DocumentManager extends Component{
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />
         <Layout>
-          <Icon
-            type="file-add"
-            onClick={() => this.createDocument()}
-           />
+          <Header style={{ background: 'silver', padding: 0 }}>
+            <Row type="flex" justify="center" align="end">
+              <Col
+                xs={5} sm={4} md={3} lg={2} xl={1}
+                className="col"
+                >
+                <Icon
+                  type="file-add"
+                  className="doc-icon"
+                  onClick={() => this.createDocument()}
+                 />
+              </Col>
+            </Row>
+          </Header>
           <Content style={{ margin: '0 16px' }}>
             <List
               size="large"

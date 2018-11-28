@@ -10,7 +10,9 @@
 .signup-form {
   width:100%;
   height:100%;
-  padding: 10%;
+  padding-top: 5%;
+  padding-left: 20%;
+  padding-right: 20%;
 }
 .signup-form-forgot {
   float: right;

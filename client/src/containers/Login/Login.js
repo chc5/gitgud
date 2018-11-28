@@ -11,6 +11,7 @@ import { Form, Icon, Input, Button, Layout } from 'antd';
 import NavBar from '../NavBar/NavBar';
 // https://ant.design/components/form/
 const FormItem = Form.Item;
+const { Header, Content } = Layout;
 
 class Login extends Component {
   constructor(props){
@@ -27,34 +28,39 @@ class Login extends Component {
       <Layout style={{ minHeight: '100vh' }} className="container">
         <NavBar />
         <Layout className="login-layout">
-          <Form onSubmit={this.handleSubmit} className="login-form">
-            <FormItem>
-              <Input
-                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                placeholder="Username"
-                value={this.state.userName}
-                onChange={event => this.setState({ userName: event.target.value })}
-               />
-            </FormItem>
-            <FormItem>
-              <Input
-                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                type="password"
-                placeholder="Password"
-                value={this.state.password}
-                onChange={event => this.setState({ password: event.target.value })}
-               />
-            </FormItem>
-            <FormItem>
-              <Button
-                type="primary" htmlType="submit" className="login-form-button">
-                Log in
-              </Button>
-            </FormItem>
-            <FormItem>
-              Or <a href="./signup">Register Now!</a>
-            </FormItem>
-          </Form>
+          <Header style={{ background: "white" }}>
+            GitGud
+          </Header>
+          <Content>
+            <Form onSubmit={this.handleSubmit} className="login-form">
+              <FormItem>
+                <Input
+                  prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  placeholder="Username"
+                  value={this.state.userName}
+                  onChange={event => this.setState({ userName: event.target.value })}
+                 />
+              </FormItem>
+              <FormItem>
+                <Input
+                  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  type="password"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={event => this.setState({ password: event.target.value })}
+                 />
+              </FormItem>
+              <FormItem>
+                <Button
+                  type="primary" htmlType="submit" className="login-form-button">
+                  Log in
+                </Button>
+              </FormItem>
+              <FormItem>
+                Or <a href="./signup">Register Now!</a>
+              </FormItem>
+            </Form>
+          </Content>
         </Layout>
       </Layout>
     );
