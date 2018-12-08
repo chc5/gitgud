@@ -63,7 +63,7 @@ const retrieveDocList = (req, res) => {
 };
 
 const updateDoc = (req, res) => {
-  if(req.isAuthenticated()){
+  if(!req.isAuthenticated()){
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
@@ -73,7 +73,7 @@ const updateDoc = (req, res) => {
     let revisionInst = new Revision({
       doc_id: req.params.documentId,
       changes: req.body.textField,
-      modifier_id: req.body._id
+      modifier_id: req.user._id
     });
     Taboo.findAllTabooWords(req.body.textField.toLowerCase(), function(tabooErr, tabooWords){
       if (tabooErr) {
