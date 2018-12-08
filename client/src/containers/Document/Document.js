@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { updateTextField } from '../../actions/actions_text_field';
 import { retrieveDocument, updateDocument } from '../../actions/actions_document';
 
-import Complaint from '../Complaint/Complaint';
+import DocComplaint from '../DocComplaint/DocComplaint';
 // UI Imports
 import { Layout, Row, Col } from 'antd';
 import './Document.css';
@@ -38,7 +38,6 @@ class Document extends Component{
     return(
       <Header style={{ background: 'silver', padding: 0 }}>
         <Row type="flex" justify="center" align="end">
-
           <Col
             xs={8} sm={5} md={4} lg={3} xl={2}
             className="col"
@@ -65,7 +64,7 @@ class Document extends Component{
   }
   renderComplaintForm(){
     return(
-      <Complaint
+      <DocComplaint
         visible={this.state.complaintVisible}
         hideComplaint={this.hideComplaint}
         docTitle={this.props.document.title}

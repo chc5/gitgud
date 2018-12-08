@@ -7,11 +7,11 @@ import {
   Form, Modal, Button
 } from 'antd';
 
-import "./Complaint.css";
+import "./DocComplaint.css";
 
 const FormItem = Form.Item;
 
-class Complaint extends Component{
+class DocComplaint extends Component{
   state = {
     visible: this.props.visible,
     complaintDetails: "",
@@ -28,6 +28,7 @@ class Complaint extends Component{
     const complaintText = this.state.complaintDetails;
     await this.props.createDocComplaint(docId, revisionId, complaintText);
     this.props.hideComplaint();
+    this.setState({ complaintDetails: "" });
   }
 
   updateTextField = (text) => {
@@ -54,6 +55,7 @@ class Complaint extends Component{
     return (
       <Modal
          visible={this.props.visible}
+         onCancel={this.handleCancel}
          footer={[
             <Button
               key="back"
@@ -81,4 +83,4 @@ function mapDispatchToProps(dispatch){
   return bindActionCreators({ createDocComplaint }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps) (Complaint);
+export default connect(null, mapDispatchToProps) (DocComplaint);
