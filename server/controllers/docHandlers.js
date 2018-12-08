@@ -80,17 +80,29 @@ const updateDoc = (req, res) => {
         res.status(500).json({error:"Unable to save this document"});
       }
       else {
-        Doc.updateOne({_id:revision.doc_id}, { $push:{revisions:revision._id}, content:req.body.textField}, function(docErr, result){
-          if (docErr) {
+        Taboo.findAllTabooWords(revision.changes.toLowerCase(), function(tabooErr, tabooWords){
+          if (tabooErr) {
             res.status(500).json({error:"Unable to save this document"});
-            Revision.deleteOne({_id:revision._id}, function(err){
-              if (err) {
-                console.log("Error deleting revision after failed update");
-              }
-            });
           }
           else {
-            res.status(200).json({msg:"Document has been saved"});
+            if (tabooWords.length != 0) {
+              res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
+            }
+            else {
+              Doc.updateOne({_id:revision.doc_id}, { $push:{revisions:revision._id}, content:req.body.textField}, function(docErr, result){
+                if (docErr) {
+                  res.status(500).json({error:"Unable to save this document"});
+                  Revision.deleteOne({_id:revision._id}, function(err){
+                    if (err) {
+                      console.log("Error deleting revision after failed update");
+                    }
+                  });
+                }
+                else {
+                  res.status(200).json({msg:"Document has been saved"});
+                }
+              });
+            }
           }
         });
       }
