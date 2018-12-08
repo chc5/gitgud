@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Router, Route, Switch } from "react-router-dom";
-import Complaint from "./components/Complaint/Complaint";
-import ComplaintManager from "./containers/ComplaintManager/ComplaintManager";
+import DocComplaintManager from "./containers/DocComplaintManager/DocComplaintManager";
 import Document from "./containers/Document/Document";
 import DocumentManager from "./containers/DocumentManager/DocumentManager";
 import Home from "./containers/Home/Home";
@@ -10,6 +9,7 @@ import Profile from "./components/Profile/Profile";
 import ProfileManager from "./containers/ProfileManager/ProfileManager";
 import Signup from "./containers/Signup/Signup";
 import TabooWordManager from "./containers/TabooWordManager/TabooWordManager";
+import UserComplaintManager from "./containers/UserComplaintManager/UserComplaintManager";
 import createHistory from "history/createBrowserHistory";
 import './App.css';
 
@@ -27,8 +27,8 @@ class App extends Component {
           <div className="container">
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route path="/complaints/:id" component={Complaint} />
-              <Route path="/complaints" component={ComplaintManager} />
+              <Route path="/complaints/user" component={UserComplaintManager} />
+              <Route path="/complaints/doc" component={DocComplaintManager} />
               <Route path="/docs/:id" component={Document} />
               <Route path="/docs" component={DocumentManager} />
               <Route path="/login" component={Login} />

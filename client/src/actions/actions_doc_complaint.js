@@ -1,5 +1,13 @@
 import axios from 'axios';
 
+import {
+  CRUD_DOC_COMPLAINT_ERROR
+} from '../constants/types_error';
+
+import {
+  RETRIEVE_DOC_COMPLAINT_LIST
+} from '../constants/types_doc_complaint_action';
+
 export function createDocComplaint(documentId, revisionId, text){
   let url = `/api/complaints/docs/create`;
   return (dispatch) => {
@@ -22,8 +30,14 @@ export function retrieveAllDocComplaint(){
   let url = `/api/complaints/docs/retrieveAll`;
   return (dispatch) => {
     axios.post(url)
-      .then((response) => console.log("retrieveAllDocComplaint", response))
-      .catch((error) => console.log("retrieveAllDocComplaint", error));
+      .then((response) => dispatch({
+        type: RETRIEVE_DOC_COMPLAINT_LIST,
+        payload: response.data
+      }))
+      .catch((error) => dispatch({
+        type: CRUD_DOC_COMPLAINT_ERROR,
+        payload: error
+      }));
   }
 }
 

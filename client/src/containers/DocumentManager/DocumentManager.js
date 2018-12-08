@@ -18,9 +18,14 @@ class DocumentManager extends Component{
     }
     this.props.retrieveAllDocument();
   }
-  createDocument(){
+  createDocument = async () => {
     let docName = prompt("Enter new file name.");
-    this.props.createDocument(docName, this.props.history);
+    await this.props.createDocument(docName, this.props.history);
+    this.props.retrieveAllDocument();
+  }
+  deleteDocument = async (id) => {
+    await this.props.deleteDocument(id);
+    this.props.retrieveAllDocument();
   }
   render(){
     return(
@@ -32,6 +37,7 @@ class DocumentManager extends Component{
               <Col
                 xs={8} sm={5} md={4} lg={3} xl={2}
                 className="col"
+                onClick={this.createDocument}
                 >
                 Create
               </Col>
@@ -64,7 +70,7 @@ class DocumentManager extends Component{
                     <Col
                       xs={4} sm={2} md={1} lg={1} xl={1}
                       className="list-item-col"
-                      onClick={() => this.props.deleteDocument(item._id)}
+                      onClick={() => this.deleteDocument(item._id)}
                       >
                       <Icon type="delete" />
                     </Col>

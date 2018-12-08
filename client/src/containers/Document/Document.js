@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { updateTextField } from '../../actions/actions_text_field';
 import { retrieveDocument, updateDocument } from '../../actions/actions_document';
 
-import DocComplaint from '../DocComplaint/DocComplaint';
+import DocComplaintForm from '../DocComplaintForm/DocComplaintForm';
 // UI Imports
 import { Layout, Row, Col } from 'antd';
 import './Document.css';
@@ -64,7 +64,7 @@ class Document extends Component{
   }
   renderComplaintForm(){
     return(
-      <DocComplaint
+      <DocComplaintForm
         visible={this.state.complaintVisible}
         hideComplaint={this.hideComplaint}
         docTitle={this.props.document.title}

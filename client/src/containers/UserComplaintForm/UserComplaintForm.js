@@ -7,11 +7,11 @@ import {
   Form, Modal, Button
 } from 'antd';
 
-import "./UserComplaint.css";
+import "./UserComplaintForm.css";
 
 const FormItem = Form.Item;
 
-class UserComplaint extends Component{
+class UserComplaintForm extends Component{
   state = {
     visible: this.props.visible,
     complaintDetails: "",
@@ -82,4 +82,4 @@ function mapDispatchToProps(dispatch){
   return bindActionCreators({ createUserComplaint }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps) (UserComplaint);
+export default connect(null, mapDispatchToProps) (UserComplaintForm);

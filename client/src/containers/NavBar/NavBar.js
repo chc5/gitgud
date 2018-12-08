@@ -68,13 +68,23 @@ class NavBar extends Component{
             <Icon type="safety-certificate" />
             <span>Taboo Words Banned</span>
           </Menu.Item>
+          <Menu.Item
+            key="5"
+            onClick={() => {
+              this.props.history.push(`/complaints/doc`);
+              this.props.updateNavKey("5");
+            }}
+            >
+            <Icon type="exception" />
+            <span>Document Complaints</span>
+          </Menu.Item>
           {!this.props.userInfo
             ? (
                 <Menu.Item
-                  key="5"
+                  key="6"
                   onClick={() => {
                     this.props.history.push(`/login`);
-                    this.props.updateNavKey("5");
+                    this.props.updateNavKey("6");
                   }}
                   >
                   <Icon type="login" />
@@ -83,10 +93,10 @@ class NavBar extends Component{
               )
             : (
                 <Menu.Item
-                  key="6"
+                  key="7"
                   onClick={() => {
                     this.props.logout(this.props.history)
-                    this.props.updateNavKey("6");
+                    this.props.updateNavKey("7");
                   }}
                   >
                   <Icon type="logout" />
