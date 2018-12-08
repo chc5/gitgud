@@ -9,7 +9,7 @@ const DocSchema = new Schema({
   content: {type: String, default:''},
   original_content: {type: String, default:''},
   owner_id: {type: Schema.Types.ObjectId, ref: 'User'},
-  locked: {type: Schema.Types.ObjectId, default: null},
+  locked: {type: Schema.Types.ObjectId, default: null, ref: 'User'},
   revisions: [{type: Schema.Types.ObjectId, ref: 'Revision'}],
   date_created: {type: Date, default: Date.now}
 });

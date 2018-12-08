@@ -52,31 +52,41 @@ const retrieveDoc = (req, res) => {
 };
 
 const lockDoc = (req, res) => {
-  Doc.findOne({_id:req.params.documentId}, function(lockerr, lockresult){
-    if(lockresult.locked) {
-      return res.status(404).json({msg:"Another user is currently making changes to the document"});
-    }
-    Doc.updateOne({_id:req.params.documentId}, {locked: req.user._id}, function(err, result){
-      if(err) {
-        return res.status(500).json({error:"Failed to lock document"});
+  if(!req.isAuthenticated()){
+    res.status(401).json({error:"Must be logged in to perform this action"});
+  }
+  else{
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr || lockresult.locked) {
+        return res.status(403).json({error:"Another user is currently making changes to the document"});
       }
-      res.status(200).json({msg:"Locked document successfully"});
+      Doc.updateOne({_id:req.params.documentId}, {locked: req.user._id}, function(err, result){
+        if(err) {
+          return res.status(500).json({error:"Failed to lock document"});
+        }
+        res.status(200).json({msg:"Locked document successfully"});
+      });
     });
-  });
+  }
 }
 
 const unlockDoc = (req, res) => {
-  Doc.findOne({_id:req.params.documentId}, function(lockerr, lockresult){
-    if(lockresult.locked != req.user._id && lockresult.owner_id != req.user._id) {
-      return res.status(500).json({msg:"You are not the user that currently has the lock"});
-    }
-    Doc.updateOne({_id:req.params.documentId}, {locked: null}, function(err, result){
-      if(err) {
-        return res.status(500).json({error:"Failed to unlock document"});
+  if(!req.isAuthenticated()){
+    res.status(401).json({error:"Must be logged in to perform this action"});
+  }
+  else{
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr || (lockresult.locked != req.user._id && lockresult.owner_id != req.user._id)) {
+        return res.status(403).json({msg:"You are not the user that currently has the lock"});
       }
-      res.status(200).json({msg:"Unlocked document successfully"});
+      Doc.updateOne({_id:req.params.documentId}, {locked: null}, function(err, result){
+        if(err) {
+          return res.status(500).json({error:"Failed to unlock document"});
+        }
+        res.status(200).json({msg:"Unlocked document successfully"});
+      });
     });
-  });
+  }
 }
 
 const retrieveDocList = (req, res) => {
