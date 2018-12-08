@@ -7,10 +7,10 @@ import { retrieveAllDocComplaint, deleteDocComplaint }
 // UI Imports
 import { Layout, List, Icon, Row, Col } from 'antd';
 import NavBar from '../NavBar/NavBar';
-import './ComplaintManager.css';
+// import './DocComplaintManager.css';
 const { Header, Content } = Layout;
 
-class ComplaintManager extends Component{
+class DocComplaintManager extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -69,7 +69,7 @@ class ComplaintManager extends Component{
                     <Col
                       xs={20} sm={22} md={23} lg={23} xl={23}
                       className="list-item-col list-item-title"
-                      onClick={() => this.props.history.push(`/complaints/${item._id}`)}
+                      onClick={() => this.props.history.push(`/complaints/doc/${item._id}`)}
                       >
                       {item.title}
                     </Col>
@@ -100,4 +100,4 @@ function mapDispatchToProps(dispatch){
   return bindActionCreators({ retrieveAllDocComplaint, deleteDocComplaint }, dispatch);
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps) (ComplaintManager));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps) (DocComplaintManager));
