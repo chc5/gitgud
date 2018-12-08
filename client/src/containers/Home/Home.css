@@ -1,18 +1,10 @@
-.nav-card{
-  width: 30%;
-  margin-left: 10%;
-  line-height: 90px;
-  display: inline-block;
-  text-align: center;
+.card{
   cursor: pointer;
 }
-.login-card{
-  width: 50%;
-  display: inline-block;
-  cursor: pointer;
+.card:hover{
+  background-color: lime;
 }
-.signup-card{
-  width: 50%;
-  display: inline-block;
-  cursor: pointer;
+.row{
+  margin-top: 10%;
+  margin-bottom: 10%;
 }

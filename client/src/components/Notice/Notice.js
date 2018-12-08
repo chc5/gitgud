@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { notification } from 'antd';
+import { resetNotification } from '../../actions/actions_notification';
 
 class Notice extends Component{
   constructor(props){
@@ -9,12 +11,13 @@ class Notice extends Component{
     this.state = { visible: true }
   }
   componentDidUpdate(prevProps){
-    if(this.props.notification !== prevProps.notification){
+    if(this.props.notification){
       const args = {
         message: this.props.notification,
         duration: 1.5,
         placement: 'bottomRight'
       };
+      this.props.resetNotification();
       notification.open(args);
     }
   }
@@ -31,4 +34,8 @@ function mapStateToProps({ notification }){
   return { notification };
 }
 
-export default connect(mapStateToProps) (Notice);
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({ resetNotification }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (Notice);
