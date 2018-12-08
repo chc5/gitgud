@@ -16,9 +16,8 @@ const DocSchema = new Schema({
 
 DocSchema.methods.findAllTabooIdx = function(cb){
   //A String is considered a word if there is a space
-  //Checks all the words and see if any are in taboo words and replaces those words
   //returns indexes of all taboo words, format at each index: [start, end + 1]
-  TabooWords.getTabooWords((err, results) => {
+  TabooWords.getApprovedTabooWords((err, results) => {
     if (err) {
       return cb(err);
     }
