@@ -7,5 +7,5 @@ export default function(state = "", action){
       return action.payload.error;
     }
   }
-  return state;
+  return "";
 }

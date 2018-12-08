@@ -17,6 +17,9 @@
 .doc-icon{
   font-size:25px;
 }
+.col{
+  font-size: 3vh;
+}
 .col:hover{
   background-color: white;
 }
