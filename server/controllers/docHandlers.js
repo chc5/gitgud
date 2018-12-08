@@ -13,7 +13,6 @@ const createDoc = (req, res) => {
       content: req.body.content,
       original_content: req.body.content,
       owner_id: req.user._id,
-      locked: false,
     });
 
     docinst.save(function (err, doc) {
@@ -27,6 +26,7 @@ const createDoc = (req, res) => {
     });
   }
 };
+
 const retrieveDoc = (req, res) => {
   Doc.findOne({_id:req.params.documentId}, function(err, result){
     if (err || !result) {
@@ -50,6 +50,34 @@ const retrieveDoc = (req, res) => {
     }
   });
 };
+
+const lockDoc = (req, res) => {
+  Doc.findOne({_id:req.params.documentId}, function(lockerr, lockresult){
+    if(lockresult.locked) {
+      return res.status(404).json({msg:"Another user is currently making changes to the document"});
+    }
+    Doc.updateOne({_id:req.params.documentId}, {locked: req.user._id}, function(err, result){
+      if(err) {
+        return res.status(500).json({error:"Failed to lock document"});
+      }
+      res.status(200).json({msg:"Locked document successfully"});
+    });
+  });
+}
+
+const unlockDoc = (req, res) => {
+  Doc.findOne({_id:req.params.documentId}, function(lockerr, lockresult){
+    if(lockresult.locked != req.user._id && lockresult.owner_id != req.user._id) {
+      return res.status(500).json({msg:"You are not the user that currently has the lock"});
+    }
+    Doc.updateOne({_id:req.params.documentId}, {locked: null}, function(err, result){
+      if(err) {
+        return res.status(500).json({error:"Failed to unlock document"});
+      }
+      res.status(200).json({msg:"Unlocked document successfully"});
+    });
+  });
+}
 
 const retrieveDocList = (req, res) => {
   Doc.find({}, function(err, results){
@@ -120,4 +148,4 @@ const deleteDoc = (req, res) => {
   }
 };
 
-module.exports = {createDoc, retrieveDoc, retrieveDocList, updateDoc, deleteDoc};
+module.exports = {createDoc, retrieveDoc, lockDoc, unlockDoc, retrieveDocList, updateDoc, deleteDoc};
