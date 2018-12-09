@@ -138,7 +138,7 @@ const updateDoc = (req, res) => {
         }
         else {
           if (tabooWords.length != 0) {
-            res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
+            return res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
           }
           revisionInst.save(function(err, revision){
             if (err) {
