@@ -63,11 +63,14 @@ const lockDoc = (req, res) => {
       if(lockresult.locked) {
         return res.status(403).json({error:"Another user is currently making changes to the document"});
       }
-      Doc.updateOne({_id:req.params.documentId}, {locked: req.user._id}, function(err, result){
-        if(err) {
-          return res.status(500).json({error:"Failed to lock document"});
+      lockResult.locked = req.user._id;
+      lockResult.save(function (err, doc) {
+        if (err) {
+          res.status(500).json({error:"Failed to lock document"});
         }
-        res.status(200).json({msg:"Locked document successfully"});
+        else {
+          res.status(200).json({msg:"Document locked"});     
+        }
       });
     });
   }
@@ -85,11 +88,14 @@ const unlockDoc = (req, res) => {
       if(lockresult.locked != req.user._id && lockresult.owner_id != req.user._id) {
         return res.status(403).json({error:"You are not the user that currently has the lock"});
       }
-      Doc.updateOne({_id:req.params.documentId}, {locked: null}, function(err, result){
-        if(err) {
-          return res.status(500).json({error:"Failed to unlock document"});
+      lockResult.locked = null;
+      lockResult.save(function (err, doc) {
+        if (err) {
+          res.status(500).json({error:"Failed to unlock document"});
         }
-        res.status(200).json({msg:"Unlocked document successfully"});
+        else {
+          res.status(200).json({msg:"Document unlocked"});     
+        }
       });
     });
   }
@@ -131,8 +137,10 @@ const updateDoc = (req, res) => {
           res.status(500).json({error:"Unable to save this document"});
         }
         else {
-          Doc.updateOne({_id:revision.doc_id}, { $push:{revisions:revision._id}, content:req.body.textField}, function(docErr, result){
-            if (docErr) {
+          lockResult.content = req.body.textField;
+          lockResult.revisions.push(revision._id);
+          lockResult.save(function (err, doc) {
+            if (err) {
               res.status(500).json({error:"Unable to save this document"});
               Revision.deleteOne({_id:revision._id}, function(err){
                 if (err) {
@@ -141,7 +149,7 @@ const updateDoc = (req, res) => {
               });
             }
             else {
-              res.status(200).json({msg:"Document has been saved"});
+              res.status(200).json({msg:"Document has been saved"});     
             }
           });
         }
