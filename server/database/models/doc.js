@@ -33,8 +33,20 @@ DocSchema.methods.findAllTabooIdx = function(cb){
   });
 };
 
-DocSchema.methods.getVersion = function(revisionId, cb){
-  if (this.revisions.indexOf(revisionId) < 0 ) {
+DocSchema.methods.containsRevisionIdAfterPopulate = function(revisionId) {
+  for(const revision of this.revisions) {
+    if (revision._id.equals(revisionId)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+DocSchema.methods.getVersion = function(revisionId, options, cb){
+  if (options.populated && !this.containsRevisionIdAfterPopulate(revisionId)) {
+    return cb({error:"Could not retrieve document version"});
+  }
+  if(!options.populated && this.revisions.indexOf(revisionId) < 0) {
     return cb({error:"Could not retrieve document version"});
   }
   // Apply changes and call cb with correct content
