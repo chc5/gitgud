@@ -8,7 +8,7 @@ const DocSchema = new Schema({
   title: {type: String, required:true},
   content: {type: String, default:''},
   owner_id: {type: Schema.Types.ObjectId, ref: 'User'},
-  locked: Boolean,
+  locked: {type: Schema.Types.ObjectId, default: null, ref: 'User'},
   revisions: [{type: Schema.Types.ObjectId, ref: 'Revision'}],
   date_created: {type: Date, default: Date.now}
 });
@@ -64,5 +64,6 @@ DocSchema.methods.getVersion = function(revisionId, options, cb){
     cb(null, result);
   }); 
 };
+
 const doc = mongoose.model('Document', DocSchema); 
 module.exports = doc;

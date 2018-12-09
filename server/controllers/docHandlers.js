@@ -12,7 +12,6 @@ const createDoc = (req, res) => {
       title: req.body.title,
       content: req.body.content,
       owner_id: req.user._id,
-      locked: false,
     });
     docinst.save(function (err, doc) {
       if (err) {
@@ -27,6 +26,7 @@ const createDoc = (req, res) => {
     });
   }
 };
+
 const retrieveDoc = (req, res) => {
   Doc.findOne({_id:req.params.documentId}).populate({
       path:"revisions", select:"modifier_id date_created",
@@ -57,6 +57,59 @@ const retrieveDoc = (req, res) => {
   });
 };
 
+const lockDoc = (req, res) => {
+  if(!req.isAuthenticated()){
+    res.status(401).json({error:"Must be logged in to perform this action"});
+  }
+  else{
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
+      }
+      if(lockResult.locked) {
+        return res.status(403).json({error:"Another user is currently making changes to the document"});
+      }
+      lockResult.locked = req.user._id;
+      lockResult.save(function (err, doc) {
+        if (err) {
+          res.status(500).json({error:"Failed to lock document"});
+        }
+        else {
+          res.status(200).json({msg:"Document locked"});     
+        }
+      });
+    });
+  }
+};
+
+const unlockDoc = (req, res) => {
+  if(!req.isAuthenticated()){
+    res.status(401).json({error:"Must be logged in to perform this action"});
+  }
+  else{
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
+      }
+      if (!lockResult.locked) {
+        return res.status(200).json({msg:"Document is already unlocked"});
+      }
+      if(!req.user._id.equals(lockResult.locked) && !req.user._id.equals(lockResult.owner_id) ) {
+        return res.status(403).json({error:"You are not the user that currently has the lock"});
+      }
+      lockResult.locked = null;
+      lockResult.save(function (err, doc) {
+        if (err) {
+          res.status(500).json({error:"Failed to unlock document"});
+        }
+        else {
+          res.status(200).json({msg:"Document unlocked"});     
+        }
+      });
+    });
+  }
+};
+
 const retrieveDocList = (req, res) => {
   Doc.find({}, function(err, results){
     if (err || !results) {
@@ -81,22 +134,30 @@ const updateDoc = (req, res) => {
       changes: req.body.textField,
       modifier_id: req.user._id
     });
-    Taboo.findAllTabooWords(req.body.textField.toLowerCase(), function(tabooErr, tabooWords){
-      if (tabooErr) {
-        res.status(500).json({error:"Unable to save this document"});
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      else {
-        if (tabooWords.length != 0) {
-          res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
+      if(!req.user._id.equals(lockResult.locked) && !req.body.title) {
+        return res.status(403).json({error:"You must acquire the lock before making changes to the document"});
+      }
+      Taboo.findAllTabooWords(req.body.textField.toLowerCase(), function(tabooErr, tabooWords){
+        if (tabooErr) {
+          res.status(500).json({error:"Unable to save this document"});
         }
         else {
+          if (tabooWords.length != 0) {
+            return res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
+          }
           revisionInst.save(function(err, revision){
             if (err) {
               res.status(500).json({error:"Unable to save this document"});
             }
             else {
-              Doc.updateOne({_id:revision.doc_id}, { $push:{revisions:revision._id}, content:req.body.textField}, function(docErr, result){
-                if (docErr) {
+              lockResult.content = req.body.textField;
+              lockResult.revisions.push(revision._id);
+              lockResult.save(function (err, doc) {
+                if (err) {
                   res.status(500).json({error:"Unable to save this document"});
                   Revision.deleteOne({_id:revision._id}, function(err){
                     if (err) {
@@ -105,37 +166,46 @@ const updateDoc = (req, res) => {
                   });
                 }
                 else {
-                  res.status(200).json({msg:"Document has been saved"});
+                  res.status(200).json({msg:"Document has been saved"});     
                 }
               });
             }
           });
         }
-      }
+      });
     });
   }
 };
+
 
 const deleteDoc = (req, res) => {
   if(!req.isAuthenticated()){
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
-    // TODO: only delete if user owns document?
-    Doc.findOneAndDelete({_id:req.params.documentId}, function(err, document){
-      if (err) {
-        res.status(500).json({error:"Unable to delete this document"});
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      else {
-        Revision.deleteMany({_id:{$in:document.revisions}}, function(err){
-          if (err) {
-            console.log("Error deleting revisions after document deletion");
-          }
-        }); 
-        res.status(200).json({msg:"Document has been deleted"});
+      if(!req.user._id.equals(lockResult.owner_id)) {
+        return res.status(403).json({error:"You are not the owner of the document"});
       }
+      // TODO: only delete if user owns document?
+      Doc.findOneAndDelete({_id:req.params.documentId}, function(err, document){
+        if (err) {
+          res.status(500).json({error:"Unable to delete this document"});
+        }
+        else {
+          Revision.deleteMany({_id:{$in:document.revisions}}, function(err){
+            if (err) {
+              console.log("Error deleting revisions after document deletion");
+            }
+          }); 
+          res.status(200).json({msg:"Document has been deleted"});
+        }
+      });
     });
   }
 };
 
-module.exports = {createDoc, retrieveDoc, retrieveDocList, updateDoc, deleteDoc};
+module.exports = {createDoc, retrieveDoc, lockDoc, unlockDoc, retrieveDocList, updateDoc, deleteDoc};
