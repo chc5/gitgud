@@ -30,10 +30,10 @@ export function createDocument(docName, history){
   }
 }
 
-export function retrieveDocument(documentId){
+export function retrieveDocument(documentId, revisionId){
   let url = `/api/docs/retrieve/${documentId}`;
   return (dispatch) => {
-    axios.post(url)
+    axios.post(url, { revisionId })
       .then((response) => {
         dispatch({
           type: RETRIEVE_DOCUMENT,

@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { createDocComplaint } from '../../actions/actions_doc_complaint';
+import { retrieveDocument } from '../../actions/actions_document';
 
 import {
   Form, Modal, Button
 } from 'antd';
 
-import "./DocComplaintForm.css";
+import "./History.css";
 
 const FormItem = Form.Item;
 
-class DocComplaintForm extends Component{
+class History extends Component{
   constructor(props){
     super(props);
     this.state = {
       visible: this.props.visible,
-      content: "",
+      complaintDetails: "",
       loading: false
     }
   }
@@ -28,17 +29,18 @@ class DocComplaintForm extends Component{
   handleSubmit = async (e) => {
     const docId = this.props.documentId;
     const revisionId = this.props.revisionId;
-    const content = this.state.content;
-    await this.props.createDocComplaint(docId, revisionId, content);
-    this.setState({ content: "" });
+    const complaintText = this.state.complaintDetails;
+    await this.props.createDocComplaint(docId, revisionId, complaintText);
+    this.setState({ complaintDetails: "" });
+    console.log(this.state.complaintDetails);
     this.props.hideComplaint();
   }
 
   updateTextField = (text) => {
-    this.setState({ content: text });
+    this.setState({ complaintDetails: text });
   }
 
-  renderForm(){
+  renderForm = () => {
     return (
       <Form>
         <h2>File a Complaint on {this.props.docTitle}</h2>
@@ -46,7 +48,7 @@ class DocComplaintForm extends Component{
            label="Complaint Details"
          >
          <textarea
-           value={ this.state.content }
+           value={ this.state.complaintDetails }
            onChange={event => this.updateTextField(event.target.value)}
            className="complaint-text-area"
           />
@@ -83,7 +85,7 @@ class DocComplaintForm extends Component{
 }
 
 function mapDispatchToProps(dispatch){
-  return bindActionCreators({ createDocComplaint }, dispatch);
+  return bindActionCreators({ retrieveDocument }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps) (DocComplaintForm);
+export default withRouter(connect(null, mapDispatchToProps) (History));

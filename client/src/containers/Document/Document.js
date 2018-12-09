@@ -5,6 +5,7 @@ import { updateTextField } from '../../actions/actions_text_field';
 import { retrieveDocument, updateDocument } from '../../actions/actions_document';
 
 import DocComplaintForm from '../DocComplaintForm/DocComplaintForm';
+import History from '../History/History';
 // UI Imports
 import { Layout, Row, Col } from 'antd';
 import './Document.css';
@@ -15,7 +16,8 @@ class Document extends Component{
   constructor(props){
     super(props);
     this.state = {
-      complaintVisible: false
+      complaintVisible: false,
+      historyVisible: false
     };
 
     let parsedUrl = new URL(window.location.href);
@@ -25,15 +27,17 @@ class Document extends Component{
     this.showComplaint = this.showComplaint.bind(this);
     this.hideComplaint = this.hideComplaint.bind(this);
   }
-  save(event){
+
+  save = (event) => {
     this.props.updateDocument(this.props.document._id, this.props.textField);
   }
-  showComplaint(event){
-    this.setState({ complaintVisible: true });
-  }
-  hideComplaint(event){
-    this.setState({ complaintVisible: false });
-  }
+
+  // UI Modal rendering for Complaints and History
+  showComplaint = (event) => this.setState({ complaintVisible: true });
+  hideComplaint = (event) => this.setState({ complaintVisible: false });
+  showHistory = (event) => this.setState({ historyVisible: true });
+  hideHistory = (event) => this.setState({ historyVisible: false });
+
   renderDocumentBar(){
     return(
       <Header style={{ background: 'silver', padding: 0 }}>
@@ -48,8 +52,9 @@ class Document extends Component{
           <Col
             xs={8} sm={5} md={4} lg={3} xl={2}
             className="col"
+            onClick={this.showHistory}
             >
-            Revisions
+            History
           </Col>
           <Col
             xs={8} sm={5} md={4} lg={3} xl={2}
@@ -70,6 +75,16 @@ class Document extends Component{
         docTitle={this.props.document.title}
         documentId={this.props.document.id}
        />
+    );
+  }
+  renderHistory(){
+    return(
+      <History
+        documentId={this.props.document.id}
+        revisions={this.props.document.revisions}
+        docTitle={this.props.document.id}
+        visible={this.state.historyVisible}
+      />
     );
   }
   render(){

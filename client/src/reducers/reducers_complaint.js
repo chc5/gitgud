@@ -8,7 +8,6 @@ export default function(state = null, action){
     case RETRIEVE_DOC_COMPLAINT:
       return action.payload.docComplaint;
     case RESET_DOC_COMPLAINT:
-      console.log("RESETTING....");
       return null;
     default:
       return state;

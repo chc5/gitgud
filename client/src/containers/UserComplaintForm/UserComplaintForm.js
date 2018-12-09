@@ -12,10 +12,13 @@ import "./UserComplaintForm.css";
 const FormItem = Form.Item;
 
 class UserComplaintForm extends Component{
-  state = {
-    visible: this.props.visible,
-    complaintDetails: "",
-    loading: false
+  constructor(props){
+    super(props);
+    this.state = {
+      visible: this.props.visible,
+      complaintDetails: "",
+      loading: false
+    }
   }
 
   handleCancel = (e) => {

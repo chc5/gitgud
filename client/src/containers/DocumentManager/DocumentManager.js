@@ -5,9 +5,10 @@ import { bindActionCreators } from 'redux';
 import { retrieveAllDocument, createDocument, deleteDocument }
   from '../../actions/actions_document';
 // UI Imports
-import { Layout, List, Icon, Row, Col } from 'antd';
+import { Layout, Row, Col, Spin } from 'antd';
 import './DocumentManager.css';
 import NavBar from '../NavBar/NavBar';
+import DocumentList from '../../components/DocumentList/DocumentList';
 const { Header, Content } = Layout;
 
 class DocumentManager extends Component{
@@ -15,20 +16,39 @@ class DocumentManager extends Component{
     super(props);
     this.state = {
       collapsed: false,
+      loading: false
     }
     this.props.retrieveAllDocument();
   }
   createDocument = async () => {
     let docName = prompt("Enter new file name.");
     if(docName){
+      this.setState({ loading: true });
       await this.props.createDocument(docName, this.props.history);
-      this.props.retrieveAllDocument();
+      await this.props.retrieveAllDocument();
+      this.setState({ loading: false });
     }
   }
   deleteDocument = async (id) => {
+    this.setState({ loading: true });
     await this.props.deleteDocument(id);
-    this.props.retrieveAllDocument();
+    await this.props.retrieveAllDocument();
+    this.setState({ loading: false });
   }
+
+  renderLoading(){
+    if(this.state.loading === true){
+      return (
+        <div style={{ padding:"1%" }}>
+          <Spin />
+        </div>
+      );
+    }
+    else{
+      return null;
+    }
+  }
+
   render(){
     return(
       <Layout style={{ minHeight: '100vh' }}>
@@ -46,40 +66,8 @@ class DocumentManager extends Component{
             </Row>
           </Header>
           <Content>
-            <List
-              size="large"
-              bordered
-              dataSource={this.props.documentList}
-              renderItem={item => (
-                <List.Item
-                  className="list-item"
-                  >
-                  <Row type="flex" justify="start" align="middle" className="list-item-row">
-                    <Col
-                      xs={16} sm={20} md={22} lg={22} xl={22}
-                      className="list-item-col list-item-title"
-                      onClick={() => this.props.history.push(`/docs/${item._id}`)}
-                      >
-                      {item.title}
-                    </Col>
-                    <Col
-                      xs={4} sm={2} md={1} lg={1} xl={1}
-                      className="list-item-col"
-                      onClick={() => this.props.history.push(`/docs/${item._id}`)}
-                      >
-                      <Icon type="edit" />
-                    </Col>
-                    <Col
-                      xs={4} sm={2} md={1} lg={1} xl={1}
-                      className="list-item-col"
-                      onClick={() => this.deleteDocument(item._id)}
-                      >
-                      <Icon type="delete" />
-                    </Col>
-                  </Row>
-                </List.Item>
-              )}
-            />
+            {this.renderLoading()}
+            <DocumentList />
           </Content>
         </Layout>
       </Layout>
