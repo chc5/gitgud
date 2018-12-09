@@ -40,7 +40,7 @@ const retrieveDoc = (req, res) => {
     }
     if (result) {
       if (req.body.revisionId) {
-        result.getVersion(req.body.revisionId, function(versionErr, versionResult) {
+        result.getVersion(req.body.revisionId, {populated:true}, function(versionErr, versionResult) {
           if (versionErr || !versionResult) {
             return res.status(404).json(versionErr);
           }
