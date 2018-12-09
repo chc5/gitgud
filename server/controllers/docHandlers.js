@@ -85,7 +85,10 @@ const unlockDoc = (req, res) => {
       if(lockErr){
         return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      if(lockresult.locked != req.user._id && lockresult.owner_id != req.user._id) {
+      if (!lockResult.locked) {
+        return res.status(200).json({msg:"Document is already unlocked"});
+      }
+      if(!req.user._id.equals(lockResult.locked) && !req.user._id.equals(lockResult.owner_id) ) {
         return res.status(403).json({error:"You are not the user that currently has the lock"});
       }
       lockResult.locked = null;
@@ -129,8 +132,8 @@ const updateDoc = (req, res) => {
       if(lockErr){
         return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      if(lockresult.locked) {
-        return res.status(403).json({error:"Another user is currently making changes to the document"});
+      if(!req.user._id.equals(lockResult.locked) && !req.body.title) {
+        return res.status(403).json({error:"You must acquire the lock before making changes to the document"});
       }
       Taboo.findAllTabooWords(req.body.textField.toLowerCase(), function(tabooErr, tabooWords){
         if (tabooErr) {
@@ -178,7 +181,7 @@ const deleteDoc = (req, res) => {
       if(lockErr){
         return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      if(lockResult.owner_id != req.user._id) {
+      if(!req.user._id.equals(lockResult.owner_id)) {
         return res.status(403).json({error:"You are not the owner of the document"});
       }
       // TODO: only delete if user owns document?
@@ -195,7 +198,7 @@ const deleteDoc = (req, res) => {
           res.status(200).json({msg:"Document has been deleted"});
         }
       });
-    }
+    });
   }
 };
 
