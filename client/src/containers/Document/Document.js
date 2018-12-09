@@ -80,10 +80,11 @@ class Document extends Component{
   renderHistory(){
     return(
       <History
-        documentId={this.props.document.id}
+        documentId={this.props.document._id}
         revisions={this.props.document.revisions}
-        docTitle={this.props.document.id}
+        docTitle={this.props.document.title}
         visible={this.state.historyVisible}
+        hideHistory={this.hideHistory}
       />
     );
   }
@@ -101,6 +102,7 @@ class Document extends Component{
              />
           </Content>
           {this.renderComplaintForm()}
+          {this.renderHistory()}
         </Layout>
       </Layout>
     );
@@ -108,7 +110,6 @@ class Document extends Component{
 }
 
 function mapStateToProps({ document, textField }){
-  console.log(document);
   return { document, textField };
 }
 
