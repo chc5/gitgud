@@ -42,7 +42,7 @@ class UserComplaintForm extends Component{
            label="Complaint Details"
          >
          <textarea
-           value={ this.state.textarea }
+           value={ this.state.complaintDetails }
            onChange={event => this.updateTextField(event.target.value)}
            className="complaint-text-area"
           />

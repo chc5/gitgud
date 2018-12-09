@@ -28,7 +28,8 @@ class UserComplaintManager extends Component{
   }
 
   showComplaint(event){
-    this.setState({ complaintVisible: true });
+    this.setState({ complaintVisible: false });
+    this.props.history.push(`/complaints/user`);
   }
 
   hideComplaint(event){
