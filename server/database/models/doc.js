@@ -7,7 +7,6 @@ const Revisions = require('./revision');
 const DocSchema = new Schema({
   title: {type: String, required:true},
   content: {type: String, default:''},
-  original_content: {type: String, default:''},
   owner_id: {type: Schema.Types.ObjectId, ref: 'User'},
   locked: Boolean,
   revisions: [{type: Schema.Types.ObjectId, ref: 'Revision'}],

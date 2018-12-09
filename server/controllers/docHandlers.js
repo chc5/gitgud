@@ -11,18 +11,18 @@ const createDoc = (req, res) => {
     let docinst = new Doc({
       title: req.body.title,
       content: req.body.content,
-      original_content: req.body.content,
       owner_id: req.user._id,
       locked: false,
     });
-
     docinst.save(function (err, doc) {
       if (err) {
         res.status(500).json({error:"Unable to create this document"});
       }
       else {
+        req.params.documentId = doc._id;
+        req.body.textField = doc.content;
         console.log(doc.title + " saved to Document collection.");
-        res.status(200).json({msg:"Document created"});     
+        updateDoc(req, res);
       }
     });
   }
