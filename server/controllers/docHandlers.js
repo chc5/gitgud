@@ -83,7 +83,7 @@ const unlockDoc = (req, res) => {
         return res.status(500).json({error:"Failed to check the lock on document"});
       }
       if(lockresult.locked != req.user._id && lockresult.owner_id != req.user._id) {
-        return res.status(403).json({msg:"You are not the user that currently has the lock"});
+        return res.status(403).json({error:"You are not the user that currently has the lock"});
       }
       Doc.updateOne({_id:req.params.documentId}, {locked: null}, function(err, result){
         if(err) {
@@ -119,26 +119,34 @@ const updateDoc = (req, res) => {
       changes: req.body.textField,
       modifier_id: req.user._id
     });
-    revisionInst.save(function(err, revision){
-      if (err) {
-        res.status(500).json({error:"Unable to save this document"});
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      else {
-        Doc.updateOne({_id:revision.doc_id}, { $push:{revisions:revision._id}, content:req.body.textField}, function(docErr, result){
-          if (docErr) {
-            res.status(500).json({error:"Unable to save this document"});
-            Revision.deleteOne({_id:revision._id}, function(err){
-              if (err) {
-                console.log("Error deleting revision after failed update");
-              }
-            });
-          }
-          else {
-            res.status(200).json({msg:"Document has been saved"});
-          }
-        });
+      if(lockresult.locked) {
+        return res.status(403).json({error:"Another user is currently making changes to the document"});
       }
-    });
+      revisionInst.save(function(err, revision){
+        if (err) {
+          res.status(500).json({error:"Unable to save this document"});
+        }
+        else {
+          Doc.updateOne({_id:revision.doc_id}, { $push:{revisions:revision._id}, content:req.body.textField}, function(docErr, result){
+            if (docErr) {
+              res.status(500).json({error:"Unable to save this document"});
+              Revision.deleteOne({_id:revision._id}, function(err){
+                if (err) {
+                  console.log("Error deleting revision after failed update");
+                }
+              });
+            }
+            else {
+              res.status(200).json({msg:"Document has been saved"});
+            }
+          });
+        }
+      });
+    }
   }
 };
 
@@ -147,20 +155,28 @@ const deleteDoc = (req, res) => {
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else {
-    // TODO: only delete if user owns document?
-    Doc.findOneAndDelete({_id:req.params.documentId}, function(err, document){
-      if (err) {
-        res.status(500).json({error:"Unable to delete this document"});
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      else {
-        Revision.deleteMany({_id:{$in:document.revisions}}, function(err){
-          if (err) {
-            console.log("Error deleting revisions after document deletion");
-          }
-        }); 
-        res.status(200).json({msg:"Document has been deleted"});
+      if(lockresult.locked != req.user._id || lockresult.owner_id != req.user._id) {
+        return res.status(403).json({error:"You are not the user that currently has the lock"});
       }
-    });
+      // TODO: only delete if user owns document?
+      Doc.findOneAndDelete({_id:req.params.documentId}, function(err, document){
+        if (err) {
+          res.status(500).json({error:"Unable to delete this document"});
+        }
+        else {
+          Revision.deleteMany({_id:{$in:document.revisions}}, function(err){
+            if (err) {
+              console.log("Error deleting revisions after document deletion");
+            }
+          }); 
+          res.status(200).json({msg:"Document has been deleted"});
+        }
+      });
+    }
   }
 };
 
