@@ -20,8 +20,10 @@ class DocumentManager extends Component{
   }
   createDocument = async () => {
     let docName = prompt("Enter new file name.");
-    await this.props.createDocument(docName, this.props.history);
-    this.props.retrieveAllDocument();
+    if(docName){
+      await this.props.createDocument(docName, this.props.history);
+      this.props.retrieveAllDocument();
+    }
   }
   deleteDocument = async (id) => {
     await this.props.deleteDocument(id);

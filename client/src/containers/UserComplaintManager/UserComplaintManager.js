@@ -53,7 +53,7 @@ class UserComplaintManager extends Component{
                 xs={24} sm={24} md={24} lg={24} xl={24}
                 className="complaint-title"
                 >
-                User Complaint List
+                User Complaints
               </Col>
             </Row>
           </Header>

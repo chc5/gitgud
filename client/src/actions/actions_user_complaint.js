@@ -37,7 +37,7 @@ export function retrieveAllUserComplaint(){
       }))
       .catch((error) => dispatch({
         type: CRUD_USER_COMPLAINT_ERROR,
-        payload: error
+        payload: error.response.data
       }));
   }
 }
