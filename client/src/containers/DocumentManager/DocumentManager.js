@@ -67,7 +67,9 @@ class DocumentManager extends Component{
           </Header>
           <Content>
             {this.renderLoading()}
-            <DocumentList />
+            <DocumentList
+              deleteDocument={this.deleteDocument}
+              />
           </Content>
         </Layout>
       </Layout>

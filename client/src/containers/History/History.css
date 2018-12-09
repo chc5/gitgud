@@ -1,3 +1,4 @@
-.list-item-col:hover{
-  background-color: grey;
+.step-revision:hover{
+  background-color: lightgrey;
+  cursor: pointer;
 }

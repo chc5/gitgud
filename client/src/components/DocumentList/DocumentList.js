@@ -37,7 +37,7 @@ class DocumentList extends Component{
               <Col
                 xs={4} sm={2} md={1} lg={1} xl={1}
                 className="list-item-col"
-                onClick={() => this.deleteDocument(item._id)}
+                onClick={() => this.props.deleteDocument(item._id)}
                 >
                 <Icon type="delete" />
               </Col>

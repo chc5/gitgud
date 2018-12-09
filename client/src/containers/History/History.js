@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { retrieveDocument } from '../../actions/actions_document';
 
-import { Modal, List, Row, Col } from 'antd';
+import { Modal, Steps } from 'antd';
 import "./History.css";
+const Step = Steps.Step;
 
 class History extends Component{
   constructor(props){
@@ -22,8 +23,6 @@ class History extends Component{
   }
 
   selectRevision = async (revisionId) =>{
-    console.log(this.props);
-    console.log("selecting revision", "revisionid: ", revisionId, "documentId:", this.props.documentId);
     await this.props.retrieveDocument(this.props.documentId, revisionId);
     this.props.hideHistory();
   }
@@ -35,34 +34,29 @@ class History extends Component{
     const blocks = str.split("T");
     const date = blocks[0];
     const time = blocks[1].slice(0, 8);
-    return `${date} ${time}`
+    return (<div>{date} {time}</div>)
   }
-
+  displayRevision(r){
+    return(
+      <Step
+        key={r._id}
+        title={this.getDateTimeFromString(r.date_created)}
+        description={r.modifier_id.username}
+        className="step-revision"
+        onClick={(e) => this.selectRevision(r._id)}
+        />
+    );
+  }
   renderHistory = () => {
+    if(!this.props.revisions){
+      return null;
+    }
+    const revisions = this.props.revisions;
+    const revisionDisplays = revisions.map(r => this.displayRevision(r));
     return (
-      <List
-        size="large"
-        bordered
-        dataSource={this.props.revisions}
-        renderItem={r => (
-          <List.Item
-            className="list-item"
-            >
-            <Row type="flex" justify="start" align="middle" className="list-item-row">
-              <Col
-                xs={14} sm={24} md={24} lg={24} xl={24}
-                className="list-item-col"
-                onClick={() => this.selectRevision(r._id)}
-                >
-                Revision Id: {r._id} <br />
-                Document Id: {this.props.documentId} <br />
-                {this.getDateTimeFromString(r.date_created)} <br />
-                {r.modifier_id.username}
-              </Col>
-            </Row>
-          </List.Item>
-        )}
-      />
+      <Steps progressDot direction="vertical" current={revisions.length-1}>
+        { revisionDisplays }
+      </Steps>
     );
   }
   render() {
@@ -70,6 +64,7 @@ class History extends Component{
       <Modal
          visible={this.props.visible}
          onCancel={this.handleCancel}
+         title="History"
        >
        {this.renderHistory()}
       </Modal>

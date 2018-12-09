@@ -28,8 +28,8 @@ class Document extends Component{
     this.hideComplaint = this.hideComplaint.bind(this);
   }
 
-  save = (event) => {
-    this.props.updateDocument(this.props.document._id, this.props.textField);
+  save = async (event) => {
+    await this.props.updateDocument(this.props.document._id, this.props.textField);
   }
 
   // UI Modal rendering for Complaints and History
