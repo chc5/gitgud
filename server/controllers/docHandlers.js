@@ -75,18 +75,18 @@ const updateDoc = (req, res) => {
       changes: req.body.textField,
       modifier_id: req.user._id
     });
-    revisionInst.save(function(err, revision){
-      if (err) {
+    Taboo.findAllTabooWords(req.body.textField.toLowerCase(), function(tabooErr, tabooWords){
+      if (tabooErr) {
         res.status(500).json({error:"Unable to save this document"});
       }
       else {
-        Taboo.findAllTabooWords(revision.changes.toLowerCase(), function(tabooErr, tabooWords){
-          if (tabooErr) {
-            res.status(500).json({error:"Unable to save this document"});
-          }
-          else {
-            if (tabooWords.length != 0) {
-              res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
+        if (tabooWords.length != 0) {
+          res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
+        }
+        else {
+          revisionInst.save(function(err, revision){
+            if (err) {
+              res.status(500).json({error:"Unable to save this document"});
             }
             else {
               Doc.updateOne({_id:revision.doc_id}, { $push:{revisions:revision._id}, content:req.body.textField}, function(docErr, result){
@@ -103,8 +103,8 @@ const updateDoc = (req, res) => {
                 }
               });
             }
-          }
-        });
+          });
+        }
       }
     });
   }
