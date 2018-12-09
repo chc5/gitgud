@@ -28,7 +28,13 @@ const createDoc = (req, res) => {
   }
 };
 const retrieveDoc = (req, res) => {
-  Doc.findOne({_id:req.params.documentId}, function(err, result){
+  Doc.findOne({_id:req.params.documentId}).populate({
+      path:"revisions", select:"modifier_id date_created",
+      populate:{
+        path:"modifier_id", select:"username"
+      }
+  })
+  .exec(function(err, result){
     if (err || !result) {
       return res.status(404).json({error:"Unable to retrieve your document"});
     }
