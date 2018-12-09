@@ -57,7 +57,10 @@ const lockDoc = (req, res) => {
   }
   else{
     Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
-      if(lockErr || lockresult.locked) {
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
+      }
+      if(lockresult.locked) {
         return res.status(403).json({error:"Another user is currently making changes to the document"});
       }
       Doc.updateOne({_id:req.params.documentId}, {locked: req.user._id}, function(err, result){
@@ -76,7 +79,10 @@ const unlockDoc = (req, res) => {
   }
   else{
     Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
-      if(lockErr || (lockresult.locked != req.user._id && lockresult.owner_id != req.user._id)) {
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
+      }
+      if(lockresult.locked != req.user._id && lockresult.owner_id != req.user._id) {
         return res.status(403).json({msg:"You are not the user that currently has the lock"});
       }
       Doc.updateOne({_id:req.params.documentId}, {locked: null}, function(err, result){
