@@ -11,10 +11,13 @@ import NotificationReducer from './reducers_notification';
 import UserEscalationReducer from './reducers_user_escalation';
 import DocComplaintListReducer from './reducers_doc_complaint_list';
 import UserComplaintListReducer from './reducers_user_complaint_list';
+import ApprovedTabooWordsReducer from './reducers_approved_taboo';
+import UnappovedTabooWordsReducer from './reducers_unapproved_taboo';
 
 const rootReducer = combineReducers({
   textField: TextFieldReducer,
   error: ErrorReducer,
+  approvedTabooWords: ApprovedTabooWordsReducer,
   complaint: ComplaintReducer,
   docComplaintList: DocComplaintListReducer,
   document: DocumentReducer,
@@ -23,7 +26,8 @@ const rootReducer = combineReducers({
   userInfo: UserInfoReducer,
   userComplaintList: UserComplaintListReducer,
   navBar: NavBarReducer,
-  notification: NotificationReducer
+  notification: NotificationReducer,
+  unapprovedTabooWords: UnappovedTabooWordsReducer
 });
 
 export default rootReducer;

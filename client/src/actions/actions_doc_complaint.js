@@ -30,7 +30,7 @@ export function retrieveDocComplaint(complaintId){
       }))
       .catch((error) => dispatch({
         type: CRUD_DOC_COMPLAINT_ERROR,
-        payload: error
+        payload: error.response.data
       }));
   }
 }
@@ -45,7 +45,7 @@ export function retrieveAllDocComplaint(){
       }))
       .catch((error) => dispatch({
         type: CRUD_DOC_COMPLAINT_ERROR,
-        payload: error
+        payload: error.response.data
       }));
   }
 }
@@ -69,7 +69,7 @@ export function processDocComplaint(complaintId){
       }))
       .catch((error) => dispatch({
         type: CRUD_DOC_COMPLAINT_ERROR,
-        payload: error
+        payload: error.response.data
       }));
   }
 }

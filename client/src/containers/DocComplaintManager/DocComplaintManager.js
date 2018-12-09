@@ -59,7 +59,7 @@ class DocComplaintManager extends Component{
                 xs={24} sm={24} md={24} lg={24} xl={24}
                 className="complaint-title"
                 >
-                Document Complaint List
+                Document Complaints
               </Col>
             </Row>
           </Header>
