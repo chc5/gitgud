@@ -27,7 +27,7 @@ const createDocComplaint = (req, res) => {
 }
 
 const retrieveDocComplaint = (req, res) => {
-  DocComplaint.findOne({_id:req.params.complaintId}, function(err, result){
+  DocComplaint.findOne({_id:req.params.complaintId}).populate("docId", "title").populate("fromUserid", "username").exec(function(err, result){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve the Document Complaint."});
     }
@@ -38,7 +38,7 @@ const retrieveDocComplaint = (req, res) => {
 };
 
 const retrieveDocComplaintList = (req, res) => {
-  DocComplaint.find({}, function(err, results){
+  DocComplaint.find({}).populate("docId", "title").populate("fromUserId", "username").exec(function(err, results){
     if (err || !results) {
       res.status(404).json({error:"Could not retrieve Document Complaints."});
     }
@@ -120,7 +120,7 @@ const createUserComplaint = (req, res) => {
 }
 
 const retrieveUserComplaint = (req, res) => {
-  UserComplaint.findOne({_id:req.params.complaintId}, function(err, result){
+  UserComplaint.findOne({_id:req.params.complaintId}).populate("fromUserId", "username").populate("targetUserId", "username").exec(function(err, result){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve the user complaint."});
     }
@@ -131,7 +131,7 @@ const retrieveUserComplaint = (req, res) => {
 };
 
 const retrieveUserComplaintList = (req, res) => {
-  UserComplaint.find({}, function(err, results){
+  UserComplaint.find({}).populate("fromUserId", "username").populate("targetUserId", "username").exec(function(err, results){
     if (err || !results) {
       res.status(404).json({error:"Could not retrieve User Complaints."});
     }
@@ -183,7 +183,7 @@ const retrieveCurrentUserComplaints = (req, res) => {
     if (!req.body.getProcessed || req.body.getProcessed==="false") {
       currUsrComplaintsQuery.processed = false;
     }
-    UserComplaint.find(currUsrComplaintsQuery, function(err, results) {
+    UserComplaint.find(currUsrComplaintsQuery).populate("fromUserId", "username").exec(function(err, results) {
       if (err || !results) {
         res.status(404).json({error:"Could not retrieve current User Complaints."});
       }
@@ -203,7 +203,7 @@ const retrieveCurrentUserSentComplaints = (req, res) => {
     if (!req.body.getProcessed || req.body.getProcessed==="false") {
       currUsrSentComplaintsQuery.processed = false;
     }
-    UserComplaint.find(currUsrSentComplaintsQuery, function(err, results) {
+    UserComplaint.find(currUsrSentComplaintsQuery).populate("targetUserId", "username").exec(function(err, results) {
       if (err || !results) {
         res.status(404).json({error:"Could not retrieve User Complaints sent by current User."});
       }
