@@ -60,7 +60,7 @@ const lockDoc = (req, res) => {
       if(lockErr){
         return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      if(lockresult.locked) {
+      if(lockResult.locked) {
         return res.status(403).json({error:"Another user is currently making changes to the document"});
       }
       lockResult.locked = req.user._id;
@@ -167,8 +167,8 @@ const deleteDoc = (req, res) => {
       if(lockErr){
         return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      if(lockresult.locked != req.user._id || lockresult.owner_id != req.user._id) {
-        return res.status(403).json({error:"You are not the user that currently has the lock"});
+      if(lockResult.owner_id != req.user._id) {
+        return res.status(403).json({error:"You are not the owner of the document"});
       }
       // TODO: only delete if user owns document?
       Doc.findOneAndDelete({_id:req.params.documentId}, function(err, document){
