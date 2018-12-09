@@ -11,17 +11,17 @@ const createDoc = (req, res) => {
     let docinst = new Doc({
       title: req.body.title,
       content: req.body.content,
-      original_content: req.body.content,
       owner_id: req.user._id,
     });
-
     docinst.save(function (err, doc) {
       if (err) {
         res.status(500).json({error:"Unable to create this document"});
       }
       else {
+        req.params.documentId = doc._id;
+        req.body.textField = doc.content;
         console.log(doc.title + " saved to Document collection.");
-        res.status(200).json({msg:"Document created"});     
+        updateDoc(req, res);
       }
     });
   }
@@ -74,7 +74,7 @@ const lockDoc = (req, res) => {
       });
     });
   }
-}
+};
 
 const unlockDoc = (req, res) => {
   if(!req.isAuthenticated()){
@@ -99,7 +99,7 @@ const unlockDoc = (req, res) => {
       });
     });
   }
-}
+};
 
 const retrieveDocList = (req, res) => {
   Doc.find({}, function(err, results){
@@ -132,31 +132,42 @@ const updateDoc = (req, res) => {
       if(lockresult.locked) {
         return res.status(403).json({error:"Another user is currently making changes to the document"});
       }
-      revisionInst.save(function(err, revision){
-        if (err) {
+      Taboo.findAllTabooWords(req.body.textField.toLowerCase(), function(tabooErr, tabooWords){
+        if (tabooErr) {
           res.status(500).json({error:"Unable to save this document"});
         }
         else {
-          lockResult.content = req.body.textField;
-          lockResult.revisions.push(revision._id);
-          lockResult.save(function (err, doc) {
+          if (tabooWords.length != 0) {
+            res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
+          }
+          revisionInst.save(function(err, revision){
             if (err) {
               res.status(500).json({error:"Unable to save this document"});
-              Revision.deleteOne({_id:revision._id}, function(err){
-                if (err) {
-                  console.log("Error deleting revision after failed update");
-                }
-              });
             }
             else {
-              res.status(200).json({msg:"Document has been saved"});     
+              lockResult.content = req.body.textField;
+              lockResult.revisions.push(revision._id);
+              lockResult.save(function (err, doc) {
+                if (err) {
+                  res.status(500).json({error:"Unable to save this document"});
+                  Revision.deleteOne({_id:revision._id}, function(err){
+                    if (err) {
+                      console.log("Error deleting revision after failed update");
+                    }
+                  });
+                }
+                else {
+                  res.status(200).json({msg:"Document has been saved"});     
+                }
+              });
             }
           });
         }
       });
-    }
+    });
   }
 };
+
 
 const deleteDoc = (req, res) => {
   if(!req.isAuthenticated()){

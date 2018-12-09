@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { retrieveAllDocComplaint, deleteDocComplaint }
   from '../../actions/actions_doc_complaint';
+import DocComplaint from '../../components/DocComplaint/DocComplaint';
 // UI Imports
 import { Layout, List, Icon, Row, Col } from 'antd';
 import NavBar from '../NavBar/NavBar';
-import './ComplaintManager.css';
+import './DocComplaintManager.css';
 const { Header, Content } = Layout;
 
-class ComplaintManager extends Component{
+class DocComplaintManager extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -27,17 +28,23 @@ class ComplaintManager extends Component{
     this.props.retrieveAllDocComplaint();
   }
 
-  showComplaint(event){
-    this.setState({ complaintVisible: true });
+  showComplaint(complaintId){
+    this.props.history.push(`/complaints/doc/${complaintId}`);
+    this.setState({ complaintVisible: true, selectedComplaintId: complaintId });
   }
 
   hideComplaint(event){
     this.setState({ complaintVisible: false });
+    this.props.history.push(`/complaints/doc`);
   }
 
-  renderComplaintForm(id){
+  renderComplaint(){
     return(
-      null
+      <DocComplaint
+        complaintId={this.state.selectedComplaintId}
+        visible={this.state.complaintVisible}
+        hideComplaint={this.hideComplaint}
+      />
     );
   }
 
@@ -52,7 +59,7 @@ class ComplaintManager extends Component{
                 xs={24} sm={24} md={24} lg={24} xl={24}
                 className="complaint-title"
                 >
-                Document Complaint List
+                Document Complaints
               </Col>
             </Row>
           </Header>
@@ -69,7 +76,7 @@ class ComplaintManager extends Component{
                     <Col
                       xs={20} sm={22} md={23} lg={23} xl={23}
                       className="list-item-col list-item-title"
-                      onClick={() => this.props.history.push(`/complaints/${item._id}`)}
+                      onClick={() => this.showComplaint(item._id)}
                       >
                       {item.title}
                     </Col>
@@ -85,6 +92,7 @@ class ComplaintManager extends Component{
               )}
             />
           </Content>
+          {this.renderComplaint()}
         </Layout>
       </Layout>
     );
@@ -92,7 +100,6 @@ class ComplaintManager extends Component{
 }
 
 function mapStateToProps({ docComplaintList }){
-  console.log(docComplaintList);
   return { docComplaintList };
 }
 
@@ -100,4 +107,4 @@ function mapDispatchToProps(dispatch){
   return bindActionCreators({ retrieveAllDocComplaint, deleteDocComplaint }, dispatch);
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps) (ComplaintManager));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps) (DocComplaintManager));

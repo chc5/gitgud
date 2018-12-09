@@ -7,7 +7,6 @@ const Revisions = require('./revision');
 const DocSchema = new Schema({
   title: {type: String, required:true},
   content: {type: String, default:''},
-  original_content: {type: String, default:''},
   owner_id: {type: Schema.Types.ObjectId, ref: 'User'},
   locked: {type: Schema.Types.ObjectId, default: null, ref: 'User'},
   revisions: [{type: Schema.Types.ObjectId, ref: 'Revision'}],
@@ -16,9 +15,8 @@ const DocSchema = new Schema({
 
 DocSchema.methods.findAllTabooIdx = function(cb){
   //A String is considered a word if there is a space
-  //Checks all the words and see if any are in taboo words and replaces those words
   //returns indexes of all taboo words, format at each index: [start, end + 1]
-  TabooWords.getTabooWords((err, results) => {
+  TabooWords.getApprovedTabooWords((err, results) => {
     if (err) {
       return cb(err);
     }
