@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { retrieveAllDocComplaint, deleteDocComplaint }
   from '../../actions/actions_doc_complaint';
+import DocComplaint from '../../components/DocComplaint/DocComplaint';
 // UI Imports
 import { Layout, List, Icon, Row, Col } from 'antd';
 import NavBar from '../NavBar/NavBar';
-// import './DocComplaintManager.css';
+import './DocComplaintManager.css';
 const { Header, Content } = Layout;
 
 class DocComplaintManager extends Component{
@@ -27,17 +28,23 @@ class DocComplaintManager extends Component{
     this.props.retrieveAllDocComplaint();
   }
 
-  showComplaint(event){
-    this.setState({ complaintVisible: true });
+  showComplaint(complaintId){
+    this.props.history.push(`/complaints/doc/${complaintId}`);
+    this.setState({ complaintVisible: true, selectedComplaintId: complaintId });
   }
 
   hideComplaint(event){
     this.setState({ complaintVisible: false });
+    this.props.history.push(`/complaints/doc`);
   }
 
-  renderComplaintForm(id){
+  renderComplaint(){
     return(
-      null
+      <DocComplaint
+        complaintId={this.state.selectedComplaintId}
+        visible={this.state.complaintVisible}
+        hideComplaint={this.hideComplaint}
+      />
     );
   }
 
@@ -69,7 +76,7 @@ class DocComplaintManager extends Component{
                     <Col
                       xs={20} sm={22} md={23} lg={23} xl={23}
                       className="list-item-col list-item-title"
-                      onClick={() => this.props.history.push(`/complaints/doc/${item._id}`)}
+                      onClick={() => this.showComplaint(item._id)}
                       >
                       {item.title}
                     </Col>
@@ -85,6 +92,7 @@ class DocComplaintManager extends Component{
               )}
             />
           </Content>
+          {this.renderComplaint()}
         </Layout>
       </Layout>
     );
@@ -92,7 +100,6 @@ class DocComplaintManager extends Component{
 }
 
 function mapStateToProps({ docComplaintList }){
-  console.log(docComplaintList);
   return { docComplaintList };
 }
 

@@ -27,8 +27,9 @@ class DocComplaintForm extends Component{
     const revisionId = this.props.revisionId;
     const complaintText = this.state.complaintDetails;
     await this.props.createDocComplaint(docId, revisionId, complaintText);
-    this.props.hideComplaint();
     this.setState({ complaintDetails: "" });
+    console.log(this.state.complaintDetails);
+    this.props.hideComplaint();
   }
 
   updateTextField = (text) => {
@@ -43,7 +44,7 @@ class DocComplaintForm extends Component{
            label="Complaint Details"
          >
          <textarea
-           value={ this.state.textarea }
+           value={ this.state.complaintDetails }
            onChange={event => this.updateTextField(event.target.value)}
            className="complaint-text-area"
           />
