@@ -42,11 +42,17 @@ DocSchema.methods.containsRevisionIdAfterPopulate = function(revisionId) {
   return false;
 };
 
-DocSchema.methods.getVersion = function(revisionId, options, cb){
-  if (options.populated && !this.containsRevisionIdAfterPopulate(revisionId)) {
-    return cb({error:"Could not retrieve document version"});
+DocSchema.methods.containsRevisionId = function(revisionId, populated) {
+  if (populated) {
+    return this.containsRevisionIdAfterPopulate(revisionId);
   }
-  if(!options.populated && this.revisions.indexOf(revisionId) < 0) {
+  else {
+    return this.revisions.indexOf(revisionId) >= 0;
+  }
+};
+
+DocSchema.methods.getVersion = function(revisionId, options, cb){
+  if (!this.containsRevisionId(revisionId, options.populated)) {
     return cb({error:"Could not retrieve document version"});
   }
   // Apply changes and call cb with correct content
