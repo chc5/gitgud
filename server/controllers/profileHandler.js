@@ -8,7 +8,8 @@ const createUserProfile = (req, res) => {
   else{
     let userProfInst = new userProfile({
       summary: req.body.summary,
-      userId: req.user._id
+      userId: req.user._id,
+      img: req.body.img
     });
     userProfInst.save(function (err, profile) {
       if(err) {
@@ -26,20 +27,12 @@ const updateProfile = (req, res) => {
     res.status(401).json({error:"Must be logged in to perform this action"});
   }
   else{
-    userProfile.findOne({userId:req.user._id}, function(err, profile){
+    userProfile.updateOne({userId:req.user_id}, {summary: req.body.summary, img: userProfile.upload(req.body.img)}, function(err, profile){
       if(err){
-        res.status(500).json({error:"Unable to find Profile"});
+        res.status(500).json({error:"Unable to update Profile"});
       }
       else{
-        profile.summary = req.body.summary;
-        profile.save(function (profSaveErr, savedProfile){
-          if(profSaveErr){
-            res.status(500).json({error:"Failed to update profile"});
-          }
-          else{
-            res.status(200).json({msg:"Profile updated"});
-          }
-        });   
+        res.status(200).json({msg:"Profile updated"});
       }
     });
   }
