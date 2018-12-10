@@ -65,4 +65,12 @@ const logout = (req, res) => {
   }
 };
 
-module.exports = {signup, login, logout};
+const checkAuthenticated = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    res.status(401).json({error:"Must be logged in to perform this action"});
+  }
+  else {
+    next();
+  }
+};
+module.exports = {signup, login, logout, checkAuthenticated};
