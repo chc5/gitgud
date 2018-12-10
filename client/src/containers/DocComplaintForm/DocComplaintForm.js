@@ -12,10 +12,13 @@ import "./DocComplaintForm.css";
 const FormItem = Form.Item;
 
 class DocComplaintForm extends Component{
-  state = {
-    visible: this.props.visible,
-    complaintDetails: "",
-    loading: false
+  constructor(props){
+    super(props);
+    this.state = {
+      visible: this.props.visible,
+      content: "",
+      loading: false
+    }
   }
 
   handleCancel = (e) => {
@@ -25,18 +28,17 @@ class DocComplaintForm extends Component{
   handleSubmit = async (e) => {
     const docId = this.props.documentId;
     const revisionId = this.props.revisionId;
-    const complaintText = this.state.complaintDetails;
-    await this.props.createDocComplaint(docId, revisionId, complaintText);
-    this.setState({ complaintDetails: "" });
-    console.log(this.state.complaintDetails);
+    const content = this.state.content;
+    await this.props.createDocComplaint(docId, revisionId, content);
+    this.setState({ content: "" });
     this.props.hideComplaint();
   }
 
   updateTextField = (text) => {
-    this.setState({ complaintDetails: text });
+    this.setState({ content: text });
   }
 
-  renderForm = () => {
+  renderForm(){
     return (
       <Form>
         <h2>File a Complaint on {this.props.docTitle}</h2>
@@ -44,7 +46,7 @@ class DocComplaintForm extends Component{
            label="Complaint Details"
          >
          <textarea
-           value={ this.state.complaintDetails }
+           value={ this.state.content }
            onChange={event => this.updateTextField(event.target.value)}
            className="complaint-text-area"
           />

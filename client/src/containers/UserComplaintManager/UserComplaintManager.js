@@ -93,7 +93,6 @@ class UserComplaintManager extends Component{
 }
 
 function mapStateToProps({ userComplaintList }){
-  console.log(userComplaintList);
   return { userComplaintList };
 }
 
