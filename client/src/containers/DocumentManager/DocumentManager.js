@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { retrieveAllDocument, createDocument, deleteDocument }
   from '../../actions/actions_document';
+import { lockDocument, unlockDocument }
+  from '../../actions/actions_lock';
 // UI Imports
 import { Layout, Row, Col, Spin } from 'antd';
 import './DocumentManager.css';
@@ -15,11 +17,11 @@ class DocumentManager extends Component{
   constructor(props){
     super(props);
     this.state = {
-      collapsed: false,
       loading: false
     }
     this.props.retrieveAllDocument();
   }
+
   createDocument = async () => {
     let docName = prompt("Enter new file name.");
     if(docName){
@@ -28,12 +30,6 @@ class DocumentManager extends Component{
       await this.props.retrieveAllDocument();
       this.setState({ loading: false });
     }
-  }
-  deleteDocument = async (id) => {
-    this.setState({ loading: true });
-    await this.props.deleteDocument(id);
-    await this.props.retrieveAllDocument();
-    this.setState({ loading: false });
   }
 
   renderLoading(){
@@ -68,7 +64,8 @@ class DocumentManager extends Component{
           <Content>
             {this.renderLoading()}
             <DocumentList
-              deleteDocument={this.deleteDocument}
+              lockDocument={this.lockDocument}
+              unlockDocument={this.unlockDocument}
               />
           </Content>
         </Layout>
@@ -82,7 +79,13 @@ function mapStateToProps({ documentList, userInfo }){
 }
 
 function mapDispatchToProps(dispatch){
-  return bindActionCreators({ retrieveAllDocument, createDocument, deleteDocument }, dispatch);
+  return bindActionCreators({
+    retrieveAllDocument,
+    createDocument,
+    deleteDocument,
+    lockDocument,
+    unlockDocument
+  }, dispatch);
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps) (DocumentManager));

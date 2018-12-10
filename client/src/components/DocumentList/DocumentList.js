@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { lockDocument, unlockDocument }
+  from '../../actions/actions_lock';
+import { deleteDocument }
+  from '../../actions/actions_document';
 // UI Imports
 import { List, Icon, Row, Col } from 'antd';
 import './DocumentList.css';
@@ -27,17 +32,30 @@ class DocumentList extends Component{
                 >
                 {item.title}
               </Col>
+              { item.locked
+                ? (
+                  <Col
+                    xs={4} sm={2} md={1} lg={1} xl={1}
+                    className="list-item-col"
+                    onClick={() => this.props.unlockDocument(item._id, this.props.history)}
+                    >
+                    <Icon type="unlock" />
+                  </Col>
+                )
+                : (
+                  <Col
+                    xs={4} sm={2} md={1} lg={1} xl={1}
+                    className="list-item-col"
+                    onClick={() => this.props.lockDocument(item._id, this.props.history)}
+                    >
+                    <Icon type="lock" />
+                  </Col>
+                )
+              }
               <Col
                 xs={4} sm={2} md={1} lg={1} xl={1}
                 className="list-item-col"
-                onClick={() => this.props.history.push(`/docs/${item._id}`)}
-                >
-                <Icon type="edit" />
-              </Col>
-              <Col
-                xs={4} sm={2} md={1} lg={1} xl={1}
-                className="list-item-col"
-                onClick={() => this.props.deleteDocument(item._id)}
+                onClick={() => this.props.deleteDocument(item._id, this.props.history)}
                 >
                 <Icon type="delete" />
               </Col>
@@ -53,4 +71,11 @@ function mapStateToProps({ documentList }){
   return { documentList };
 }
 
-export default withRouter(connect(mapStateToProps) (DocumentList));
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({
+    deleteDocument,
+    lockDocument,
+    unlockDocument
+  }, dispatch);
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps) (DocumentList));

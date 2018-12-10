@@ -62,18 +62,25 @@ export function updateDocument(documentId, textField){
   }
 }
 
-export function deleteDocument(documentId){
+export function deleteDocument(documentId, history){
   let url = `/api/docs/delete/${documentId}`;
   return (dispatch) => {
     axios.post(url)
-      .then((response) => dispatch({
-        type: DELETE_DOCUMENT,
-        payload: response.data
-      }))
-      .catch((error) => dispatch({
-        type: CRUD_DOC_ERROR,
-        payload: error.response.data
-      }))
+      .then((response) => {
+        dispatch({
+          type: DELETE_DOCUMENT,
+          payload: response.data
+        });
+        history.push('/docs');
+        return true;
+      })
+      .catch((error) => {
+        dispatch({
+          type: CRUD_DOC_ERROR,
+          payload: error.response.data
+        });
+        return false;
+      })
   }
 }
 
