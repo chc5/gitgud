@@ -43,7 +43,6 @@ export function unlockDocument(documentId, history){
         });
         retrieveAllDocument();
         history.push(`/docs`);
-        return true;
       })
       .catch((error) => {
         dispatch({
@@ -52,7 +51,6 @@ export function unlockDocument(documentId, history){
         });
         retrieveAllDocument();
         history.push(`/docs`);
-        return false;
       });
   }
 }

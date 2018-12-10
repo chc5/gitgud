@@ -107,11 +107,11 @@ class TabooWordManager extends Component{
           <Header style={{ background: 'silver', padding: 0 }}>
             <Row type="flex" justify="center" align="end">
               <Col
-                xs={8} sm={5} md={4} lg={3} xl={2}
+                xs={10} sm={6} md={5} lg={4} xl={3}
                 className="col"
                 onClick={this.createTabooWord}
                 >
-                Create
+                Create Taboo
               </Col>
             </Row>
           </Header>

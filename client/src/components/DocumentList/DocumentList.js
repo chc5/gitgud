@@ -15,6 +15,7 @@ class DocumentList extends Component{
     if(!this.props.documentList || this.props.documentList.length === 0){
       return null;
     }
+    console.log(this.props.documentList);
     return(
       <List
         size="large"

@@ -53,11 +53,18 @@ class DocumentManager extends Component{
           <Header style={{ background: 'silver', padding: 0 }}>
             <Row type="flex" justify="center" align="end">
               <Col
-                xs={8} sm={5} md={4} lg={3} xl={2}
+                xs={8} sm={14} md={16} lg={18} xl={20}
+                className="col"
+                style={{"textAlign":"left"}}
+                >
+                Document List
+              </Col>
+              <Col
+                xs={16} sm={10} md={8} lg={6} xl={4}
                 className="col"
                 onClick={this.createDocument}
                 >
-                Create
+                Create Document
               </Col>
             </Row>
           </Header>

@@ -48,7 +48,18 @@ class DocComplaintManager extends Component{
     );
   }
 
+  getDateTimeFromString = (str) => {
+    if(!str){
+      return "";
+    }
+    const blocks = str.split("T");
+    const date = blocks[0];
+    const time = blocks[1].slice(0, 8);
+    return `${date} ${time}`
+  }
+
   render(){
+    console.log(this.props.docComplaintList);
     return(
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />
@@ -78,7 +89,7 @@ class DocComplaintManager extends Component{
                       className="list-item-col list-item-title"
                       onClick={() => this.showComplaint(item._id)}
                       >
-                      {item.title}
+                      {item.fromUserId.username} {this.getDateTimeFromString(item.date_created)}
                     </Col>
                     <Col
                       xs={4} sm={2} md={1} lg={1} xl={1}
