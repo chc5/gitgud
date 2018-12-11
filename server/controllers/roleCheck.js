@@ -12,6 +12,9 @@ const getRoleFromString = (roleString) => {
 };
 
 const checkRole = (req, permissions, cb) => {
+  if (!req.user) {
+    return cb({status:403, info:"Your role has insufficient privilege"});
+  }
   const userId = req.user._id;
   User.findOne({_id:userId}, "username role", function(err, result){
     if (err) {
