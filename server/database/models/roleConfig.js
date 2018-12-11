@@ -5,7 +5,7 @@ const GU = {
     complaint : ["doc-create"],
     taboo : ["create"],
     applications: ["create"],
-    user: []
+    user: ["create", "update", "retrieve", "delete"]
   }
 };
 
