@@ -1,4 +1,5 @@
 const userProfile = require('../database/models/userProfile');
+const Roles = require('./roleCheck');
 
 const createUserProfile = (req, res) => {
   Roles.checkRole(req, {user:["create"]}, function(roleErr){
