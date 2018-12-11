@@ -34,12 +34,12 @@ const retrieveProfile = (req, res) => {
     queryField.userId = req.user._id;
   }
   userProfile.findOne(queryField, function(err, profileData){
-    if(err){
-      res.status(500).json({error:"Unable to find Profile"});
+    if(err || !profileData){
+      return res.status(404).json({error:"Unable to find Profile"});
     }
-    else{
+    if (profileData) {
       // check if documents are private before sending
-      res.status(200).json({profile:profileData});
+      return res.status(200).json({profile:profileData});
     }
   });
 };
