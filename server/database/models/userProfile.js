@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.promise = Promise;
 const Schema = mongoose.Schema;
-const imgur = require('imgur');
+const Doc = require('./doc');
 
 const UserProfileSchema = new Schema({
   summary:{type: String, default: ''},
@@ -10,38 +10,25 @@ const UserProfileSchema = new Schema({
   recentDocs: [{type: Schema.Types.ObjectId, ref: 'Document'}]
 });
 
-const UserProfileSchema.methods.upload = function(filepath){
-  // Setting
-  imgur.setClientId('aCs53GSs4tga0ikp');
- 
-  // Getting
-  imgur.getClientId();
- 
-  // Saving to disk. Returns a promise.
-  // NOTE: path is optional. Defaults to ~/.imgur
-  imgur.saveClientId(path)
-    .then(function () {
-        console.log('Saved.');
-    })
-    .catch(function (err) {
-        console.log(err.message);
-    });
- 
-  // Loading from disk
-  // NOTE: path is optional. Defaults to ~/.imgur
-  imgur.loadClientId(path)
-    .then(imgur.setClientId);
-
-  // A single image
-  imgur.uploadFile(filepath)
-    .then(function (json) {
-        console.log(json.data.link);
-    })
-    .catch(function (err) {
-        console.error(err.message);
-    });
-};
-
+UserProfileSchema.pre('save', function(next) {
+  const profile = this;
+  if (profile.recentDocs.length === 0) {
+    // check not private
+    // get 3 most popular
+    Doc.find({}, "_id", {limit:3, sort:{__v:-1}}, function(err, docs){
+      if (err) {
+        return next(err);
+      }
+      for (const doc of docs) {
+        profile.recentDocs.unshift(doc._id);
+      }
+      next();
+    }); 
+  }
+  else {
+    next();
+  }
+}); 
 
 const userProfile = mongoose.model('UserProfile', UserProfileSchema);
 module.exports = userProfile;
