@@ -22,7 +22,7 @@ const createDocComplaint = (req, res) => {
 }
 
 const retrieveDocComplaint = (req, res) => {
-  DocComplaint.findOne({_id:req.params.complaintId}).populate("docId", "title").populate("fromUserid", "username").exec(function(err, result){
+  DocComplaint.findOne({_id:req.params.complaintId}).populate("docId", "title").populate("fromUserId", "username").exec(function(err, result){
     if (err || !result) {
       res.status(404).json({error:"Could not retrieve the Document Complaint."});
     }

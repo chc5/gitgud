@@ -2,23 +2,29 @@ const Doc = require('../database/models/doc');
 const Taboo = require('../database/models/taboo');
 const authentication = require('../authentication');
 const Revision = require('../database/models/revision');
+const Roles = require('./roleCheck');
 
 const createDoc = (req, res) => {
-  let docinst = new Doc({
-    title: req.body.title,
-    content: req.body.content,
-    owner_id: req.user._id,
-  });
-  docinst.save(function (err, doc) {
-    if (err) {
-      res.status(500).json({error:"Unable to create this document"});
+  Roles.checkRole(req, {document:["create"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
     }
-    else {
-      req.params.documentId = doc._id;
-      req.body.textField = doc.content;
-      console.log(doc.title + " saved to Document collection.");
-      updateDoc(req, res);
-    }
+    let docinst = new Doc({
+      title: req.body.title,
+      content: req.body.content,
+      owner_id: req.user._id,
+    });
+    docinst.save(function (err, doc) {
+      if (err) {
+        res.status(500).json({error:"Unable to create this document"});
+      }
+      else {
+        req.params.documentId = doc._id;
+        req.body.textField = doc.content;
+        console.log(doc.title + " saved to Document collection.");
+        updateDoc(req, res);
+      }
+    });
   });
 };
 

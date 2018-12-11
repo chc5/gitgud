@@ -5,7 +5,8 @@ const bcrypt = require('bcrypt');
 
 const UserSchema = new Schema({
   username: {type: String, unique: true, required: true},
-  password: {type: String, required: true}
+  password: {type: String, required: true},
+  role: {type: String, default:'GU', required:true}
 });
 
 // Pre save hook that activates before a User is saved to db
