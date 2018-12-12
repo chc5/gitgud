@@ -5,6 +5,7 @@ const docControllers = require('../controllers/docHandlers');
 router.post('/create', docControllers.createDoc);
 router.post('/retrieve/:documentId', docControllers.retrieveDoc);
 router.post('/retrieveAll', docControllers.retrieveDocList);
+router.post('/search', docControllers.searchDocList);
 router.post('/lock/:documentId', docControllers.lockDoc);
 router.post('/unlock/:documentId', docControllers.unlockDoc);
 router.post('/update/:documentId', docControllers.updateDoc);

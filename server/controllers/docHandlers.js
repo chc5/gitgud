@@ -143,10 +143,11 @@ const searchDocList = (req, res) => {
       return res.status(roleErr.status).json({error:roleErr.info});
     }
     // add here
-    Doc.find({$and[{$or:[{"privacy.level":"PUBLIC"}, {"privacy.level":"RESTRICTED"}, {$and:[{"privacy.level":"PRIVATE"},
+    Doc.find({$and:[{$or:[{"privacy.level":"PUBLIC"}, {"privacy.level":"RESTRICTED"}, {$and:[{"privacy.level":"PRIVATE"},
     {owner_id:req.user._id}]}, {$and:[{"privacy.level":"SHARED"},
-    {"privacy.members":{$elemMatch:{$eq:req.user._id}}}]}, {"owner_id":req.user._id} ]}, {$or[{title:/req.params.searchTerm/i},
-    {content:/req.params.content/i}]}]}, function(err, results){
+    {"privacy.members":{$elemMatch:{$eq:req.user._id}}}]}, {"owner_id":req.user._id} ]},
+    {$or:[{title:/req.body.searchTerm/i},
+    {content:/req.body.content/i}]}]}, function(err, results){
       if (err || !results) {
         return res.status(404).json({error:"Unable to retrieve your documents"});
       }
