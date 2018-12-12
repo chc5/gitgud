@@ -1,5 +1,6 @@
 const Doc = require('../database/models/doc');
 const Taboo = require('../database/models/taboo');
+const User = require('../database/models/user');
 const authentication = require('../authentication');
 const Revision = require('../database/models/revision');
 const Roles = require('./roleCheck');
@@ -39,6 +40,7 @@ const retrieveDoc = (req, res) => {
           path:"modifier_id", select:"username"
         }
     })
+    .populate("privacy.members", "username")
     .exec(function(err, result){
       if (err || !result) {
         return res.status(404).json({error:"Unable to retrieve your document"});
@@ -264,16 +266,21 @@ const inviteUser = (req, res) => {
       }
       if (result) {
         if (result.privacy.level === "SHARED") {
-          result.privacy.members.push(req.body.userId);
-          result.save(function(saveErr, saveResult){
-            if (saveErr) {
+          User.findOne({username:req.body.userId}, function(userErr, userResult){
+            if (userErr || !userResult) {
               return res.status(500).json({error:"Could not add user"});
             }
-            res.status(200).json({msg:"User invited to document"});
+            result.privacy.members.push(userResult._id);
+            result.save(function(saveErr, saveResult){
+              if (saveErr) {
+                return res.status(500).json({error:"Could not add user"});
+              }
+              res.status(200).json({msg:"User invited to document"});
+            });
           });
         }
         else {
-          return res.status(301).json({error:"Document is not being shared"});
+          return res.status(401).json({error:"Document is not being shared"});
         }
       }
     });
