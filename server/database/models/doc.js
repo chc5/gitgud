@@ -67,7 +67,7 @@ DocSchema.methods.getVersion = function(revisionId, options, cb){
 };
 
 DocSchema.pre('save', function(next) {
-  self = this;
+  const self = this;
   UserProfile.findOne({userId:self.locked}, function(err, profile){
     if(err){
       return next(err);
