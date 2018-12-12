@@ -11,7 +11,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   User.findOne(
     { _id: id},
-    "username",
+    "username role",
     (err, user) => {
       done(null, user);
     }

@@ -39,6 +39,7 @@ class Document extends Component{
   hideHistory = (event) => this.setState({ historyVisible: false });
 
   renderDocumentBar(){
+    console.log(this.props.userInfo);
     return(
       <Header style={{ background: 'silver', padding: 0 }}>
         <Row type="flex" justify="center" align="end">
@@ -109,8 +110,8 @@ class Document extends Component{
   }
 }
 
-function mapStateToProps({ document, textField }){
-  return { document, textField };
+function mapStateToProps({ document, textField, userInfo }){
+  return { document, textField, userInfo };
 }
 
 function mapDispatchToProps(dispatch){

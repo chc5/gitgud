@@ -47,7 +47,9 @@ const login = (req, res, next) => {
       console.log("log in status of " + req.user.username + " is " + req.isAuthenticated());
       return res.status(200).json({
         userInfo:{  
-          username:req.user.username
+          _id: req.user._id,
+          username:req.user.username,
+          role: req.user.role
         }
       });
     });
