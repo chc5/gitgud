@@ -3,11 +3,12 @@ const Taboo = require('../database/models/taboo');
 const User = require('../database/models/user');
 const authentication = require('../authentication');
 const Revision = require('../database/models/revision');
+const UserProfile = require('../database/models/userProfile');
 const Roles = require('./roleCheck');
 
 const createDoc = (req, res) => {
   Roles.checkRole(req, {document:["create"]}, function(roleErr){
-    if (roleErr) { 
+    if (roleErr) {
       return res.status(roleErr.status).json({error:roleErr.info});
     }
     let docinst = new Doc({
@@ -83,7 +84,7 @@ const lockDoc = (req, res) => {
           res.status(500).json({error:"Failed to lock document"});
         }
         else {
-          res.status(200).json({msg:"Document locked"});     
+          res.status(200).json({msg:"Document locked"});
         }
       });
     });
@@ -112,7 +113,7 @@ const unlockDoc = (req, res) => {
             res.status(500).json({error:"Failed to unlock document"});
           }
           else {
-            res.status(200).json({msg:"Document unlocked"});     
+            res.status(200).json({msg:"Document unlocked"});
           }
         });
       });
@@ -184,7 +185,29 @@ const updateDoc = (req, res) => {
                   });
                 }
                 else {
-                  res.status(200).json({msg:"Document has been saved"});     
+                  UserProfile.findOne({userId:req.user._id}, function(profileFindErr, profile){
+                    if(profileFindErr || !profile){
+                      return res.status(500).json({error:"Failed to find profile"});
+                    }
+                    let initLowest = profile.recentDocs[0];
+                    for(let i = 0; i < profile.recentDocs.length - 1; i++){
+                      profile.recentDocs[i] = profile.recentDocs[i+1];
+                    }
+                    let idxCurr = profile.recentDocs.indexOf(lockResult._id);
+                    if(idxCurr >= 0){
+                      for(let j = idxCurr; j > 0; j--){
+                        profile.recentDocs[j] = profile.recentDocs[j-1];
+                      }
+                      profile.recentDocs[0] = initLowest;
+                    }
+                    profile.recentDocs[2] = lockResult._id;
+                    UserProfile.updateOne({userId:profile.userId}, {$set:{recentDocs:profile.recentDocs}}, function(updateErr, update){
+                      if (updateErr) {
+                        return res.status(500).json({error:"Failed to update profile"});
+                      }
+                      return res.status(200).json({msg:"Document has been saved"});
+                    });
+                  });
                 }
               });
             }
@@ -194,7 +217,6 @@ const updateDoc = (req, res) => {
     });
   });
 };
-
 
 const deleteDoc = (req, res) => {
   Roles.checkRole(req, {document:["delete"]}, function(roleErr){
@@ -218,7 +240,7 @@ const deleteDoc = (req, res) => {
             if (err) {
               console.log("Error deleting revisions after document deletion");
             }
-          }); 
+          });
           res.status(200).json({msg:"Document has been deleted"});
         }
       });
