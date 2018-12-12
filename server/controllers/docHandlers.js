@@ -2,6 +2,7 @@ const Doc = require('../database/models/doc');
 const Taboo = require('../database/models/taboo');
 const authentication = require('../authentication');
 const Revision = require('../database/models/revision');
+const UserProfile = require('../database/models/userProfile');
 
 const createDoc = (req, res) => {
   let docinst = new Doc({
@@ -147,7 +148,29 @@ const updateDoc = (req, res) => {
                 });
               }
               else {
-                res.status(200).json({msg:"Document has been saved"});     
+                UserProfile.findOne({userId:lockResult.locked}, function(profileFindErr, profile){
+                  if(profileFindErr){
+                    return res.status(500).json({error:"Failed to find profile"});
+                  }
+                  let initLowest = profile.recentDocs[0];
+                  for(let i = 0; i < profile.recentDocs.length - 1; i++){
+                    profile.recentDocs[i] = profile.recentDocs[i+1];
+                  }
+                  let idxCurr = profile.recentDocs.indexOf(lockResult._id);
+                  if(idxCurr >= 0){
+                    for(let j = idxCurr; j > 0; j--){
+                      profile.recentDocs[j] = profile.recentDocs[j-1];
+                    }
+                    profile.recentDocs[0] = initLowest;
+                  }
+                  profile.recentDocs[2] = lockResult._id;
+                  profile.save(function(profileErr, savedProfile){
+                    if(profileErr){
+                      return res.status(500).json({error:"Failed to update profile"});
+                    }
+                    res.status(200).json({msg:"Document has been saved"});     
+                 });
+               });
               }
             });
           }
