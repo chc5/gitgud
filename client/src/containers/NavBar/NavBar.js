@@ -16,6 +16,7 @@ const { Sider } = Layout;
 // Navigation Bar for the entire website.
 class NavBar extends Component{
   render(){
+    console.log(this.props.userInfo);
     return(
       <Sider
         collapsible
@@ -70,7 +71,9 @@ class NavBar extends Component{
               )
             : null
           }
-          { this.props.userInfo && (this.props.userInfo === OU || this.props.userInfo === SU)
+          { this.props.userInfo &&
+            (this.props.userInfo.role === OU ||
+              this.props.userInfo.role === SU)
             ? (
                 <Menu.Item
                   key="4"
@@ -100,7 +103,37 @@ class NavBar extends Component{
               )
             : null
           }
-          {!this.props.userInfo
+          { this.props.userInfo && this.props.userInfo.role == SU
+            ? (
+                <Menu.Item
+                  key="10"
+                  onClick={() => {
+                    this.props.history.push(`/taboos`);
+                    this.props.updateNavKey("10");
+                  }}
+                  >
+                  <Icon type="global" />
+                  <span>User Promotion</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo
+            ? (
+              <Menu.Item
+                key="9"
+                onClick={() => {
+                  this.props.history.push(`/setting`);
+                  this.props.updateNavKey("9");
+                }}
+                >
+                <Icon type="setting" />
+                <span>Settings</span>
+              </Menu.Item>
+            )
+            : null
+          }
+          { !this.props.userInfo
             ? (
                 <Menu.Item
                   key="6"
@@ -113,7 +146,10 @@ class NavBar extends Component{
                   <span>Login</span>
                 </Menu.Item>
               )
-            : (
+            : null
+          }
+          { this.props.userInfo
+            ? (
                 <Menu.Item
                   key="7"
                   onClick={() => {
@@ -125,14 +161,15 @@ class NavBar extends Component{
                   <span>Logout</span>
                 </Menu.Item>
               )
+            : null
           }
           {!this.props.userInfo
             ? (
                 <Menu.Item
-                  key="7"
+                  key="8"
                   onClick={() => {
                     this.props.history.push(`/signup`)
-                    this.props.updateNavKey("7");
+                    this.props.updateNavKey("8");
                   }}
                   >
                   <Icon type="plus" />
