@@ -19,6 +19,7 @@
 }
 .col{
   font-size: 3vh;
+  background: silver;
 }
 .col:hover{
   background-color: white;

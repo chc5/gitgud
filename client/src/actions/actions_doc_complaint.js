@@ -59,15 +59,18 @@ export function retrieveDocComplaint(complaintId){
   return (dispatch) => {
     axios.post(url)
       .then((response) => {
+        console.log(response);
         dispatch({
           type: RETRIEVE_DOC_COMPLAINT,
           payload: response.data
         });
       })
-      .catch((error) => dispatch({
-        type: CRUD_DOC_COMPLAINT_ERROR,
-        payload: error.response.data
-      }));
+      .catch((error) => {
+        dispatch({
+          type: CRUD_DOC_COMPLAINT_ERROR,
+          payload: error.response.data
+        });
+      });
   }
 }
 
@@ -94,10 +97,9 @@ export function processDocComplaint(complaintId){
           resolve(true);
         })
         .catch((error) => {
-          console.log(error);
           dispatch({
             type: CRUD_DOC_COMPLAINT_ERROR,
-            payload: error
+            payload: error.response.data
           });
           reject(false);
         });
@@ -115,6 +117,11 @@ export function deleteDocComplaint(complaintId){
         });
         dispatch(retrieveAllDocComplaint());
       })
-      .catch((error) => console.log("deleteDocComplaint", error));
+      .catch((error) => {
+        dispatch({
+          type: CRUD_DOC_COMPLAINT_ERROR,
+          payload: error.response.data
+        });
+      });
   }
 }

@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { retrieveAllUserComplaint, deleteUserComplaint }
   from '../../actions/actions_user_complaint';
+import UserComplaint from '../../components/UserComplaint/UserComplaint';
 // UI Imports
 import { Layout, List, Icon, Row, Col } from 'antd';
 import NavBar from '../NavBar/NavBar';
-// import './UserComplaintManager.css';
+import './UserComplaintManager.css';
 const { Header, Content } = Layout;
 
 class UserComplaintManager extends Component{
@@ -22,24 +23,34 @@ class UserComplaintManager extends Component{
     this.hideComplaint = this.hideComplaint.bind(this);
   }
 
-  deleteUserComplaint = async (id) => {
-    await this.props.deleteUserComplaint(id);
-    this.props.retrieveAllUserComplaint();
-  }
-
-  showComplaint(event){
+  showComplaint(complaintId){
+    this.props.history.push(`/complaints/user/${complaintId}`);
     this.setState({ complaintVisible: false });
-    this.props.history.push(`/complaints/user`);
   }
 
   hideComplaint(event){
+    this.props.history.push(`/complaints/user`);
     this.setState({ complaintVisible: false });
   }
 
-  renderComplaintForm(id){
+  renderComplaint(){
     return(
-      null
+      <UserComplaint
+        complaintId={this.state.selectedComplaintId}
+        visible={this.state.complaintVisible}
+        hideComplaint={this.hideComplaint}
+      />
     );
+  }
+
+  getDateTimeFromString = (str) => {
+    if(!str){
+      return "";
+    }
+    const blocks = str.split("T");
+    const date = blocks[0];
+    const time = blocks[1].slice(0, 8);
+    return `${date} ${time}`
   }
 
   render(){
@@ -70,14 +81,14 @@ class UserComplaintManager extends Component{
                     <Col
                       xs={20} sm={22} md={23} lg={23} xl={23}
                       className="list-item-col list-item-title"
-                      onClick={() => this.props.history.push(`/complaints/user/${item._id}`)}
+                      onClick={() => this.showComplaint(item._id)}
                       >
-                      {item.title}
+                      {item.fromUserId.username} {this.getDateTimeFromString(item.date_created)}
                     </Col>
                     <Col
                       xs={4} sm={2} md={1} lg={1} xl={1}
                       className="list-item-col"
-                      onClick={() => this.deleteUserComplaint(item._id)}
+                      onClick={() => this.props.deleteUserComplaint(item._id)}
                       >
                       <Icon type="delete" />
                     </Col>
@@ -86,6 +97,7 @@ class UserComplaintManager extends Component{
               )}
             />
           </Content>
+          {this.renderComplaint()}
         </Layout>
       </Layout>
     );
