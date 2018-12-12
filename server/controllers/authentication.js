@@ -1,5 +1,6 @@
 const User = require('../database/models/user');
 const authentication = require('../authentication');
+const UserProfile = require('../database/models/userProfile');
 
 /*
  * Retrieves username and password from request
@@ -17,14 +18,25 @@ const signup  = (req, res) => {
     }
     // Register user if it does not exist
     if (!existingUser) {
-      userinst.save(function (err) {
+      userinst.save(function (err, userResult) {
         if (err) {
           console.log('Couldnt add user', err);
           res.status(500).json({error:"Unable to signup user"});
         }
         else {
-          console.log('Successfully added user');
-          res.status(200).json({msg:"You have successfully signed up. Please log in."});
+          let userProfInst = new UserProfile({
+            userId: userResult._id
+          });
+          userProfInst.save(function (profileErr, profile) {
+            if (profileErr) {
+              console.log(profileErr);
+              res.status(500).json({error:"Unable to create user profile"});
+            }
+            else {
+              console.log('Successfully added user');
+              res.status(200).json({msg:"You have successfully signed up. Please log in."});
+            }
+          });
         }
       });
     }
