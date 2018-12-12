@@ -71,8 +71,16 @@ DocSchema.pre('save', function(next) {
     if(err){
       return next(err);
     }
+    let initLowest = profile.recentDocs[0];
     for(let i = 0; i < profile.recentDocs.length - 1; i++){
       profile.recentDocs[i] = profile.recentDocs[i+1];
+    }
+    let idxCurr = profiles.recentDocs.indexOf(this._id);
+    if(idxCurr != -1){
+      for(let j = idxCurr; j > 0; j--){
+        profile.recentDocs[j] = profile.recentDocs[j-1];
+      }
+      profile.recentDocs[0] = initLowest;
     }
     profile.recentDocs[2] = this._id;
     profile.save(function(profileErr, savedProfile){
