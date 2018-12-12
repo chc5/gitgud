@@ -78,7 +78,9 @@ class Profile extends Component{
                <List.Item
                  className="list-item"
                  >
-                 <a onClick={() => this.props.history.push(`/docs/${docId}`)}>Document</a>
+                 <div onClick={() => this.props.history.push(`/docs/${docId}`)}>
+                   Document
+                 </div>
                </List.Item>
              )}
            />

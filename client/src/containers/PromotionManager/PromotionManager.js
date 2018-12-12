@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { SU, GU, OU, DO } from '../../constants/types_permission';
+
 import {
   createPromotion,
   retrieveAllPromotion,
@@ -12,6 +14,9 @@ import {
   demoteUser
 } from '../../actions/actions_promotion';
 
+import {
+  retrieveAllProfiles
+} from '../../actions/actions_profile';
 // UI Imports
 import { Layout, List, Icon, Row, Col, Card } from 'antd';
 import './PromotionManager.css'
@@ -25,9 +30,16 @@ class PromotionManager extends Component{
       collapsed: false
     }
     this.props.retrieveAllPromotion();
+    this.props.retrieveAllProfiles();
   }
 
   renderPromotionList(){
+    if(!this.props.promotionList || this.props.promotionList.length === 0){
+      return (
+        <Card title="Profile List">
+        </Card>
+      );
+    }
     return(
       <Card
         title="Promotion List"
@@ -46,19 +58,19 @@ class PromotionManager extends Component{
                   xs={16} sm={18} md={20} lg={20} xl={20}
                   className="list-item-col list-item-title"
                   >
-                  {item.word}
+                  {item.userId.username} | Reason: {item.content}
                 </Col>
                 <Col
                   xs={4} sm={3} md={2} lg={2} xl={2}
                   className="list-item-col"
-                  onClick={() => this.approveUserPromotion(item._id)}
+                  onClick={() => this.props.approveUserPromotion(item._id)}
                   >
                   <Icon type="check" />
                 </Col>
                 <Col
                   xs={4} sm={3} md={2} lg={2} xl={2}
                   className="list-item-col"
-                  onClick={() => this.denyUserPromotion(item._id)}
+                  onClick={() => this.props.denyUserPromotion(item._id)}
                   >
                   <Icon type="delete" />
                 </Col>
@@ -69,7 +81,30 @@ class PromotionManager extends Component{
       </Card>
     );
   }
+  getRoleName(role){
+    switch(role){
+      case "SU":
+        return SU
+      case "OU":
+        return OU
+      case "GU":
+        return GU
+      case "DO":
+        return DO
+      default:
+        return "NO ROLE"
+    }
+  }
   renderProfileList(){
+    if(!this.props.profileList || this.props.profileList.length === 0){
+      return (
+        <Card
+          title="Profile List"
+          >
+        </Card>
+      );
+    }
+    console.log(this.props.profileList);
     return(
       <Card
         title="Profile List"
@@ -88,19 +123,23 @@ class PromotionManager extends Component{
                   xs={16} sm={18} md={20} lg={20} xl={20}
                   className="list-item-col list-item-title"
                   >
-                  {item.username}: {item.content}
+                  {item.userId.username} | {this.getRoleName(item.userId.role)}
+                  { item.summary
+                    ? (<span> | {item.summary}</span>)
+                    : null
+                  }
                 </Col>
                 <Col
                   xs={4} sm={3} md={2} lg={2} xl={2}
                   className="list-item-col"
-                  onClick={() => this.promoteUser(item._id)}
+                  onClick={() => this.props.promoteUser(item.userId._id)}
                   >
                   <Icon type="arrow-up" />
                 </Col>
                 <Col
                   xs={4} sm={3} md={2} lg={2} xl={2}
                   className="list-item-col"
-                  onClick={() => this.demoteUser(item._id)}
+                  onClick={() => this.props.demoteUser(item.userId._id)}
                   >
                   <Icon type="arrow-down" />
                 </Col>
@@ -153,7 +192,8 @@ function mapDispatchToProps(dispatch){
     approveUserPromotion,
     denyUserPromotion,
     promoteUser,
-    demoteUser
+    demoteUser,
+    retrieveAllProfiles
   }, dispatch);
 }
 

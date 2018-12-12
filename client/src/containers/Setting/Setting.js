@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createProfile, retrieveProfile, updateProfile, deleteProfile }
   from '../../actions/actions_profile';
-
+import { createPromotion }
+  from '../../actions/actions_promotion';
 import './Setting.css';
-import { Form, Card, Layout, Row, Col, List } from 'antd';
+import { Card, Layout, Row, Col, List, Button } from 'antd';
 import NavBar from '../NavBar/NavBar';
 const { Header, Content } = Layout;
 
@@ -18,9 +19,13 @@ class Setting extends Component{
   handleSubmit = (e) => {
     e.preventDefault();
   }
+  createPromotion(){
+    const reason = prompt("Provide a reason why you want to be an Ordinary User");
+    this.props.createPromotion(reason);
+    alert("Your reason will be considered by the Super User");
+  }
   renderProfile(){
     const p = this.props.profile;
-    console.log(p);
     return(
       <Card
         hoverable
@@ -28,7 +33,7 @@ class Setting extends Component{
         <Row type="flex" justify="center" align="end">
           <Col xs={24} sm={24} md={24} lg={24} xl={24}>
             { p.img
-              ? ( <img src={p.img} /> )
+              ? ( <img alt="Not Found" src={p.img} /> )
               : (null)
             }
           </Col>
@@ -48,7 +53,7 @@ class Setting extends Component{
                   <List.Item
                     className="list-item"
                     >
-                    <div onClick={() => this.history.push(`/docs/${docId}`)}>
+                    <div onClick={() => this.props.history.push(`/docs/${docId}`)}>
                       Document
                     </div>
                   </List.Item>
@@ -56,6 +61,20 @@ class Setting extends Component{
               />
             </Card>
           </Col>
+          { this.props.userInfo && this.props.userInfo.role === "GU"
+            ? (
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                Do you wish to become Ordinary User? <br />
+                <Button
+                  type="primary"
+                  onClick={() => this.createPromotion()}
+                  >
+                  Click here
+                </Button>
+              </Col>
+            )
+            : null
+          }
         </Row>
       </Card>
     );
@@ -73,9 +92,6 @@ class Setting extends Component{
                   ? this.renderProfile()
                   : (<h2>This user does not have a profile.</h2>)
                 }
-            <Form onSubmit={this.handleSubmit} className="profile-form">
-
-            </Form>
           </Content>
         </Layout>
       </Layout>
@@ -83,8 +99,8 @@ class Setting extends Component{
   }
 }
 
-function mapStateToProps({ profile }){
-  return { profile };
+function mapStateToProps({ profile, userInfo }){
+  return { profile, userInfo };
 }
 
 function mapDispatchToProps (dispatch){
@@ -92,7 +108,8 @@ function mapDispatchToProps (dispatch){
     createProfile,
     retrieveProfile,
     updateProfile,
-    deleteProfile
+    deleteProfile,
+    createPromotion
   }, dispatch);
 }
 
