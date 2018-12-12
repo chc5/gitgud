@@ -159,6 +159,10 @@ const updateDoc = (req, res) => {
         if (tabooErr) {
           res.status(500).json({error:"Unable to save this document"});
         }
+        else {
+          if (tabooWords.length != 0) {
+            return res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
+          }
         revisionInst.save(function(err, revision){
           if (err) {
             res.status(500).json({error:"Unable to save this document"});
@@ -201,11 +205,7 @@ const updateDoc = (req, res) => {
                });
               }
             });
-        else {
-          if (tabooWords.length != 0) {
-            return res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
           }
-        }
       });
     });
   });
