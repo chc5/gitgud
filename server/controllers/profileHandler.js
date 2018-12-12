@@ -49,7 +49,7 @@ const retrieveProfile = (req, res) => {
       if (!req.body.userId || roleErr) {
         queryField.userId = req.user._id;
       }
-      userProfile.findOne(queryField, function(err, profileData){
+      userProfile.findOne(queryField).populate("userId", "username").exec(function(err, profileData){
         if(err || !profileData){
           return res.status(404).json({error:"Unable to find Profile"});
         }
