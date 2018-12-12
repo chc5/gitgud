@@ -4,13 +4,13 @@ Time Spent: **2** Months
 
 ## Technology Stack
 **MongoDB**
-MongoDB is used as the data store for our website.
+MongoDB is our data store for our website.
 
 **Express**
-We used Express.js for it's many web to server routing tools. 
+We used Express.js for its capability to perform server-side routing. 
 
 **React.js**
-Our website is built on React.js where we map out all of our functionalities on the website.
+Our website is built on React.js/Redux where we map out all of our functionalities and components on the website.
 
 **Node.js**
 Node.js is used to get our website up and running both locally and in production.
@@ -92,6 +92,12 @@ Make sure you clone the github repository to your computer and have NodeJS along
 **Running the Application**
 ``npm run-script dev``
 This should open a new tab on your default browser window with the Gitgud application loading onto it. You are now able to utilize the application locally on your machine. You could now see how the website works, or test your changes.
+``
+mongo;
+use gitgud
+db.users.updateOne({username:"yourusername"}, {role:"SU"})
+``
+The application does not have a super user in the initial state. The script above will promote an existing user's role directly to Super User.
 
 ## License
 
