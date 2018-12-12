@@ -6,7 +6,7 @@ const Roles = require('./roleCheck');
 
 const createDoc = (req, res) => {
   Roles.checkRole(req, {document:["create"]}, function(roleErr){
-    if (roleErr) {
+    if (roleErr) { 
       return res.status(roleErr.status).json({error:roleErr.info});
     }
     let docinst = new Doc({
@@ -125,7 +125,8 @@ const retrieveDocList = (req, res) => {
     }
     // add here
     Doc.find({$or:[{"privacy.level":"PUBLIC"}, {"privacy.level":"RESTRICTED"}, {$and:[{"privacy.level":"PRIVATE"},
-    {owner_id:req.user._id}]}, {$and:[{"privacy.level":"SHARED"}, {"privacy.members":{$elemMatch:{$eq:req.user._id}}}]}]}, function(err, results){
+    {owner_id:req.user._id}]}, {$and:[{"privacy.level":"SHARED"},
+    {"privacy.members":{$elemMatch:{$eq:req.user._id}}}]}, {"owner_id":req.user._id} ]}, function(err, results){
       if (err || !results) {
         return res.status(404).json({error:"Unable to retrieve your documents"});
       }
@@ -230,7 +231,7 @@ const setPrivacy = (req, res) => {
     }
     if (req.body.privacyLevel === "PRIVATE" || req.body.privacyLevel === "PUBLIC" ||
     req.body.privacyLevel === "RESTRICTED" || req.body.privacyLevel === "SHARED") {
-      return Doc.findOne({_id:req.params.documentId}, {"privacy.level":req.body.privacyLevel}, function(findErr, findResult){
+      return Doc.findOne({_id:req.params.documentId}, function(findErr, findResult){
         if (findErr || !findResult) {
           return res.status(500).json({error:"Could not update privacy"});
         }
