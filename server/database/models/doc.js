@@ -10,6 +10,11 @@ const DocSchema = new Schema({
   owner_id: {type: Schema.Types.ObjectId, ref: 'User'},
   locked: {type: Schema.Types.ObjectId, default: null, ref: 'User'},
   revisions: [{type: Schema.Types.ObjectId, ref: 'Revision'}],
+  privacy : {
+    permission : {type: String, default:"33"},
+    level : {type: String, default:'PUBLIC'},
+    members : [{type: Schema.Types.ObjectId, ref: 'User'}]
+  },
   date_created: {type: Date, default: Date.now}
 });
 

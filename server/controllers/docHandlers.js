@@ -123,6 +123,7 @@ const retrieveDocList = (req, res) => {
     if (roleErr) {
       return res.status(roleErr.status).json({error:roleErr.info});
     }
+    // add here
     Doc.find({}, function(err, results){
       if (err || !results) {
         return res.status(404).json({error:"Unable to retrieve your documents"});
