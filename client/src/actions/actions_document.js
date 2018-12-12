@@ -11,11 +11,7 @@ import {
   DELETE_DOCUMENT,
   RETRIEVE_DOCUMENT_LIST,
   INVITATION_SUCCESSFUL,
-  INVITATION_UNSUCCESSFUL,
-  REMOVE_USER_FROM_DOC_SUCCESSFUL,
-  REMOVE_USER_FROM_DOC_UNSUCCESSFUL,
-  SET_PRIVACY_SUCCESSFUL,
-  SET_PRIVACY_UNSUCCESSFUL
+  INVITATION_UNSUCCESSFUL
 } from '../constants/types_document_action';
 
 export function retrieveAllDocument(){
@@ -107,11 +103,11 @@ export function deleteDocument(documentId, history){
   }
 }
 
-export function inviteUsersToDoc(documentId, userId){
-  let url = `/api/docs/${documentId}/inviteUser`;
+export function inviteUsersToDoc(documentId, username, permission){
+  let url = `/api/docs/documentId/invite`;
   return (dispatch) =>
     new Promise((resolve, reject) => {
-      axios.post(url, { userId })
+      axios.post(url, { username, permission })
         .then((response) => {
           dispatch({
             type: INVITATION_SUCCESSFUL,
@@ -122,54 +118,6 @@ export function inviteUsersToDoc(documentId, userId){
         .catch((error) => {
           dispatch({
             type: INVITATION_UNSUCCESSFUL,
-            payload: error.response.data
-          });
-          reject(false);
-        });
-    });
-}
-
-export function removeUsersFromDoc(documentId, userId){
-  let url = `/api/docs/${documentId}/removeUser`;
-  return (dispatch) =>
-    new Promise((resolve, reject) => {
-      axios.post(url, { userId })
-        .then((response) => {
-          dispatch({
-            type: REMOVE_USER_FROM_DOC_SUCCESSFUL,
-            payload: response.data
-          });
-          resolve(true);
-        })
-        .catch((error) => {
-          dispatch({
-            type: REMOVE_USER_FROM_DOC_UNSUCCESSFUL,
-            payload: error.response.data
-          });
-          reject(false);
-        });
-    });
-}
-
-export function setPrivacy(documentId, privacyLevel){
-  console.log(privacyLevel);
-  let url = `/api/docs/${documentId}/setPrivacy`;
-  return (dispatch) =>
-    new Promise((resolve, reject) => {
-      axios.post(url, { privacyLevel })
-        .then((response) => {
-          console.log("setting Privacy Results Success", response);
-          dispatch({
-            type: SET_PRIVACY_SUCCESSFUL,
-            payload: response.data
-          });
-          dispatch(retrieveAllDocument());
-          resolve(true);
-        })
-        .catch((error) => {
-          console.log("setting Privacy Results Fail", error);
-          dispatch({
-            type: SET_PRIVACY_UNSUCCESSFUL,
             payload: error.response.data
           });
           reject(false);
