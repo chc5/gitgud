@@ -9,6 +9,7 @@ const { Header, Content } = Layout;
 
 class Home extends Component{
   render(){
+    console.log(this.props.userInfo);
     return(
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />
@@ -16,36 +17,10 @@ class Home extends Component{
           <Header style={{ background: '#fff', padding: 0 }}>
             {this.props.userInfo
               ? (<h2>Welcome, { this.props.userInfo.username }!</h2>)
-              : (<h2>Home</h2>)
+              : (<h2>GitGud</h2>)
             }
           </Header>
           <Content style={{ margin: '0 16px' }}>
-            <Row gutter={16} className="row">
-              <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                <Card
-                  className="card"
-                  onClick={() => this.props.history.push(`/docs`)}
-                  >
-                  Search for Documents
-                </Card>
-              </Col>
-              <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                <Card
-                  className="card"
-                  onClick={() => this.props.history.push(`/profiles`)}
-                  >
-                  Search for Users
-                </Card>
-              </Col>
-              <Col xs={24} sm={24} md={8} lg={8} xl={8}>
-                <Card
-                  className="card"
-                  onClick={() => this.props.history.push(`/taboos`)}
-                  >
-                  Search for Taboo Words
-                </Card>
-              </Col>
-            </Row>
             {!this.props.userInfo
               ? (
                 <Row gutter={16} className="row">
@@ -67,7 +42,34 @@ class Home extends Component{
                   </Col>
                 </Row>
               )
-              : null
+              : (
+                <Row gutter={16} className="row">
+                  <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                    <Card
+                      className="card"
+                      onClick={() => this.props.history.push(`/docs`)}
+                      >
+                      Search for Documents
+                    </Card>
+                  </Col>
+                  <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                    <Card
+                      className="card"
+                      onClick={() => this.props.history.push(`/profiles`)}
+                      >
+                      Search for Users
+                    </Card>
+                  </Col>
+                  <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                    <Card
+                      className="card"
+                      onClick={() => this.props.history.push(`/taboos`)}
+                      >
+                      Search for Taboo Words
+                    </Card>
+                  </Col>
+                </Row>
+              )
             }
           </Content>
         </Layout>

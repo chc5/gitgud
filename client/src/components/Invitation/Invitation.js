@@ -15,10 +15,7 @@ class Invitation extends Component{
   constructor(props){
     super(props);
     this.state = {
-      username: "",
-      write_access: false,
-      read_access: false,
-      loading: false
+      username: ""
     }
   }
 
@@ -49,19 +46,6 @@ class Invitation extends Component{
              onChange={event => this.setState({ username: event.target.value })}
             />
           </FormItem>
-          <FormItem>
-            <Checkbox
-             onChange={event => this.setState({ read_access: !this.state.read_access })}
-            >
-            Read Only
-            </Checkbox>
-            <Checkbox
-              onChangeonChange={event => this.setState({ write_access: !this.state.write_access })}
-            >
-              Read and Write
-            </Checkbox>
-          </FormItem>
-
       </Form>
     );
   }

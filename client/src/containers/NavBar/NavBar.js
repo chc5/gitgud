@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import { logout } from '../../actions/actions_account_registration';
 import { updateNavKey, updateNavCollapse } from '../../actions/actions_nav_bar';
 import Notice from '../../components/Notice/Notice';
+import { SU, GU, DO, OU }
+  from './../../constants/types_permission';
 // UI Imports
 import { Layout, Menu, Icon } from 'antd';
 import "./NavBar.css";
@@ -38,46 +40,66 @@ class NavBar extends Component{
             <Icon type="home" />
             <span>Home</span>
           </Menu.Item>
-          <Menu.Item
-            key="2"
-            onClick={() => {
-              this.props.history.push(`/docs`);
-              this.props.updateNavKey("2");
-            }}
-            >
-            <Icon type="file-search" />
-            <span>Document List</span>
-          </Menu.Item>
-          <Menu.Item
-            key="3"
-            onClick={() => {
-              this.props.history.push(`/profiles`);
-              this.props.updateNavKey("3");
-            }}
-            >
-            <Icon type="user" />
-            <span>User Profiles</span>
-          </Menu.Item>
-          <Menu.Item
-            key="4"
-            onClick={() => {
-              this.props.history.push(`/taboos`);
-              this.props.updateNavKey("4");
-            }}
-            >
-            <Icon type="safety-certificate" />
-            <span>Taboo Words Banned</span>
-          </Menu.Item>
-          <Menu.Item
-            key="5"
-            onClick={() => {
-              this.props.history.push(`/complaints/doc`);
-              this.props.updateNavKey("5");
-            }}
-            >
-            <Icon type="exception" />
-            <span>Document Complaints</span>
-          </Menu.Item>
+          { this.props.userInfo
+            ? (
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    this.props.history.push(`/docs`);
+                    this.props.updateNavKey("2");
+                  }}
+                  >
+                  <Icon type="file-search" />
+                  <span>Document List</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo
+            ? (
+                <Menu.Item
+                  key="3"
+                  onClick={() => {
+                    this.props.history.push(`/profiles`);
+                    this.props.updateNavKey("3");
+                  }}
+                  >
+                  <Icon type="user" />
+                  <span>User Profiles</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo && this.props.userInfo === OU || this.props.userInfo === SU
+            ? (
+                <Menu.Item
+                  key="4"
+                  onClick={() => {
+                    this.props.history.push(`/taboos`);
+                    this.props.updateNavKey("4");
+                  }}
+                  >
+                  <Icon type="safety-certificate" />
+                  <span>Taboo Words Banned</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo
+            ? (
+                <Menu.Item
+                  key="5"
+                  onClick={() => {
+                    this.props.history.push(`/complaints/doc`);
+                    this.props.updateNavKey("5");
+                  }}
+                  >
+                  <Icon type="exception" />
+                  <span>Document Complaints</span>
+                </Menu.Item>
+              )
+            : null
+          }
           {!this.props.userInfo
             ? (
                 <Menu.Item

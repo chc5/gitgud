@@ -27,7 +27,7 @@ class DocumentManager extends Component{
 
   showPrivacySettings = (doc) =>
     this.setState({ privacySettingsVisible: true, selectedDocument: doc });
-    
+
   hidePrivacySettings = (event) => this.setState({ privacySettingsVisible: false });
 
   renderPrivacySettings(){
