@@ -15,13 +15,13 @@ class Home extends Component{
         <Layout>
           <Header style={{ background: '#fff', padding: 0 }}>
             {this.props.userInfo
-              ? (<span>Welcome, { this.props.userInfo.username }</span>)
-              : (<span>Home</span>)
+              ? (<h2>Welcome, { this.props.userInfo.username }!</h2>)
+              : (<h2>Home</h2>)
             }
           </Header>
           <Content style={{ margin: '0 16px' }}>
             <Row gutter={16} className="row">
-              <Col span={8}>
+              <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                 <Card
                   className="card"
                   onClick={() => this.props.history.push(`/docs`)}
@@ -29,7 +29,7 @@ class Home extends Component{
                   Search for Documents
                 </Card>
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                 <Card
                   className="card"
                   onClick={() => this.props.history.push(`/profiles`)}
@@ -37,7 +37,7 @@ class Home extends Component{
                   Search for Users
                 </Card>
               </Col>
-              <Col span={8}>
+              <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                 <Card
                   className="card"
                   onClick={() => this.props.history.push(`/taboos`)}
@@ -46,24 +46,29 @@ class Home extends Component{
                 </Card>
               </Col>
             </Row>
-            <Row gutter={16} className="row">
-              <Col span={12}>
-                <Card
-                  className="card"
-                  onClick={() => this.props.history.push(`/login`)}
-                  >
-                  Login
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card
-                  className="card"
-                  onClick={() => this.props.history.push(`/signup`)}
-                  >
-                  Signup
-                </Card>
-              </Col>
-            </Row>
+            {!this.props.userInfo
+              ? (
+                <Row gutter={16} className="row">
+                  <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <Card
+                      className="card"
+                      onClick={() => this.props.history.push(`/login`)}
+                      >
+                      Login
+                    </Card>
+                  </Col>
+                  <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <Card
+                      className="card"
+                      onClick={() => this.props.history.push(`/signup`)}
+                      >
+                      Signup
+                    </Card>
+                  </Col>
+                </Row>
+              )
+              : null
+            }
           </Content>
         </Layout>
       </Layout>

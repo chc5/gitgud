@@ -23,19 +23,14 @@ class DocComplaintManager extends Component{
     this.hideComplaint = this.hideComplaint.bind(this);
   }
 
-  deleteDocComplaint = async (id) => {
-    await this.props.deleteDocComplaint(id);
-    this.props.retrieveAllDocComplaint();
-  }
-
   showComplaint(complaintId){
     this.props.history.push(`/complaints/doc/${complaintId}`);
     this.setState({ complaintVisible: true, selectedComplaintId: complaintId });
   }
 
   hideComplaint(event){
-    this.setState({ complaintVisible: false });
     this.props.history.push(`/complaints/doc`);
+    this.setState({ complaintVisible: false });
   }
 
   renderComplaint(){
@@ -46,6 +41,16 @@ class DocComplaintManager extends Component{
         hideComplaint={this.hideComplaint}
       />
     );
+  }
+
+  getDateTimeFromString = (str) => {
+    if(!str){
+      return "";
+    }
+    const blocks = str.split("T");
+    const date = blocks[0];
+    const time = blocks[1].slice(0, 8);
+    return `${date} ${time}`
   }
 
   render(){
@@ -78,12 +83,12 @@ class DocComplaintManager extends Component{
                       className="list-item-col list-item-title"
                       onClick={() => this.showComplaint(item._id)}
                       >
-                      {item.title}
+                      {item.fromUserId.username} {this.getDateTimeFromString(item.date_created)}
                     </Col>
                     <Col
                       xs={4} sm={2} md={1} lg={1} xl={1}
                       className="list-item-col"
-                      onClick={() => this.deleteDocComplaint(item._id)}
+                      onClick={() => this.props.deleteDocComplaint(item._id)}
                       >
                       <Icon type="delete" />
                     </Col>
