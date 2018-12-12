@@ -8,7 +8,7 @@ router.get('/logout', authenticationControllers.logout);
 router.post('/signup', authenticationControllers.signup);
 
 router.post('/createProfile', authenticationControllers.checkAuthenticated, profileControllers.createUserProfile);
-router.post('/retrieveProfile', profileControllers.retrieveProfile);
+router.post('/retrieveProfile', authenticationControllers.checkAuthenticated, profileControllers.retrieveProfile);
 router.post('/updateProfile', authenticationControllers.checkAuthenticated, profileControllers.updateProfile);
 router.post('/deleteProfile', authenticationControllers.checkAuthenticated, profileControllers.deleteProfile);
 
