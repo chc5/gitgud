@@ -4,7 +4,7 @@ const GU = {
     document : ["retrieve"],
     complaint : ["doc-create"],
     taboo : ["create"],
-    applications: ["create"],
+    promotion: ["create"],
     user: ["create", "update", "retrieve", "delete"]
   }
 };
@@ -20,6 +20,6 @@ SU.name = "SU";
 Array.prototype.push.apply(SU.resource.document, ["unlock-master"]);
 Array.prototype.push.apply(SU.resource.complaint, ["user-retrieve", "user-process", "user-delete"]);
 Array.prototype.push.apply(SU.resource.taboo, ["approve", "retrieve", "delete"]);
-Array.prototype.push.apply(SU.resource.applications, ["approve", "retrieve", "delete"]);
+Array.prototype.push.apply(SU.resource.promotion, ["approve", "retrieve", "deny"]);
 
 module.exports = {GU, OU, SU};
