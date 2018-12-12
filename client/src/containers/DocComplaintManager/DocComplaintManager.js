@@ -23,19 +23,14 @@ class DocComplaintManager extends Component{
     this.hideComplaint = this.hideComplaint.bind(this);
   }
 
-  deleteDocComplaint = async (id) => {
-    await this.props.deleteDocComplaint(id);
-    this.props.retrieveAllDocComplaint();
-  }
-
   showComplaint(complaintId){
     this.props.history.push(`/complaints/doc/${complaintId}`);
     this.setState({ complaintVisible: true, selectedComplaintId: complaintId });
   }
 
   hideComplaint(event){
-    this.setState({ complaintVisible: false });
     this.props.history.push(`/complaints/doc`);
+    this.setState({ complaintVisible: false });
   }
 
   renderComplaint(){
@@ -59,7 +54,6 @@ class DocComplaintManager extends Component{
   }
 
   render(){
-    console.log(this.props.docComplaintList);
     return(
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />
@@ -94,7 +88,7 @@ class DocComplaintManager extends Component{
                     <Col
                       xs={4} sm={2} md={1} lg={1} xl={1}
                       className="list-item-col"
-                      onClick={() => this.deleteDocComplaint(item._id)}
+                      onClick={() => this.props.deleteDocComplaint(item._id)}
                       >
                       <Icon type="delete" />
                     </Col>

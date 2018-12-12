@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { retrieveDocComplaint, processDocComplaint, resetDocComplaint }
+import { retrieveDocComplaint, processDocComplaint }
   from './../../actions/actions_doc_complaint';
 
 import { Modal, Tag, Button } from 'antd';
@@ -22,17 +22,14 @@ class DocComplaint extends Component{
   }
 
   handleProcess = async (e) => {
-    await this.props.processDocComplaint(this.props.complaintId);
-    await this.props.resetDocComplaint();
-    this.props.hideComplaint();
+    const success = await this.props.processDocComplaint(this.props.complaintId);
+    if(success === true){
+      this.props.hideComplaint();
+    }
   }
 
   handleCancel = (e) => {
     this.props.hideComplaint();
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
   }
 
   getDateTimeFromString = (str) => {
@@ -95,8 +92,7 @@ function mapStateToProps({ complaint }){
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     retrieveDocComplaint,
-    processDocComplaint,
-    resetDocComplaint
+    processDocComplaint
   }, dispatch);
 }
 

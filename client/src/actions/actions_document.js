@@ -12,8 +12,24 @@ import {
   RETRIEVE_DOCUMENT_LIST
 } from '../constants/types_document_action';
 
-
-
+export function retrieveAllDocument(){
+  let url = `/api/docs/retrieveAll`;
+  return (dispatch) => {
+    axios.post(url)
+      .then((response) => {
+        dispatch({
+          type: RETRIEVE_DOCUMENT_LIST,
+          payload: response.data
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: CRUD_DOC_ERROR,
+          payload: error.response.data
+        })
+      })
+  }
+}
 
 export function createDocument(docName, history){
   let url = `/api/docs/create`;
@@ -81,22 +97,5 @@ export function deleteDocument(documentId, history){
         });
         return false;
       })
-  }
-}
-
-export function retrieveAllDocument(){
-  let url = `/api/docs/retrieveAll`;
-  return (dispatch) => {
-    axios.post(url)
-      .then((response) => {
-        dispatch({
-          type: RETRIEVE_DOCUMENT_LIST,
-          payload: response.data
-        });
-      })
-      .catch((error) => dispatch({
-        type: CRUD_DOC_ERROR,
-        payload: error.response.data
-      }))
   }
 }
