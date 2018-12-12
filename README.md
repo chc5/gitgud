@@ -53,7 +53,7 @@ This project is split into multiple parts, the backend and the frontend. When ru
        to the SU about the owner of the documents
   - [x] as the owner of a document deal with complaints filed by other OUs (remove some OUs who were invited before) 
   - [x] unlock the locked documents s/he owns that is being updated by others
-  - [1/2] search own file(s) based on (partial) keyword
+  - [x] 1/2: search own file(s) based on (partial) keyword
   - [x] search information about other OUs based on name and/or interests
   - [x] have all privileges for GUs
 
@@ -72,7 +72,7 @@ This project is split into multiple parts, the backend and the frontend. When ru
         the 3 most popular (most read and/or updated) files in the system are shown.
 
 ## Additional Feature
-- [x] Security
+- [x] **Security**
 We focused on creating a robust and secure login and authentication system.
 passwords are hashed with 10 salt rounds using bcrypt upon sign up. This is the industry standward way of storing passwords.
 Upon login, we use Passport.js to create a new session token which only contain the user id. These sessions tokens are encrypted using a private key on the server. These session tokens are mapped to a document in our database. The session token appears to be a random string to the user and modifying the session token will make it invalid. When the user logs in, we set this token as an http only cookie. This is a good measure against session fixation attacks since we generate a new token everytime a user logs in.
