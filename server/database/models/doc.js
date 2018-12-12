@@ -67,7 +67,8 @@ DocSchema.methods.getVersion = function(revisionId, options, cb){
 };
 
 DocSchema.pre('save', function(next) {
-  UserProfile.findOne({userId:this.locked}, function(err, profile){
+  self = this;
+  UserProfile.findOne({userId:self.locked}, function(err, profile){
     if(err){
       return next(err);
     }
@@ -75,14 +76,14 @@ DocSchema.pre('save', function(next) {
     for(let i = 0; i < profile.recentDocs.length - 1; i++){
       profile.recentDocs[i] = profile.recentDocs[i+1];
     }
-    let idxCurr = profiles.recentDocs.indexOf(this._id);
+    let idxCurr = profiles.recentDocs.indexOf(self._id);
     if(idxCurr != -1){
       for(let j = idxCurr; j > 0; j--){
         profile.recentDocs[j] = profile.recentDocs[j-1];
       }
       profile.recentDocs[0] = initLowest;
     }
-    profile.recentDocs[2] = this._id;
+    profile.recentDocs[2] = self._id;
     profile.save(function(profileErr, savedProfile){
       if(profileErr){
         return next(err);
