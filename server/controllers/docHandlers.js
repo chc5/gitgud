@@ -8,7 +8,7 @@ const Roles = require('./roleCheck');
 
 const createDoc = (req, res) => {
   Roles.checkRole(req, {document:["create"]}, function(roleErr){
-    if (roleErr) { 
+    if (roleErr) {
       return res.status(roleErr.status).json({error:roleErr.info});
     }
     let docinst = new Doc({
@@ -84,7 +84,7 @@ const lockDoc = (req, res) => {
           res.status(500).json({error:"Failed to lock document"});
         }
         else {
-          res.status(200).json({msg:"Document locked"});     
+          res.status(200).json({msg:"Document locked"});
         }
       });
     });
@@ -113,7 +113,7 @@ const unlockDoc = (req, res) => {
             res.status(500).json({error:"Failed to unlock document"});
           }
           else {
-            res.status(200).json({msg:"Document unlocked"});     
+            res.status(200).json({msg:"Document unlocked"});
           }
         });
       });
@@ -185,8 +185,8 @@ const updateDoc = (req, res) => {
                   });
                 }
                 else {
-                  UserProfile.findOne({userId:lockResult.locked}, function(profileFindErr, profile){
-                    if(profileFindErr){
+                  UserProfile.findOne({userId:req.user._id}, function(profileFindErr, profile){
+                    if(profileFindErr || !profile){
                       return res.status(500).json({error:"Failed to find profile"});
                     }
                     let initLowest = profile.recentDocs[0];
@@ -201,11 +201,11 @@ const updateDoc = (req, res) => {
                       profile.recentDocs[0] = initLowest;
                     }
                     profile.recentDocs[2] = lockResult._id;
-                    profile.save(function(profileErr, savedProfile){
-                      if(profileErr){
+                    UserProfile.updateOne({userId:profile.userId}, {$set:{recentDocs:profile.recentDocs}}, function(updateErr, update){
+                      if (updateErr) {
                         return res.status(500).json({error:"Failed to update profile"});
                       }
-                      res.status(200).json({msg:"Document has been saved"});     
+                      return res.status(200).json({msg:"Document has been saved"});
                     });
                   });
                 }
@@ -240,7 +240,7 @@ const deleteDoc = (req, res) => {
             if (err) {
               console.log("Error deleting revisions after document deletion");
             }
-          }); 
+          });
           res.status(200).json({msg:"Document has been deleted"});
         }
       });
