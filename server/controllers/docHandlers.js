@@ -213,7 +213,6 @@ const updateDoc = (req, res) => {
   });
 };
 
-
 const deleteDoc = (req, res) => {
   Roles.checkRole(req, {document:["delete"]}, function(roleErr){
     if (roleErr) {

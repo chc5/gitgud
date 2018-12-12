@@ -7,7 +7,6 @@ const UserSchema = new Schema({
   username: {type: String, unique: true, required: true},
   password: {type: String, required: true},
   role: {type: String, default:'GU', required:true},
-  hasProfile: {type: Boolean, default:false, required:true}
 });
 
 // Pre save hook that activates before a User is saved to db
