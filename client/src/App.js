@@ -14,7 +14,6 @@ import createHistory from "history/createBrowserHistory";
 import './App.css';
 
 class App extends Component {
-
   constructor(props) {
     super(props);
     this.history = createHistory();
