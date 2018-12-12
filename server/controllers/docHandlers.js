@@ -2,107 +2,135 @@ const Doc = require('../database/models/doc');
 const Taboo = require('../database/models/taboo');
 const authentication = require('../authentication');
 const Revision = require('../database/models/revision');
+const Roles = require('./roleCheck');
 
 const createDoc = (req, res) => {
-  let docinst = new Doc({
-    title: req.body.title,
-    content: req.body.content,
-    owner_id: req.user._id,
-  });
-  docinst.save(function (err, doc) {
-    if (err) {
-      res.status(500).json({error:"Unable to create this document"});
+  Roles.checkRole(req, {document:["create"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
     }
-    else {
-      req.params.documentId = doc._id;
-      req.body.textField = doc.content;
-      console.log(doc.title + " saved to Document collection.");
-      updateDoc(req, res);
-    }
+    let docinst = new Doc({
+      title: req.body.title,
+      content: req.body.content,
+      owner_id: req.user._id,
+    });
+    docinst.save(function (err, doc) {
+      if (err) {
+        res.status(500).json({error:"Unable to create this document"});
+      }
+      else {
+        req.params.documentId = doc._id;
+        req.body.textField = doc.content;
+        console.log(doc.title + " saved to Document collection.");
+        updateDoc(req, res);
+      }
+    });
   });
 };
 
 const retrieveDoc = (req, res) => {
-  Doc.findOne({_id:req.params.documentId}).populate({
-      path:"revisions", select:"modifier_id date_created",
-      populate:{
-        path:"modifier_id", select:"username"
-      }
-  })
-  .exec(function(err, result){
-    if (err || !result) {
-      return res.status(404).json({error:"Unable to retrieve your document"});
+  Roles.checkRole(req, {document:["retrieve"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
     }
-    if (result) {
-      if (req.body.revisionId) {
-        result.getVersion(req.body.revisionId, {populated:true}, function(versionErr, versionResult) {
-          if (versionErr || !versionResult) {
-            return res.status(404).json(versionErr);
-          }
-          if (versionResult) {
-            result.content = versionResult.changes
-            res.status(200).json({document:result});
-          }
-        });
+    Doc.findOne({_id:req.params.documentId}).populate({
+        path:"revisions", select:"modifier_id date_created",
+        populate:{
+          path:"modifier_id", select:"username"
+        }
+    })
+    .exec(function(err, result){
+      if (err || !result) {
+        return res.status(404).json({error:"Unable to retrieve your document"});
       }
-      else {
-        res.status(200).json({document:result});
+      if (result) {
+        if (req.body.revisionId) {
+          result.getVersion(req.body.revisionId, {populated:true}, function(versionErr, versionResult) {
+            if (versionErr || !versionResult) {
+              return res.status(404).json(versionErr);
+            }
+            if (versionResult) {
+              result.content = versionResult.changes
+              res.status(200).json({document:result});
+            }
+          });
+        }
+        else {
+          res.status(200).json({document:result});
+        }
       }
-    }
+    });
   });
 };
 
 const lockDoc = (req, res) => {
-  Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
-    if(lockErr){
-      return res.status(500).json({error:"Failed to check the lock on document"});
+  Roles.checkRole(req, {document:["lock"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
     }
-    if(lockResult.locked) {
-      return res.status(403).json({error:"Another user is currently making changes to the document"});
-    }
-    lockResult.locked = req.user._id;
-    lockResult.save(function (err, doc) {
-      if (err) {
-        res.status(500).json({error:"Failed to lock document"});
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      else {
-        res.status(200).json({msg:"Document locked"});     
+      if(lockResult.locked) {
+        return res.status(403).json({error:"Another user is currently making changes to the document"});
       }
+      lockResult.locked = req.user._id;
+      lockResult.save(function (err, doc) {
+        if (err) {
+          res.status(500).json({error:"Failed to lock document"});
+        }
+        else {
+          res.status(200).json({msg:"Document locked"});     
+        }
+      });
     });
   });
 };
 
 const unlockDoc = (req, res) => {
-  Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
-    if(lockErr){
-      return res.status(500).json({error:"Failed to check the lock on document"});
+  Roles.checkRole(req, {document:["unlock"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
     }
-    if (!lockResult.locked) {
-      return res.status(200).json({msg:"Document is already unlocked"});
-    }
-    if(!req.user._id.equals(lockResult.locked) && !req.user._id.equals(lockResult.owner_id) ) {
-      return res.status(403).json({error:"You are not the user that currently has the lock"});
-    }
-    lockResult.locked = null;
-    lockResult.save(function (err, doc) {
-      if (err) {
-        res.status(500).json({error:"Failed to unlock document"});
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      else {
-        res.status(200).json({msg:"Document unlocked"});     
+      if (!lockResult.locked) {
+        return res.status(200).json({msg:"Document is already unlocked"});
       }
+      Roles.checkRole(req, {document:["unlock-master"]}, function(roleErr){
+        if(!req.user._id.equals(lockResult.locked) && !req.user._id.equals(lockResult.owner_id) && !roleErr ) {
+          return res.status(403).json({error:"You are not the user that currently has the lock"});
+        }
+        lockResult.locked = null;
+        lockResult.save(function (err, doc) {
+          if (err) {
+            res.status(500).json({error:"Failed to unlock document"});
+          }
+          else {
+            res.status(200).json({msg:"Document unlocked"});     
+          }
+        });
+      });
     });
   });
 };
 
 const retrieveDocList = (req, res) => {
-  Doc.find({}, function(err, results){
-    if (err || !results) {
-      return res.status(404).json({error:"Unable to retrieve your documents"});
+  Roles.checkRole(req, {document:["retrieve"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
     }
-    if (results) {
-      res.status(200).json({documentList:results});
-    }
+    Doc.find({}, function(err, results){
+      if (err || !results) {
+        return res.status(404).json({error:"Unable to retrieve your documents"});
+      }
+      if (results) {
+        res.status(200).json({documentList:results});
+      }
+    });
   });
 };
 
@@ -110,75 +138,85 @@ const updateDoc = (req, res) => {
   // add entire text field into revision collection
   // push revision id to revisions array
   // TODO : change in future to only store changes
-  let revisionInst = new Revision({
-    doc_id: req.params.documentId,
-    changes: req.body.textField,
-    modifier_id: req.user._id
-  });
-  Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
-    if(lockErr){
-      return res.status(500).json({error:"Failed to check the lock on document"});
+  Roles.checkRole(req, {document:["update"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
     }
-    if(!req.user._id.equals(lockResult.locked) && !req.body.title) {
-      return res.status(403).json({error:"You must acquire the lock before making changes to the document"});
-    }
-    Taboo.findAllTabooWords(req.body.textField.toLowerCase(), function(tabooErr, tabooWords){
-      if (tabooErr) {
-        res.status(500).json({error:"Unable to save this document"});
+    let revisionInst = new Revision({
+      doc_id: req.params.documentId,
+      changes: req.body.textField,
+      modifier_id: req.user._id
+    });
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      else {
-        if (tabooWords.length != 0) {
-          return res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
+      if(!req.user._id.equals(lockResult.locked) && !req.body.title) {
+        return res.status(403).json({error:"You must acquire the lock before making changes to the document"});
+      }
+      Taboo.findAllTabooWords(req.body.textField.toLowerCase(), function(tabooErr, tabooWords){
+        if (tabooErr) {
+          res.status(500).json({error:"Unable to save this document"});
         }
-        revisionInst.save(function(err, revision){
-          if (err) {
-            res.status(500).json({error:"Unable to save this document"});
+        else {
+          if (tabooWords.length != 0) {
+            return res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
           }
-          else {
-            lockResult.content = req.body.textField;
-            lockResult.revisions.push(revision._id);
-            lockResult.save(function (err, doc) {
-              if (err) {
-                res.status(500).json({error:"Unable to save this document"});
-                Revision.deleteOne({_id:revision._id}, function(err){
-                  if (err) {
-                    console.log("Error deleting revision after failed update");
-                  }
-                });
-              }
-              else {
-                res.status(200).json({msg:"Document has been saved"});     
-              }
-            });
-          }
-        });
-      }
+          revisionInst.save(function(err, revision){
+            if (err) {
+              res.status(500).json({error:"Unable to save this document"});
+            }
+            else {
+              lockResult.content = req.body.textField;
+              lockResult.revisions.push(revision._id);
+              lockResult.save(function (err, doc) {
+                if (err) {
+                  res.status(500).json({error:"Unable to save this document"});
+                  Revision.deleteOne({_id:revision._id}, function(err){
+                    if (err) {
+                      console.log("Error deleting revision after failed update");
+                    }
+                  });
+                }
+                else {
+                  res.status(200).json({msg:"Document has been saved"});     
+                }
+              });
+            }
+          });
+        }
+      });
     });
   });
 };
 
 
 const deleteDoc = (req, res) => {
-  Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
-    if(lockErr){
-      return res.status(500).json({error:"Failed to check the lock on document"});
+  Roles.checkRole(req, {document:["delete"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
     }
-    if(!req.user._id.equals(lockResult.owner_id)) {
-      return res.status(403).json({error:"You are not the owner of the document"});
-    }
-    // TODO: only delete if user owns document?
-    Doc.findOneAndDelete({_id:req.params.documentId}, function(err, document){
-      if (err) {
-        res.status(500).json({error:"Unable to delete this document"});
+    Doc.findOne({_id:req.params.documentId}, function(lockErr, lockResult){
+      if(lockErr){
+        return res.status(500).json({error:"Failed to check the lock on document"});
       }
-      else {
-        Revision.deleteMany({_id:{$in:document.revisions}}, function(err){
-          if (err) {
-            console.log("Error deleting revisions after document deletion");
-          }
-        }); 
-        res.status(200).json({msg:"Document has been deleted"});
+      if(!req.user._id.equals(lockResult.owner_id)) {
+        return res.status(403).json({error:"You are not the owner of the document"});
       }
+      // TODO: only delete if user owns document?
+      Doc.findOneAndDelete({_id:req.params.documentId}, function(err, document){
+        if (err) {
+          res.status(500).json({error:"Unable to delete this document"});
+        }
+        else {
+          Revision.deleteMany({_id:{$in:document.revisions}}, function(err){
+            if (err) {
+              console.log("Error deleting revisions after document deletion");
+            }
+          }); 
+          res.status(200).json({msg:"Document has been deleted"});
+        }
+      });
     });
   });
 };
