@@ -12,8 +12,24 @@ import {
   RETRIEVE_DOCUMENT_LIST
 } from '../constants/types_document_action';
 
-
-
+export function retrieveAllDocument(){
+  let url = `/api/docs/retrieveAll`;
+  return (dispatch) => {
+    axios.post(url)
+      .then((response) => {
+        dispatch({
+          type: RETRIEVE_DOCUMENT_LIST,
+          payload: response.data
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: CRUD_DOC_ERROR,
+          payload: error.response.data
+        });
+      })
+  }
+}
 
 export function createDocument(docName, history){
   let url = `/api/docs/create`;
@@ -62,34 +78,24 @@ export function updateDocument(documentId, textField){
   }
 }
 
-export function deleteDocument(documentId){
+export function deleteDocument(documentId, history){
   let url = `/api/docs/delete/${documentId}`;
-  return (dispatch) => {
-    axios.post(url)
-      .then((response) => dispatch({
-        type: DELETE_DOCUMENT,
-        payload: response.data
-      }))
-      .catch((error) => dispatch({
-        type: CRUD_DOC_ERROR,
-        payload: error.response.data
-      }))
-  }
-}
-
-export function retrieveAllDocument(){
-  let url = `/api/docs/retrieveAll`;
   return (dispatch) => {
     axios.post(url)
       .then((response) => {
         dispatch({
-          type: RETRIEVE_DOCUMENT_LIST,
+          type: DELETE_DOCUMENT,
           payload: response.data
         });
+        history.push('/docs');
+        return true;
       })
-      .catch((error) => dispatch({
-        type: CRUD_DOC_ERROR,
-        payload: error.response.data
-      }))
+      .catch((error) => {
+        dispatch({
+          type: CRUD_DOC_ERROR,
+          payload: error.response.data
+        });
+        return false;
+      })
   }
 }
