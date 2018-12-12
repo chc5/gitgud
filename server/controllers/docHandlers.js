@@ -165,54 +165,55 @@ const updateDoc = (req, res) => {
           if (tabooWords.length != 0) {
             return res.status(403).json({error:"Document contains taboo : " + tabooWords.join()});
           }
-        revisionInst.save(function(err, revision){
-          if (err) {
-            res.status(500).json({error:"Unable to save this document"});
-          }
-          else {
-            lockResult.content = req.body.textField;
-            lockResult.revisions.push(revision._id);
-            lockResult.save(function (err, doc) {
-              if (err) {
-                res.status(500).json({error:"Unable to save this document"});
-                Revision.deleteOne({_id:revision._id}, function(err){
-                  if (err) {
-                    console.log("Error deleting revision after failed update");
-                  }
-                });
-              }
-              else {
-                UserProfile.findOne({userId:lockResult.locked}, function(profileFindErr, profile){
-                  if(profileFindErr){
-                    return res.status(500).json({error:"Failed to find profile"});
-                  }
-                  let initLowest = profile.recentDocs[0];
-                  for(let i = 0; i < profile.recentDocs.length - 1; i++){
-                    profile.recentDocs[i] = profile.recentDocs[i+1];
-                  }
-                  let idxCurr = profile.recentDocs.indexOf(lockResult._id);
-                  if(idxCurr >= 0){
-                    for(let j = idxCurr; j > 0; j--){
-                      profile.recentDocs[j] = profile.recentDocs[j-1];
+          revisionInst.save(function(err, revision){
+            if (err) {
+              res.status(500).json({error:"Unable to save this document"});
+            }
+            else {
+              lockResult.content = req.body.textField;
+              lockResult.revisions.push(revision._id);
+              lockResult.save(function (err, doc) {
+                if (err) {
+                  res.status(500).json({error:"Unable to save this document"});
+                  Revision.deleteOne({_id:revision._id}, function(err){
+                    if (err) {
+                      console.log("Error deleting revision after failed update");
                     }
-                    profile.recentDocs[0] = initLowest;
-                  }
-                  profile.recentDocs[2] = lockResult._id;
-                  profile.save(function(profileErr, savedProfile){
-                    if(profileErr){
-                      return res.status(500).json({error:"Failed to update profile"});
+                  });
+                }
+                else {
+                  UserProfile.findOne({userId:lockResult.locked}, function(profileFindErr, profile){
+                    if(profileFindErr){
+                      return res.status(500).json({error:"Failed to find profile"});
                     }
-                    res.status(200).json({msg:"Document has been saved"});     
-                 });
-               });
-              }
-            });
-          }
+                    let initLowest = profile.recentDocs[0];
+                    for(let i = 0; i < profile.recentDocs.length - 1; i++){
+                      profile.recentDocs[i] = profile.recentDocs[i+1];
+                    }
+                    let idxCurr = profile.recentDocs.indexOf(lockResult._id);
+                    if(idxCurr >= 0){
+                      for(let j = idxCurr; j > 0; j--){
+                        profile.recentDocs[j] = profile.recentDocs[j-1];
+                      }
+                      profile.recentDocs[0] = initLowest;
+                    }
+                    profile.recentDocs[2] = lockResult._id;
+                    profile.save(function(profileErr, savedProfile){
+                      if(profileErr){
+                        return res.status(500).json({error:"Failed to update profile"});
+                      }
+                      res.status(200).json({msg:"Document has been saved"});     
+                    });
+                  });
+                }
+              });
+            }
+          });
+        }
       });
     });
   });
 };
-
 
 const deleteDoc = (req, res) => {
   Roles.checkRole(req, {document:["delete"]}, function(roleErr){

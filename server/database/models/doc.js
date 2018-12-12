@@ -3,7 +3,6 @@ mongoose.promise = Promise;
 const Schema = mongoose.Schema;
 const TabooWords = require('./taboo');
 const Revisions = require('./revision');
-const UserProfile = require('./userProfile');
 
 const DocSchema = new Schema({
   title: {type: String, required:true},
