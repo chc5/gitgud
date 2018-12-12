@@ -70,7 +70,7 @@ class NavBar extends Component{
               )
             : null
           }
-          { this.props.userInfo && this.props.userInfo === OU || this.props.userInfo === SU
+          { this.props.userInfo && (this.props.userInfo === OU || this.props.userInfo === SU)
             ? (
                 <Menu.Item
                   key="4"

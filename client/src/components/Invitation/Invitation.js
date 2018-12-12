@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { inviteUsersToDoc } from '../../actions/actions_document';
 
 import {
-  Form, Modal, Button, Checkbox, Icon, Input
+  Form, Modal, Button, Icon, Input
 } from 'antd';
 
 import "./Invitation.css";
