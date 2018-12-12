@@ -44,7 +44,7 @@ class Setting extends Component{
             <p>{ p.userId.summary }</p>
           </Col>
           <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-            <Card title="Recently Edited Documents:">
+            <Card title="Most Relevant Documents:">
               <List
                 size="large"
                 bordered

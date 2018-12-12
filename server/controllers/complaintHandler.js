@@ -48,12 +48,18 @@ const retrieveDocComplaintList = (req, res) => {
     if (roleErr) {
       return res.status(roleErr.status).json({error:roleErr.info});
     }
-    DocComplaint.find({}).populate("docId", "title").populate("fromUserId", "username").exec(function(err, results){
+    DocComplaint.find({}).populate("docId", "owner_id title").populate("fromUserId", "username").exec(function(err, results){
       if (err || !results) {
         res.status(404).json({error:"Could not retrieve Document Complaints."});
       }
       else {
-        res.status(200).json({docComplaintList:results});
+        const ownedDocuments = [];
+        for (const document of results) {
+          if (req.user._id.equals(document.docId.owner_id)) {
+            ownedDocuments.push(document);
+          }
+        }
+        res.status(200).json({docComplaintList:ownedDocuments});
       }
     });
   });
@@ -120,9 +126,9 @@ const createUserComplaint = (req, res) => {
     let usercomplaintinst = new UserComplaint({
       content: req.body.text,
       fromUserId: req.user._id,
-      targetUserId: req.body.targetUserId 
+      targetUserId: req.body.targetUserId
     });
-    
+
     usercomplaintinst.save(function (err, userComplaint) {
       if (err) {
         res.status(500).json({error:"Could not create the User Complaint."});
