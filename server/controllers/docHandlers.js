@@ -230,11 +230,22 @@ const setPrivacy = (req, res) => {
     }
     if (req.body.privacyLevel === "PRIVATE" || req.body.privacyLevel === "PUBLIC" ||
     req.body.privacyLevel === "RESTRICTED" || req.body.privacyLevel === "SHARED") {
-      return Doc.updateOne({_id:req.params.documentId}, {"privacy.level":req.body.privacyLevel}, function(updateErr, updateResult){
-        if (updateErr) {
+      return Doc.findOne({_id:req.params.documentId}, {"privacy.level":req.body.privacyLevel}, function(findErr, findResult){
+        if (findErr || !findResult) {
           return res.status(500).json({error:"Could not update privacy"});
         }
-        res.status(200).json({msg:"Updated privacy level"});
+        if (result) {
+          if (!req.user._id.equals(result.owner_id)) {
+            return res.status(403).json({error:"You do not own this document"});
+          }
+          result.privacy.level = req.body.privacyLevel;
+          result.save(function(saveErr, saveResult){
+            if (saveErr) {
+              return res.status(500).json({error:"Could not update privacy"});
+            }
+            res.status(200).json({msg:"Document privacy updated"});
+          });
+        }
       });
     }
     res.status(401).json({error:"Invalid privacy level"});
