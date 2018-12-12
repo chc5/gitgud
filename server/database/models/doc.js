@@ -3,6 +3,7 @@ mongoose.promise = Promise;
 const Schema = mongoose.Schema;
 const TabooWords = require('./taboo');
 const Revisions = require('./revision');
+const UserProfile = require('./userProfile');
 
 const DocSchema = new Schema({
   title: {type: String, required:true},
@@ -64,6 +65,24 @@ DocSchema.methods.getVersion = function(revisionId, options, cb){
     cb(null, result);
   }); 
 };
+
+DocSchema.pre('save', function(next) {
+  UserProfile.findOne({userId:this.locked}, function(err, profile){
+    if(err){
+      return next(err);
+    }
+    for(let i = 0; i < profile.recentDocs.length - 1; i++){
+      profile.recentDocs[i] = profile.recentDocs[i+1];
+    }
+    profile.recentDocs[2] = this._id;
+    profile.save(function(profileErr, savedProfile){
+      if(profileErr){
+        return next(err);
+      }
+      next();
+    });
+  });   
+});
 
 const doc = mongoose.model('Document', DocSchema); 
 module.exports = doc;
