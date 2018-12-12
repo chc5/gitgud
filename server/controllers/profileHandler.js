@@ -97,4 +97,4 @@ const deleteProfile = (req, res) => {
   });
 };
 
-module.exports = {createUserProfile, updateProfile, retrieveProfile, deleteProfile};
+module.exports = {createUserProfile, updateProfile, retrieveProfile, deleteProfile, retrieveProfileList};
