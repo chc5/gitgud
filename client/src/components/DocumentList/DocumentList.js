@@ -15,6 +15,7 @@ class DocumentList extends Component{
     if(!this.props.documentList || this.props.documentList.length === 0){
       return null;
     }
+
     console.log(this.props.documentList);
     return(
       <List
@@ -27,11 +28,18 @@ class DocumentList extends Component{
             >
             <Row type="flex" justify="start" align="middle" className="list-item-row">
               <Col
-                xs={16} sm={20} md={22} lg={22} xl={22}
+                xs={10} sm={15} md={18} lg={19} xl={20}
                 className="list-item-col list-item-title"
                 onClick={() => this.props.history.push(`/docs/${item._id}`)}
                 >
                 {item.title}
+              </Col>
+              <Col
+                xs={6} sm={5} md={4} lg={3} xl={2}
+                className="list-item-col"
+                onClick={() => this.props.showPrivacySettings(item)}
+                >
+                {item.privacy.level}
               </Col>
               { item.locked
                 ? (
