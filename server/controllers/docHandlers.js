@@ -235,7 +235,7 @@ const setPrivacy = (req, res) => {
           return res.status(500).json({error:"Could not update privacy"});
         }
         if (findResult) {
-          if (!req.user._id.equals(result.owner_id)) {
+          if (!req.user._id.equals(findResult.owner_id)) {
             return res.status(403).json({error:"You do not own this document"});
           }
           findResult.privacy.level = req.body.privacyLevel;
