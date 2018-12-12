@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { makeNotification } from '../../actions/actions_notification';
 import { signup } from '../../actions/actions_account_registration';
 
 // UI Imports
@@ -19,7 +20,12 @@ class Signup extends Component{
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.signup(this.state, this.props.history);
+    if(this.state.password !== this.state.password_2)
+      this.props.makeNotification("Passwords are not identical.");
+    else if(this.state.password.length < 8)
+      this.props.makeNotification("Password must have at least 8 characters.")
+    else
+      this.props.signup(this.state, this.props.history);
   }
   render(){
     return(
@@ -83,7 +89,7 @@ class Signup extends Component{
 
 // mapStateToProps = null;
 function mapDispatchToProps (dispatch){
-  return bindActionCreators({ signup }, dispatch);
+  return bindActionCreators({ signup, makeNotification }, dispatch);
 }
 
 export default withRouter(connect(null, mapDispatchToProps) (Signup));

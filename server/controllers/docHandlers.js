@@ -124,7 +124,9 @@ const retrieveDocList = (req, res) => {
     if (roleErr) {
       return res.status(roleErr.status).json({error:roleErr.info});
     }
-    Doc.find({}, function(err, results){
+    // add here
+    Doc.find({$or:[{"privacy.level":"PUBLIC"}, {"privacy.level":"RESTRICTED"}, {$and:[{"privacy.level":"PRIVATE"},
+    {owner_id:req.user._id}]}, {$and:[{"privacy.level":"SHARED"}, {"privacy.members":{$elemMatch:{$eq:req.user._id}}}]}]}, function(err, results){
       if (err || !results) {
         return res.status(404).json({error:"Unable to retrieve your documents"});
       }
@@ -242,4 +244,90 @@ const deleteDoc = (req, res) => {
   });
 };
 
-module.exports = {createDoc, retrieveDoc, lockDoc, unlockDoc, retrieveDocList, updateDoc, deleteDoc};
+const setPrivacy = (req, res) => {
+  Roles.checkRole(req, {document:["update"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
+    }
+    if (req.body.privacyLevel === "PRIVATE" || req.body.privacyLevel === "PUBLIC" ||
+    req.body.privacyLevel === "RESTRICTED" || req.body.privacyLevel === "SHARED") {
+      return Doc.findOne({_id:req.params.documentId}, {"privacy.level":req.body.privacyLevel}, function(findErr, findResult){
+        if (findErr || !findResult) {
+          return res.status(500).json({error:"Could not update privacy"});
+        }
+        if (result) {
+          if (!req.user._id.equals(result.owner_id)) {
+            return res.status(403).json({error:"You do not own this document"});
+          }
+          result.privacy.level = req.body.privacyLevel;
+          result.save(function(saveErr, saveResult){
+            if (saveErr) {
+              return res.status(500).json({error:"Could not update privacy"});
+            }
+            res.status(200).json({msg:"Document privacy updated"});
+          });
+        }
+      });
+    }
+    res.status(401).json({error:"Invalid privacy level"});
+  });
+};
+
+const inviteUser = (req, res) => {
+  Roles.checkRole(req, {document:["update"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
+    }
+    Doc.findOne({_id:req.params.documentId}, function(err, result){
+      if (err || !result) {
+        return res.status(500).json({error:"Could not add user"});
+      }
+      if (result) {
+        if (result.privacy.level === "SHARED") {
+          result.privacy.members.push(req.body.userId);
+          result.save(function(saveErr, saveResult){
+            if (saveErr) {
+              return res.status(500).json({error:"Could not add user"});
+            }
+            res.status(200).json({msg:"User invited to document"});
+          });
+        }
+        else {
+          return res.status(301).json({error:"Document is not being shared"});
+        }
+      }
+    });
+  });
+};
+
+const removeUser = (req, res) => {
+  Roles.checkRole(req, {document:["update"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
+    }
+    Doc.findOne({_id:req.params.documentId}, function(err, result){
+      if (err || !result) {
+        return res.status(500).json({error:"Could not remove user"});
+      }
+      if (result) {
+        if (result.privacy.level === "SHARED") {
+          const loc = result.privacy.members.indexOf(req.body.userId);
+          if (loc < 0) {
+            return res.status(500).json({error:"Document isn't shared with user"});
+          }
+          result.privacy.members = result.privacy.members.splice(loc, 1);
+          result.save(function(saveErr, saveResult){
+            if (saveErr) {
+              return res.status(500).json({error:"Could not remove user"});
+            }
+            res.status(200).json({msg:"User removed document"});
+          });
+        }
+        else {
+          return res.status(301).json({error:"Document is not being shared"});
+        }
+      }
+    });
+  });
+};
+module.exports = {createDoc, retrieveDoc, lockDoc, unlockDoc, retrieveDocList, updateDoc, deleteDoc, setPrivacy, inviteUser, removeUser};

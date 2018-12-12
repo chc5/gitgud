@@ -5,9 +5,9 @@ import Document from "./containers/Document/Document";
 import DocumentManager from "./containers/DocumentManager/DocumentManager";
 import Home from "./containers/Home/Home";
 import Login from "./containers/Login/Login";
-import Profile from "./components/Profile/Profile";
 import ProfileManager from "./containers/ProfileManager/ProfileManager";
 import Signup from "./containers/Signup/Signup";
+import Setting from "./containers/Setting/Setting";
 import TabooWordManager from "./containers/TabooWordManager/TabooWordManager";
 import UserComplaintManager from "./containers/UserComplaintManager/UserComplaintManager";
 import createHistory from "history/createBrowserHistory";
@@ -32,8 +32,8 @@ class App extends Component {
               <Route path="/docs/:id" component={Document} />
               <Route path="/docs" component={DocumentManager} />
               <Route path="/login" component={Login} />
-              <Route path="/profiles/:id" component={Profile} />
               <Route path="/profiles" component={ProfileManager} />
+              <Route path="/setting" component={Setting} />
               <Route path="/signup" component={Signup} />
               <Route path="/taboos" component={TabooWordManager} />
             </Switch>

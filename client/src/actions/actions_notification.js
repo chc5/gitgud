@@ -9,6 +9,6 @@ export function resetNotification(){
 export function makeNotification(msg){
   return {
     type: NOTIFICATION_ALERT,
-    payload: msg
+    payload: {msg: msg}
   }
 }

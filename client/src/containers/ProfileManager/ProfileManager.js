@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-// import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { retrieveAllProfiles }
+  from '../../actions/actions_profile';
+import Profile from '../../components/Profile/Profile';
 
 // UI Imports
-import { Layout, List } from 'antd';
-
+import { Layout, List, Row, Col } from 'antd';
 import NavBar from '../NavBar/NavBar';
+import './ProfileManager.css';
 const { Header, Content } = Layout;
 
 class ProfileManager extends Component{
@@ -14,51 +17,73 @@ class ProfileManager extends Component{
     super(props);
     this.state = {
       collapsed: false,
-      data: [
-        'Profile # 1: hohoho.txt',
-        'Profile # 2: pohoho.txt',
-        'Profile # 3: fohoho.txt',
-        'Profile # 4: gohoho.txt',
-        'Profile # 5: zohoho.txt',
-      ]
+      profileVisible: false
     }
+    this.props.retrieveAllProfiles();
+    this.showProfile = this.showProfile.bind(this);
+    this.hideProfile = this.hideProfile.bind(this);
   }
 
+  showProfile(profileId){
+    this.props.history.push(`/profiles/${profileId}`);
+    this.setState({ profileVisible: true, selectedProfileId: profileId });
+  }
+
+  hideProfile(event){
+    this.props.history.push(`/profiles/doc`);
+    this.setState({ profileVisible: false });
+  }
+
+  renderProfile(){
+    return(
+      <Profile
+        profileId={this.state.selectedProfileId}
+        visible={this.state.profileVisible}
+        hideProfile={this.hideComplaint}
+      />
+    );
+  }
   render(){
     return(
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />
         <Layout>
-          <Header style={{ background: '#fff', padding: 0 }}>
-            Profile Manager
+          <Header style={{ background: 'silver', padding: 0 }}>
+            <Row type="flex" justify="center" align="end">
+              <Col
+                xs={24} sm={24} md={24} lg={24} xl={24}
+                className="complaint-title"
+                >
+                User Profiles
+              </Col>
+            </Row>
           </Header>
-          <Content style={{ margin: '0 16px' }}>
+          <Content>
             <List
               size="large"
               bordered
-              dataSource={this.state.data}
+              dataSource={this.props.profileList}
               renderItem={item => (
                 <List.Item
-                  onClick={() => this.props.history.push(`/profiles/${item}`)}
+                  className="list-item"
                   >
-                  {item}
                 </List.Item>
               )}
             />
           </Content>
+          {this.renderProfile()}
         </Layout>
       </Layout>
     );
   }
 }
 
-// function mapStateToProps({  }){
-//   return {  };
-// }
-//
-// function mapDispatchToProps(dispatch){
-//   return bindActionCreators({  }, dispatch);
-// }
+function mapStateToProps({ profileList }){
+  return { profileList };
+}
 
-// export default withRouter(connect(mapStateToProps, mapDispatchToProps) (ProfileManager));
-export default withRouter(ProfileManager);
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({ retrieveAllProfiles }, dispatch);
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps) (ProfileManager));

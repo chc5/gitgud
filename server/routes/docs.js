@@ -10,4 +10,7 @@ router.post('/unlock/:documentId', docControllers.unlockDoc);
 router.post('/update/:documentId', docControllers.updateDoc);
 router.post('/delete/:documentId', docControllers.deleteDoc);
 
+router.post('/:documentId/setPrivacy', docControllers.setPrivacy);
+router.post('/:documentId/inviteUser', docControllers.inviteUser);
+router.post('/:documentId/removeUser', docControllers.removeUser);
 module.exports = router;

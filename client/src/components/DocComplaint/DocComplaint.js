@@ -43,11 +43,11 @@ class DocComplaint extends Component{
   }
 
   render() {
-    if(!this.props.complaint){
+    if(!this.props.docComplaint){
       return null;
     }
-    const c = this.props.complaint;
-    const footer =[
+    const c = this.props.docComplaint;
+    const footer = [
       <Button
         key="back"
         onClick={this.handleCancel}
@@ -72,8 +72,8 @@ class DocComplaint extends Component{
          footer={footer}
        >
          <div className="complaint-content">
-           <h2>Document Complaint on {c.docId} </h2>
-           <h4>{c.fromUserId} | {this.getDateTimeFromString(c.date_created)}</h4>
+           <h2>Document Complaint on {c.docId.title} </h2>
+           <h4>{c.fromUserId.username} | {this.getDateTimeFromString(c.date_created)}</h4>
             {c.processed === true
               ? (<Tag color="lime">Processed</Tag>)
               : (<Tag color="magenta">Not Processed</Tag>)
@@ -85,8 +85,8 @@ class DocComplaint extends Component{
   }
 }
 
-function mapStateToProps({ complaint }){
-  return { complaint };
+function mapStateToProps({ docComplaint }){
+  return { docComplaint };
 }
 
 function mapDispatchToProps(dispatch){
