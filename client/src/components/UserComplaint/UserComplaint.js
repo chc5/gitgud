@@ -47,6 +47,7 @@ class UserComplaint extends Component{
   }
 
   render() {
+    console.log(this.props.userComplaint);
     if(!this.props.userComplaint){
       return null;
     }
@@ -77,7 +78,8 @@ class UserComplaint extends Component{
        >
          <div className="complaint-content">
            <h2>Document Complaint on {c.docId} </h2>
-           <h4>{c.fromUserId} | {this.getDateTimeFromString(c.date_created)}</h4>
+           <h4>{c.fromUserId.username} | {this.getDateTimeFromString(c.date_created)}</h4>
+           <h4>Report on {c.targetUserId.username}</h4>
             {c.processed === true
               ? (<Tag color="lime">Processed</Tag>)
               : (<Tag color="magenta">Not Processed</Tag>)

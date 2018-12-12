@@ -5,7 +5,7 @@ export const SHARED = "SHARED";
 export const RESTRICTED = "RESTRICTED";
 
 // User Permission Roles
-export const DO = "DOCUMENT_OWNER";
-export const GU = "GUEST_USER";
-export const OU = "ORDINARY_USER";
-export const SU = "SUPER_USER";
+export const DO = "DOCUMENT OWNER";
+export const GU = "GUEST USER";
+export const OU = "ORDINARY USER";
+export const SU = "SUPER USER";

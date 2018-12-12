@@ -72,7 +72,9 @@ class TabooWordManager extends Component{
                   >
                   {item.word}
                 </Col>
-                {title === UNAPPROVED_TABOO_WORDS_TITLE
+                {(title === UNAPPROVED_TABOO_WORDS_TITLE &&
+                  this.props.userInfo && 
+                  this.props.userInfo.role === "SU")
                   ? (
                     <Col
                       xs={4} sm={3} md={2} lg={2} xl={2}
@@ -85,13 +87,20 @@ class TabooWordManager extends Component{
                     <Col xs={4} sm={3} md={2} lg={2} xl={2}></Col>
                   )
                 }
-                <Col
-                  xs={4} sm={3} md={2} lg={2} xl={2}
-                  className="list-item-col"
-                  onClick={() => this.deleteTabooWord(item._id)}
-                  >
-                  <Icon type="delete" />
-                </Col>
+                { this.props.userInfo && this.props.userInfo.role === "SU"
+                  ? (
+                    <Col
+                      xs={4} sm={3} md={2} lg={2} xl={2}
+                      className="list-item-col"
+                      onClick={() => this.deleteTabooWord(item._id)}
+                      >
+                      <Icon type="delete" />
+                    </Col>
+                  )
+                  : (
+                    <Col xs={4} sm={3} md={2} lg={2} xl={2}></Col>
+                  )
+                }
               </Row>
             </List.Item>
           )}
@@ -131,8 +140,8 @@ class TabooWordManager extends Component{
   }
 }
 
-function mapStateToProps({ approvedTabooWords, unapprovedTabooWords }){
-  return { approvedTabooWords, unapprovedTabooWords };
+function mapStateToProps({ approvedTabooWords, unapprovedTabooWords, userInfo }){
+  return { approvedTabooWords, unapprovedTabooWords, userInfo };
 }
 
 function mapDispatchToProps(dispatch){

@@ -6,6 +6,7 @@ import DocumentManager from "./containers/DocumentManager/DocumentManager";
 import Home from "./containers/Home/Home";
 import Login from "./containers/Login/Login";
 import ProfileManager from "./containers/ProfileManager/ProfileManager";
+import PromotionManager from "./containers/PromotionManager/PromotionManager";
 import Signup from "./containers/Signup/Signup";
 import Setting from "./containers/Setting/Setting";
 import TabooWordManager from "./containers/TabooWordManager/TabooWordManager";
@@ -30,6 +31,7 @@ class App extends Component {
               <Route path="/complaints/doc" component={DocComplaintManager} />
               <Route path="/docs/:id" component={Document} />
               <Route path="/docs" component={DocumentManager} />
+              <Route path="/promotion" component={PromotionManager} />
               <Route path="/login" component={Login} />
               <Route path="/profiles" component={ProfileManager} />
               <Route path="/setting" component={Setting} />

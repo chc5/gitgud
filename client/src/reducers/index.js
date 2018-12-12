@@ -10,6 +10,7 @@ import NavBarReducer from './reducers_nav_bar';
 import NotificationReducer from './reducers_notification';
 import ProfileReducer from './reducers_profile';
 import ProfileListReducer from './reducers_profile_list';
+import PromotionListReducer from './reducers_promotion_list';
 import TextFieldReducer from './reducers_text_field';
 import UnappovedTabooWordsReducer from './reducers_unapproved_taboo';
 import UserComplaintReducer from './reducers_user_complaint';
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   notification: NotificationReducer,
   profile: ProfileReducer,
   profileList: ProfileListReducer,
+  promotionList: PromotionListReducer,
   textField: TextFieldReducer,
   unapprovedTabooWords: UnappovedTabooWordsReducer,
   userEscalation: UserEscalationReducer,
