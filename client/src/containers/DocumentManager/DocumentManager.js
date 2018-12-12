@@ -11,15 +11,33 @@ import { Layout, Row, Col, Spin } from 'antd';
 import './DocumentManager.css';
 import NavBar from '../NavBar/NavBar';
 import DocumentList from '../../components/DocumentList/DocumentList';
+import PrivacySettings from '../../components/PrivacySettings/PrivacySettings';
 const { Header, Content } = Layout;
 
 class DocumentManager extends Component{
   constructor(props){
     super(props);
     this.state = {
-      loading: false
+      loading: false,
+      privacySettingsVisible: false,
+      selectedDocument: null
     }
     this.props.retrieveAllDocument();
+  }
+
+  showPrivacySettings = (doc) =>
+    this.setState({ privacySettingsVisible: true, selectedDocument: doc });
+    
+  hidePrivacySettings = (event) => this.setState({ privacySettingsVisible: false });
+
+  renderPrivacySettings(){
+    return (
+      <PrivacySettings
+        document={this.state.selectedDocument}
+        visible={this.state.privacySettingsVisible}
+        hidePrivacySettings={this.hidePrivacySettings}
+      />
+    );
   }
 
   createDocument = async () => {
@@ -73,9 +91,11 @@ class DocumentManager extends Component{
             <DocumentList
               lockDocument={this.lockDocument}
               unlockDocument={this.unlockDocument}
+              showPrivacySettings={this.showPrivacySettings}
               />
           </Content>
         </Layout>
+        {this.renderPrivacySettings()}
       </Layout>
     );
   }
