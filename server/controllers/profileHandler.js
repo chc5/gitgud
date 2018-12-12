@@ -46,8 +46,7 @@ const retrieveProfile = (req, res) => {
     }
     Roles.checkRole(req, {user:["search"]}, function(roleErr){
       const queryField = {userId:req.body.userId};
-      // can remove authentication check after adding login check to everything
-      if (req.isAuthenticated() && !req.body.userId || roleErr) {
+      if (!req.body.userId || roleErr) {
         queryField.userId = req.user._id;
       }
       userProfile.findOne(queryField, function(err, profileData){
@@ -57,6 +56,25 @@ const retrieveProfile = (req, res) => {
         if (profileData) {
           // check if documents are private before sending
           return res.status(200).json({profile:profileData});
+        }
+      });
+    });
+  });
+};
+
+const retrieveProfileList = (req, res) => { 
+  Roles.checkRole(req, {user:["retrieve"]}, function(roleErr){
+    if (roleErr) {
+      return res.status(roleErr.status).json({error:roleErr.info});
+    }
+    Roles.checkRole(req, {user:["search"]}, function(roleErr){
+      userProfile.find({}).populate("userId", "username role").exec(function(err, profileDataList){
+        if(err || !profileDataList){
+          return res.status(404).json({error:"Unable to find User Profiles"});
+        }
+        if (profileDataList) {
+          // check if documents are private before sending
+          return res.status(200).json({profileList:profileDataList});
         }
       });
     });
