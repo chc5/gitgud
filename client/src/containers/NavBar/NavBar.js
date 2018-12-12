@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { logout } from '../../actions/actions_account_registration';
 import { updateNavKey, updateNavCollapse } from '../../actions/actions_nav_bar';
 import Notice from '../../components/Notice/Notice';
-import { SU, GU, DO, OU }
+import { SU, OU }
   from './../../constants/types_permission';
 // UI Imports
 import { Layout, Menu, Icon } from 'antd';
@@ -16,7 +16,6 @@ const { Sider } = Layout;
 // Navigation Bar for the entire website.
 class NavBar extends Component{
   render(){
-    console.log(this.props.userInfo);
     return(
       <Sider
         collapsible
@@ -88,7 +87,9 @@ class NavBar extends Component{
               )
             : null
           }
-          { this.props.userInfo
+          { this.props.userInfo &&
+            (this.props.userInfo.role === OU ||
+              this.props.userInfo.role === SU)
             ? (
                 <Menu.Item
                   key="5"
@@ -103,7 +104,7 @@ class NavBar extends Component{
               )
             : null
           }
-          { this.props.userInfo && this.props.userInfo.role == SU
+          { this.props.userInfo && this.props.userInfo.role === SU
             ? (
                 <Menu.Item
                   key="10"

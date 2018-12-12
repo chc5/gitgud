@@ -35,15 +35,17 @@ class ProfileManager extends Component{
   }
 
   renderProfile(){
+    console.log(this.state.profileVisible);
     return(
       <Profile
         profileId={this.state.selectedProfileId}
         visible={this.state.profileVisible}
-        hideProfile={this.hideComplaint}
+        hideProfile={this.hideProfile}
       />
     );
   }
   render(){
+    console.log(this.props.profileList);
     return(
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />
@@ -52,9 +54,9 @@ class ProfileManager extends Component{
             <Row type="flex" justify="center" align="end">
               <Col
                 xs={24} sm={24} md={24} lg={24} xl={24}
-                className="complaint-title"
+                className="profile-title"
                 >
-                User Profiles
+                <h2>User Profiles</h2>
               </Col>
             </Row>
           </Header>
@@ -63,10 +65,19 @@ class ProfileManager extends Component{
               size="large"
               bordered
               dataSource={this.props.profileList}
-              renderItem={item => (
+              renderItem={p => (
                 <List.Item
                   className="list-item"
                   >
+                  <Row type="flex" justify="start" align="middle" className="list-item-row">
+                    <Col
+                      xs={24} sm={24} md={24} lg={24} xl={24}
+                      className="list-item-col list-item-title"
+                      onClick={() => this.showProfile(p.userId._id)}
+                      >
+                      {p.userId.username}
+                    </Col>
+                  </Row>
                 </List.Item>
               )}
             />
