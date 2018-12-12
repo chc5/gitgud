@@ -59,15 +59,18 @@ export function retrieveDocComplaint(complaintId){
   return (dispatch) => {
     axios.post(url)
       .then((response) => {
+        console.log(response);
         dispatch({
           type: RETRIEVE_DOC_COMPLAINT,
           payload: response.data
         });
       })
-      .catch((error) => dispatch({
-        type: CRUD_DOC_COMPLAINT_ERROR,
-        payload: error.response.data
-      }));
+      .catch((error) => {
+        dispatch({
+          type: CRUD_DOC_COMPLAINT_ERROR,
+          payload: error.response.data
+        });
+      });
   }
 }
 

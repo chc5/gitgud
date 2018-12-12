@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import TextFieldReducer from './reducers_text_field';
-import ComplaintReducer from './reducers_complaint';
+import DocComplaintReducer from './reducers_doc_complaint';
 import DocumentReducer from './reducers_document';
 import ErrorReducer from './reducers_error';
 import DocumentListReducer from './reducers_doc_list';
@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
   textField: TextFieldReducer,
   error: ErrorReducer,
   approvedTabooWords: ApprovedTabooWordsReducer,
-  complaint: ComplaintReducer,
+  docComplaint: DocComplaintReducer,
   docComplaintList: DocComplaintListReducer,
   document: DocumentReducer,
   documentList: DocumentListReducer,

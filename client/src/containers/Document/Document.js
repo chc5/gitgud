@@ -74,7 +74,7 @@ class Document extends Component{
         visible={this.state.complaintVisible}
         hideComplaint={this.hideComplaint}
         docTitle={this.props.document.title}
-        documentId={this.props.document.id}
+        documentId={this.props.document._id}
        />
     );
   }
