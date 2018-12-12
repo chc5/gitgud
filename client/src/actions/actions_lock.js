@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  retrieveAllDocument
+  retrieveAllDocument, retrieveDocument
 } from './actions_document';
 import {
   LOCK_DOCUMENT,
@@ -19,6 +19,7 @@ export function lockDocument(documentId, history){
           payload: response.data
         });
         dispatch(retrieveAllDocument());
+        dispatch(retrieveDocument(documentId));
         history.push(`/docs/${documentId}`);
       })
       .catch((error) => {

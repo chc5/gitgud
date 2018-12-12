@@ -9,7 +9,9 @@ import {
   RETRIEVE_DOCUMENT,
   UPDATE_DOCUMENT,
   DELETE_DOCUMENT,
-  RETRIEVE_DOCUMENT_LIST
+  RETRIEVE_DOCUMENT_LIST,
+  INVITATION_SUCCESSFUL,
+  INVITATION_UNSUCCESSFUL
 } from '../constants/types_document_action';
 
 export function retrieveAllDocument(){
@@ -35,14 +37,17 @@ export function createDocument(docName, history){
   let url = `/api/docs/create`;
   return (dispatch) => {
     axios.post(url, { title: docName })
-      .then((response) => dispatch({
-        type: CREATE_DOCUMENT,
-        payload: response.data
-      }))
+      .then((response) => {
+        dispatch({
+          type: CREATE_DOCUMENT,
+          payload: response.data
+        });
+        dispatch(retrieveAllDocument());
+      })
       .catch((error) => dispatch({
         type: CRUD_DOC_ERROR,
         payload: error.response.data
-      }))
+      }));
   }
 }
 
@@ -87,15 +92,35 @@ export function deleteDocument(documentId, history){
           type: DELETE_DOCUMENT,
           payload: response.data
         });
-        history.push('/docs');
-        return true;
+        dispatch(retrieveAllDocument());
       })
       .catch((error) => {
         dispatch({
           type: CRUD_DOC_ERROR,
           payload: error.response.data
         });
-        return false;
       })
   }
+}
+
+export function inviteUsersToDoc(documentId, username, permission){
+  let url = `/api/docs/documentId/invite`;
+  return (dispatch) =>
+    new Promise((resolve, reject) => {
+      axios.post(url, { username, permission })
+        .then((response) => {
+          dispatch({
+            type: INVITATION_SUCCESSFUL,
+            payload: response.data
+          });
+          resolve(true);
+        })
+        .catch((error) => {
+          dispatch({
+            type: INVITATION_UNSUCCESSFUL,
+            payload: error.response.data
+          });
+          reject(false);
+        });
+    });
 }
