@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createProfile, retrieveProfile, updateProfile, deleteProfile }
   from '../../actions/actions_profile';
-
+import { createPromotion }
+  from '../../actions/actions_promotion';
 import './Setting.css';
-import { Form, Icon, Input, Button, Checkbox, Layout } from 'antd';
+import { Card, Layout, Row, Col, List, Button } from 'antd';
 import NavBar from '../NavBar/NavBar';
-const FormItem = Form.Item;
 const { Header, Content } = Layout;
 
 class Setting extends Component{
@@ -19,18 +19,79 @@ class Setting extends Component{
   handleSubmit = (e) => {
     e.preventDefault();
   }
+  createPromotion(){
+    const reason = prompt("Provide a reason why you want to be an Ordinary User");
+    this.props.createPromotion(reason);
+    alert("Your reason will be considered by the Super User");
+  }
+  renderProfile(){
+    const p = this.props.profile;
+    return(
+      <Card
+        hoverable
+      >
+        <Row type="flex" justify="center" align="end">
+          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+            { p.img
+              ? ( <img alt="Not Found" src={p.img} /> )
+              : (null)
+            }
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+            <h2>{ p.userId.username }</h2>
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+            <p>{ p.userId.summary }</p>
+          </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+            <Card title="Recently Edited Documents:">
+              <List
+                size="large"
+                bordered
+                dataSource={p.recentDocs}
+                renderItem={docId => (
+                  <List.Item
+                    className="list-item"
+                    >
+                    <div onClick={() => this.props.history.push(`/docs/${docId}`)}>
+                      Document
+                    </div>
+                  </List.Item>
+                )}
+              />
+            </Card>
+          </Col>
+          { this.props.userInfo && this.props.userInfo.role === "GU"
+            ? (
+              <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                Do you wish to become Ordinary User? <br />
+                <Button
+                  type="primary"
+                  onClick={() => this.createPromotion()}
+                  >
+                  Click here
+                </Button>
+              </Col>
+            )
+            : null
+          }
+        </Row>
+      </Card>
+    );
+  }
   render(){
     return(
       <Layout style={{ minHeight: '100vh' }} className="container">
         <NavBar />
         <Layout className="profile-layout">
           <Header style={{ background: "white" }}>
-            Settings
+            <h2>User Profile</h2>
           </Header>
           <Content>
-            <Form onSubmit={this.handleSubmit} className="profile-form">
-
-            </Form>
+                { this.props.profile
+                  ? this.renderProfile()
+                  : (<h2>This user does not have a profile.</h2>)
+                }
           </Content>
         </Layout>
       </Layout>
@@ -38,8 +99,8 @@ class Setting extends Component{
   }
 }
 
-function mapStateToProps({ profile }){
-  return { profile };
+function mapStateToProps({ profile, userInfo }){
+  return { profile, userInfo };
 }
 
 function mapDispatchToProps (dispatch){
@@ -47,7 +108,8 @@ function mapDispatchToProps (dispatch){
     createProfile,
     retrieveProfile,
     updateProfile,
-    deleteProfile
+    deleteProfile,
+    createPromotion
   }, dispatch);
 }
 

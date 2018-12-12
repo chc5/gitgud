@@ -5,8 +5,7 @@ import {
 export default function(state = null, action){
   switch(action.type){
     case RETRIEVE_PROFILE:
-      console.log("NEED TO SET THE STATE OF PROFILE IN REDUCER");
-      return state;
+      return action.payload.profile;
     default:
       return state;
   }

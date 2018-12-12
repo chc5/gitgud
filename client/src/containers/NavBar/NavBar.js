@@ -38,47 +38,101 @@ class NavBar extends Component{
             <Icon type="home" />
             <span>Home</span>
           </Menu.Item>
-          <Menu.Item
-            key="2"
-            onClick={() => {
-              this.props.history.push(`/docs`);
-              this.props.updateNavKey("2");
-            }}
-            >
-            <Icon type="file-search" />
-            <span>Document List</span>
-          </Menu.Item>
-          <Menu.Item
-            key="3"
-            onClick={() => {
-              this.props.history.push(`/profiles`);
-              this.props.updateNavKey("3");
-            }}
-            >
-            <Icon type="user" />
-            <span>User Profiles</span>
-          </Menu.Item>
-          <Menu.Item
-            key="4"
-            onClick={() => {
-              this.props.history.push(`/taboos`);
-              this.props.updateNavKey("4");
-            }}
-            >
-            <Icon type="safety-certificate" />
-            <span>Taboo Words Banned</span>
-          </Menu.Item>
-          <Menu.Item
-            key="5"
-            onClick={() => {
-              this.props.history.push(`/complaints/doc`);
-              this.props.updateNavKey("5");
-            }}
-            >
-            <Icon type="exception" />
-            <span>Document Complaints</span>
-          </Menu.Item>
-          {!this.props.userInfo
+          { this.props.userInfo
+            ? (
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    this.props.history.push(`/docs`);
+                    this.props.updateNavKey("2");
+                  }}
+                  >
+                  <Icon type="file-search" />
+                  <span>Document List</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo
+            ? (
+                <Menu.Item
+                  key="3"
+                  onClick={() => {
+                    this.props.history.push(`/profiles`);
+                    this.props.updateNavKey("3");
+                  }}
+                  >
+                  <Icon type="user" />
+                  <span>User Profiles</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo &&
+            (this.props.userInfo.role === "OU" ||
+              this.props.userInfo.role === "SU")
+            ? (
+                <Menu.Item
+                  key="4"
+                  onClick={() => {
+                    this.props.history.push(`/taboos`);
+                    this.props.updateNavKey("4");
+                  }}
+                  >
+                  <Icon type="safety-certificate" />
+                  <span>Taboo Words Banned</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo &&
+            (this.props.userInfo.role === "OU" ||
+              this.props.userInfo.role === "SU")
+            ? (
+                <Menu.Item
+                  key="5"
+                  onClick={() => {
+                    this.props.history.push(`/complaints/doc`);
+                    this.props.updateNavKey("5");
+                  }}
+                  >
+                  <Icon type="exception" />
+                  <span>Document Complaints</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo && this.props.userInfo.role === "SU"
+            ? (
+                <Menu.Item
+                  key="10"
+                  onClick={() => {
+                    this.props.history.push(`/promotion`);
+                    this.props.updateNavKey("10");
+                  }}
+                  >
+                  <Icon type="global" />
+                  <span>User Promotion</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo
+            ? (
+              <Menu.Item
+                key="9"
+                onClick={() => {
+                  this.props.history.push(`/setting`);
+                  this.props.updateNavKey("9");
+                }}
+                >
+                <Icon type="setting" />
+                <span>Settings</span>
+              </Menu.Item>
+            )
+            : null
+          }
+          { !this.props.userInfo
             ? (
                 <Menu.Item
                   key="6"
@@ -91,7 +145,10 @@ class NavBar extends Component{
                   <span>Login</span>
                 </Menu.Item>
               )
-            : (
+            : null
+          }
+          { this.props.userInfo
+            ? (
                 <Menu.Item
                   key="7"
                   onClick={() => {
@@ -103,14 +160,15 @@ class NavBar extends Component{
                   <span>Logout</span>
                 </Menu.Item>
               )
+            : null
           }
           {!this.props.userInfo
             ? (
                 <Menu.Item
-                  key="7"
+                  key="8"
                   onClick={() => {
                     this.props.history.push(`/signup`)
-                    this.props.updateNavKey("7");
+                    this.props.updateNavKey("8");
                   }}
                   >
                   <Icon type="plus" />

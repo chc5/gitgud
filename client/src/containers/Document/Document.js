@@ -44,7 +44,7 @@ class Document extends Component{
   hideInvitation = (event) => this.setState({ invitationVisible: false });
 
   renderDocumentBar(){
-    console.log(this.props.userInfo);
+    console.log(this.props.document);
     return(
       <Header style={{ background: 'silver', padding: 0 }}>
         <Row type="flex" justify="center" align="end">

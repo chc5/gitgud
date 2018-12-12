@@ -51,7 +51,6 @@ export function retrieveProfile(userId){
   return (dispatch) => {
     axios.post(url, { userId })
       .then((response) => {
-        console.log("retrieveProfile", response);
         dispatch({
           type: RETRIEVE_PROFILE,
           payload: response.data

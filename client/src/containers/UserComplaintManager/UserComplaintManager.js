@@ -16,7 +16,8 @@ class UserComplaintManager extends Component{
     super(props);
     this.state = {
       collapsed: false,
-      complaintVisible: false
+      complaintVisible: false,
+      selectedComplaintId: null
     }
     this.props.retrieveAllUserComplaint();
     this.showComplaint = this.showComplaint.bind(this);
@@ -25,7 +26,7 @@ class UserComplaintManager extends Component{
 
   showComplaint(complaintId){
     this.props.history.push(`/complaints/user/${complaintId}`);
-    this.setState({ complaintVisible: false });
+    this.setState({ complaintVisible: true, selectedComplaintId: complaintId });
   }
 
   hideComplaint(event){
@@ -34,6 +35,7 @@ class UserComplaintManager extends Component{
   }
 
   renderComplaint(){
+    console.log(this.state.complaintVisible);
     return(
       <UserComplaint
         complaintId={this.state.selectedComplaintId}
@@ -54,6 +56,7 @@ class UserComplaintManager extends Component{
   }
 
   render(){
+    console.log(this.props.userComplaintList)
     return(
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />

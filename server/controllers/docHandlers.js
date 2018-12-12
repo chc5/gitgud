@@ -1,5 +1,6 @@
 const Doc = require('../database/models/doc');
 const Taboo = require('../database/models/taboo');
+const User = require('../database/models/user');
 const authentication = require('../authentication');
 const Revision = require('../database/models/revision');
 const UserProfile = require('../database/models/userProfile');
@@ -7,7 +8,7 @@ const Roles = require('./roleCheck');
 
 const createDoc = (req, res) => {
   Roles.checkRole(req, {document:["create"]}, function(roleErr){
-    if (roleErr) {
+    if (roleErr) { 
       return res.status(roleErr.status).json({error:roleErr.info});
     }
     let docinst = new Doc({
@@ -40,6 +41,7 @@ const retrieveDoc = (req, res) => {
           path:"modifier_id", select:"username"
         }
     })
+    .populate("privacy.members", "username")
     .exec(function(err, result){
       if (err || !result) {
         return res.status(404).json({error:"Unable to retrieve your document"});
@@ -126,7 +128,8 @@ const retrieveDocList = (req, res) => {
     }
     // add here
     Doc.find({$or:[{"privacy.level":"PUBLIC"}, {"privacy.level":"RESTRICTED"}, {$and:[{"privacy.level":"PRIVATE"},
-    {owner_id:req.user._id}]}, {$and:[{"privacy.level":"SHARED"}, {"privacy.members":{$elemMatch:{$eq:req.user._id}}}]}]}, function(err, results){
+    {owner_id:req.user._id}]}, {$and:[{"privacy.level":"SHARED"},
+    {"privacy.members":{$elemMatch:{$eq:req.user._id}}}]}, {"owner_id":req.user._id} ]}, function(err, results){
       if (err || !results) {
         return res.status(404).json({error:"Unable to retrieve your documents"});
       }
@@ -252,16 +255,16 @@ const setPrivacy = (req, res) => {
     }
     if (req.body.privacyLevel === "PRIVATE" || req.body.privacyLevel === "PUBLIC" ||
     req.body.privacyLevel === "RESTRICTED" || req.body.privacyLevel === "SHARED") {
-      return Doc.findOne({_id:req.params.documentId}, {"privacy.level":req.body.privacyLevel}, function(findErr, findResult){
+      return Doc.findOne({_id:req.params.documentId}, function(findErr, findResult){
         if (findErr || !findResult) {
           return res.status(500).json({error:"Could not update privacy"});
         }
-        if (result) {
-          if (!req.user._id.equals(result.owner_id)) {
+        if (findResult) {
+          if (!req.user._id.equals(findResult.owner_id)) {
             return res.status(403).json({error:"You do not own this document"});
           }
-          result.privacy.level = req.body.privacyLevel;
-          result.save(function(saveErr, saveResult){
+          findResult.privacy.level = req.body.privacyLevel;
+          findResult.save(function(saveErr, saveResult){
             if (saveErr) {
               return res.status(500).json({error:"Could not update privacy"});
             }
@@ -285,16 +288,21 @@ const inviteUser = (req, res) => {
       }
       if (result) {
         if (result.privacy.level === "SHARED") {
-          result.privacy.members.push(req.body.userId);
-          result.save(function(saveErr, saveResult){
-            if (saveErr) {
+          User.findOne({username:req.body.userId}, function(userErr, userResult){
+            if (userErr || !userResult) {
               return res.status(500).json({error:"Could not add user"});
             }
-            res.status(200).json({msg:"User invited to document"});
+            result.privacy.members.push(userResult._id);
+            result.save(function(saveErr, saveResult){
+              if (saveErr) {
+                return res.status(500).json({error:"Could not add user"});
+              }
+              res.status(200).json({msg:"User invited to document"});
+            });
           });
         }
         else {
-          return res.status(301).json({error:"Document is not being shared"});
+          return res.status(401).json({error:"Document is not being shared"});
         }
       }
     });
