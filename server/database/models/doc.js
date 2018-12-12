@@ -77,7 +77,7 @@ DocSchema.pre('save', function(next) {
       profile.recentDocs[i] = profile.recentDocs[i+1];
     }
     let idxCurr = profiles.recentDocs.indexOf(self._id);
-    if(idxCurr != -1){
+    if(idxCurr >= 0){
       for(let j = idxCurr; j > 0; j--){
         profile.recentDocs[j] = profile.recentDocs[j-1];
       }
