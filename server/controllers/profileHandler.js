@@ -1,5 +1,6 @@
 const userProfile = require('../database/models/userProfile');
 const Roles = require('./roleCheck');
+const User = require('../database/models/user');
 
 const createUserProfile = (req, res) => {
   Roles.checkRole(req, {user:["create"]}, function(roleErr){
@@ -17,7 +18,14 @@ const createUserProfile = (req, res) => {
         res.status(500).json({error:"Unable to create user profile"});
       }
       else{
-        res.status(200).json({msg:"Profile created"});
+        User.updateOne({_id:req.user._id}, {hasProfile:true}, function(userErr, updated){
+          if(userErr){
+            res.status(500).json({error:"Failed to set profile to true after creation"});
+          }
+          else{
+            res.status(200).json({msg:"Profile created successfully"});
+          }
+        });
       }
     });
   });
@@ -91,7 +99,14 @@ const deleteProfile = (req, res) => {
         res.status(500).json({error:"Unable to delete profile"});
       }
       else{
-        res.status(200).json({msg:"Profile deleted"});
+        User.updateOne({_id:req.user._id}, {hasProfile:false}, function(userErr, updated){
+          if(userErr){
+            res.status(500).json({error:"Failed to set profile to false after deletion"});
+          }
+          else{
+            res.status(200).json({msg:"Profile deleted"});
+          }
+        });
       }
     });
   });
