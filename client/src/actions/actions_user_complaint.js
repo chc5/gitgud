@@ -5,25 +5,17 @@ import {
 } from '../constants/types_error';
 
 import {
+  CREATE_USER_COMPLAINT,
+  RETRIEVE_USER_COMPLAINT,
+  PROCESS_USER_COMPLAINT,
+  DELETE_USER_COMPLAINT,
+  RESET_USER_COMPLAINT,
   RETRIEVE_USER_COMPLAINT_LIST
 } from '../constants/types_user_complaint_action';
 
-
-export function createUserComplaint(targetUserId, text){
-  let url = `/api/complaints/users/create`;
-  return (dispatch) => {
-    axios.post(url, { targetUserId, text })
-      .then((response) => console.log("createUserComplaint", response))
-      .catch((error) => console.log("createUserComplaint", error));
-  }
-}
-
-export function retrieveUserComplaint(complaintId){
-  let url = `/api/complaints/users/retrieve/${complaintId}`;
-  return (dispatch) => {
-    axios.post(url)
-      .then((response) => console.log("retrieveUserComplaint", response))
-      .catch((error) => console.log("retrieveUserComplaint", error));
+export function resetUserComplaint(){
+  return {
+    type: RESET_USER_COMPLAINT
   }
 }
 
@@ -39,6 +31,46 @@ export function retrieveAllUserComplaint(){
         type: CRUD_USER_COMPLAINT_ERROR,
         payload: error.response.data
       }));
+  }
+}
+
+export function createUserComplaint(targetUserId, text){
+  let url = `/api/complaints/users/create`;
+  return (dispatch) => {
+    axios.post(url, { targetUserId, text })
+      .then((response) => {
+        dispatch({
+          type: CREATE_USER_COMPLAINT,
+          payload: response.data
+        });
+        dispatch(retrieveAllUserComplaint());
+      })
+      .catch((error) => {
+        dispatch({
+          type: CRUD_USER_COMPLAINT_ERROR,
+          payload: error.response.data
+        });
+      });
+  }
+}
+
+export function retrieveUserComplaint(complaintId){
+  let url = `/api/complaints/users/retrieve/${complaintId}`;
+  return (dispatch) => {
+    axios.post(url)
+      .then((response) => {
+        console.log(response);
+        dispatch({
+          type: RETRIEVE_USER_COMPLAINT,
+          payload: response.data
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: CRUD_USER_COMPLAINT_ERROR,
+          payload: error.response.data
+        });
+      });
   }
 }
 
@@ -62,18 +94,43 @@ export function retrieveUserComplaintForUser(userId){
 
 export function processUserComplaint(complaintId){
   let url = `/api/complaints/users/process/${complaintId}`;
-  return (dispatch) => {
-    axios.post(url)
-      .then((response) => console.log("processUserComplaint", response))
-      .catch((error) => console.log("processUserComplaint", error));
-  }
+  return (dispatch) =>
+    new Promise((resolve, reject) => {
+      axios.post(url)
+        .then((response) => {
+          dispatch({
+            type: PROCESS_USER_COMPLAINT,
+            payload: response.data
+          });
+          dispatch(resetUserComplaint());
+          resolve(true);
+        })
+        .catch((error) => {
+          dispatch({
+            type: CRUD_USER_COMPLAINT_ERROR,
+            payload: error.response.data
+          });
+          reject(false);
+        });
+    })
 }
 
 export function deleteUserComplaint(complaintId){
   let url = `/api/complaints/users/delete/${complaintId}`;
   return (dispatch) => {
     axios.post(url)
-      .then((response) => console.log("deleteUserComplaint", response))
-      .catch((error) => console.log("deleteUserComplaint", error));
+      .then((response) => {
+        dispatch({
+          type: DELETE_USER_COMPLAINT,
+          payload: response.data
+        });
+        dispatch(retrieveAllUserComplaint());
+      })
+      .catch((error) => {
+        dispatch({
+          type: CRUD_USER_COMPLAINT_ERROR,
+          payload: error.response.data
+        })
+      });
   }
 }

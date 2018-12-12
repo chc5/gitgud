@@ -97,10 +97,9 @@ export function processDocComplaint(complaintId){
           resolve(true);
         })
         .catch((error) => {
-          console.log(error);
           dispatch({
             type: CRUD_DOC_COMPLAINT_ERROR,
-            payload: error
+            payload: error.response.data
           });
           reject(false);
         });
@@ -118,6 +117,11 @@ export function deleteDocComplaint(complaintId){
         });
         dispatch(retrieveAllDocComplaint());
       })
-      .catch((error) => console.log("deleteDocComplaint", error));
+      .catch((error) => {
+        dispatch({
+          type: CRUD_DOC_COMPLAINT_ERROR,
+          payload: error.response.data
+        });
+      });
   }
 }

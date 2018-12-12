@@ -1,8 +1,8 @@
-Userimport React, { Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { retrieveUserComplaint, processUserComplaint, resetUserComplaint }
-  from './../../actions/actions_doc_complaint';
+import { retrieveUserComplaint, processUserComplaint }
+  from './../../actions/actions_user_complaint';
 
 import { Modal, Tag, Button } from 'antd';
 
@@ -16,15 +16,16 @@ class UserComplaint extends Component{
     }
   }
   componentDidUpdate(prevProps){
-    if(this.props.complaintId !== prevProps.complaintId){
+    if(this.props.visible !== prevProps.visible){
       this.props.retrieveUserComplaint(this.props.complaintId);
     }
   }
 
   handleProcess = async (e) => {
-    await this.props.processUserComplaint(this.props.complaintId);
-    this.props.hideComplaint();
-    this.props.resetUserComplaint();
+    const success = await this.props.processUserComplaint(this.props.complaintId);
+    if(success === true){
+      this.props.hideComplaint();
+    }
   }
 
   handleCancel = (e) => {
@@ -46,10 +47,10 @@ class UserComplaint extends Component{
   }
 
   render() {
-    if(!this.props.complaint){
+    if(!this.props.userComplaint){
       return null;
     }
-    const c = this.props.complaint;
+    const c = this.props.userComplaint;
     const footer =[
       <Button
         key="back"
@@ -88,12 +89,15 @@ class UserComplaint extends Component{
   }
 }
 
-function mapStateToProps({ complaint }){
-  return { complaint };
+function mapStateToProps({ userComplaint }){
+  return { userComplaint };
 }
 
 function mapDispatchToProps(dispatch){
-  return bindActionCreators({ retrieveUserComplaint, processUserComplaint, resetUserComplaint }, dispatch);
+  return bindActionCreators({
+    retrieveUserComplaint,
+    processUserComplaint
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps) (UserComplaint);
