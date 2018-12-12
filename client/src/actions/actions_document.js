@@ -26,7 +26,7 @@ export function retrieveAllDocument(){
         dispatch({
           type: CRUD_DOC_ERROR,
           payload: error.response.data
-        })
+        });
       })
   }
 }

@@ -18,7 +18,7 @@ export function lockDocument(documentId, history){
           type: LOCK_DOCUMENT,
           payload: response.data
         });
-        retrieveAllDocument();
+        dispatch(retrieveAllDocument());
         history.push(`/docs/${documentId}`);
       })
       .catch((error) => {
@@ -26,8 +26,6 @@ export function lockDocument(documentId, history){
           type: LOCK_ERROR,
           payload: error.response.data
         });
-        retrieveAllDocument();
-        history.push(`/docs`);
       });
   }
 }
@@ -41,7 +39,7 @@ export function unlockDocument(documentId, history){
           type: UNLOCK_DOCUMENT,
           payload: response.data
         });
-        retrieveAllDocument();
+        dispatch(retrieveAllDocument());
         history.push(`/docs`);
       })
       .catch((error) => {
@@ -49,8 +47,6 @@ export function unlockDocument(documentId, history){
           type: UNLOCK_ERROR,
           payload: error.response.data
         });
-        retrieveAllDocument();
-        history.push(`/docs`);
       });
   }
 }
