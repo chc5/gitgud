@@ -234,12 +234,12 @@ const setPrivacy = (req, res) => {
         if (findErr || !findResult) {
           return res.status(500).json({error:"Could not update privacy"});
         }
-        if (result) {
+        if (findResult) {
           if (!req.user._id.equals(result.owner_id)) {
             return res.status(403).json({error:"You do not own this document"});
           }
-          result.privacy.level = req.body.privacyLevel;
-          result.save(function(saveErr, saveResult){
+          findResult.privacy.level = req.body.privacyLevel;
+          findResult.save(function(saveErr, saveResult){
             if (saveErr) {
               return res.status(500).json({error:"Could not update privacy"});
             }
