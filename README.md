@@ -19,11 +19,11 @@ Node.js is used to get our website up and running both locally and in production
 This project is split into multiple parts, the backend and the frontend. When running our application locally, the back-end and front-end runs on the local machine concurrently. 
 
 ## Set-up instructions
-1. Set up MongoDB  https://docs.mongodb.com/manual/installation/
+1. Set up [MongoDB](https://docs.mongodb.com/manual/installation/)
 
-2. Set up Node.js  https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions-enterprise-linux-fedora-and-snap-packages
+2. Set up [Node.js](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions-enterprise-linux-fedora-and-snap-packages)
 
-3. Do npm install on root directory and in client directory
+3. Do ``npm install`` twice, once on the root directory and once on the client directory.
 
 ## Terminology
 1. SU = Super User
@@ -68,8 +68,7 @@ This project is split into multiple parts, the backend and the frontend. When ru
   - [x] the retrieval of older versions of documents should be done by your system based on the current version and possibly a sequence of history files. 
   - [x] Prevents update if there are any word(s) belonging to the taboo list (maintained by SU) 
   - [x] a creative feature worthy of 15% is required for each system (Refer to Additional feature section directly below)
-  - [x] a GUI is required, different users should have their own page populated by his/her picture and 3 most recent documents. For a brand-new user, 
-        the 3 most popular (most read and/or updated) files in the system are shown.
+  - [x] a GUI is required, different users should have their own page populated by his/her picture and 3 most recent documents. For a brand-new user, the 3 most popular (most read and/or updated) files in the system are shown.
 
 ## Additional Feature
 - [x] **Security**
@@ -87,16 +86,17 @@ When you finished your code, you can create a pull request. Once everything is i
 
 ## Getting our Code to Work
 **Prerequisites**
-Make sure you clone the github repository to your computer and have NodeJS along with the Node Package Manager (npm) installed.
+Make sure you clone the github repository to your computer and have Node.js along with the Node Package Manager (npm) installed.
 
 **Running the Application**
-``npm run-script dev``
-This should open a new tab on your default browser window with the Gitgud application loading onto it. You are now able to utilize the application locally on your machine. You could now see how the website works, or test your changes.
-``
+```npm run-script dev```
+The command above should get the server up and running in the local environment. The server is running on port 5000 by default and the client side is running on port 3000 by default. 
+
+```
 mongo;
 use gitgud
 db.users.updateOne({username:"yourusername"}, {role:"SU"})
-``
+```
 The application does not have a super user in the initial state. The script above will promote an existing user's role directly to Super User.
 
 ## License
