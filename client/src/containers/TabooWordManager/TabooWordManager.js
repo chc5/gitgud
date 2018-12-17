@@ -73,7 +73,7 @@ class TabooWordManager extends Component{
                   {item.word}
                 </Col>
                 {(title === UNAPPROVED_TABOO_WORDS_TITLE &&
-                  this.props.userInfo && 
+                  this.props.userInfo &&
                   this.props.userInfo.role === "SU")
                   ? (
                     <Col

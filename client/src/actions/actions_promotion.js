@@ -19,122 +19,100 @@ import {
 
 export function createPromotion(content){
   let url = `/api/promotion/create`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { content })
-      .then((response) => {
-        dispatch({
-          type: CREATE_PROMOTION,
-          payload: response.data
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: PROMOTION_ERROR,
-          payload: error.response.data
-        });
-      })
-  }
+      .then((response) => dispatch({
+        type: CREATE_PROMOTION,
+        payload: response.data
+      }))
+      .catch((error) => dispatch({
+        type: PROMOTION_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function retrieveAllPromotion(){
   let url = `/api/promotion/retrieveAll`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
-      .then((response) => {
-        dispatch({
-          type: RETRIEVE_ALL_PROMOTION,
-          payload: response.data
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: PROMOTION_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .then((response) => dispatch({
+        type: RETRIEVE_ALL_PROMOTION,
+        payload: response.data
+      }))
+      .catch((error) => dispatch({
+        type: PROMOTION_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function approveUserPromotion(promotionId){
   let url = `/api/promotion/approve/${promotionId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
-      .then((response) => {
+      .then(async (response) => {
         dispatch({
           type: APPROVE_USER_PROMOTION,
           payload: response.data
         });
-        dispatch(retrieveAllPromotion());
-        dispatch(retrieveAllProfiles());
+        await dispatch(retrieveAllPromotion());
+        return dispatch(retrieveAllProfiles());
       })
-      .catch((error) => {
-        dispatch({
-          type: PROMOTION_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .catch((error) => dispatch({
+        type: PROMOTION_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function denyUserPromotion(promotionId){
   let url = `/api/promotion/deny/${promotionId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
-      .then((response) => {
+      .then(async (response) => {
         dispatch({
           type: DENY_USER_PROMOTION,
           payload: response.data
         });
-        dispatch(retrieveAllPromotion());
-        dispatch(retrieveAllProfiles());
+        await dispatch(retrieveAllPromotion());
+        return dispatch(retrieveAllProfiles());
       })
-      .catch((error) => {
-        dispatch({
-          type: PROMOTION_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .catch((error) => dispatch({
+        type: PROMOTION_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function promoteUser(userId){
   let url = `/api/promotion/promote/${userId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
-      .then((response) => {
+      .then(async (response) => {
         dispatch({
           type: PROMOTE_USER,
           payload: response.data
         });
-        dispatch(retrieveAllPromotion());
-        dispatch(retrieveAllProfiles());
+        await dispatch(retrieveAllPromotion());
+        return dispatch(retrieveAllProfiles());
       })
-      .catch((error) => {
-        dispatch({
-          type: PROMOTION_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .catch((error) => dispatch({
+        type: PROMOTION_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function demoteUser(userId){
   let url = `/api/promotion/demote/${userId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
-      .then((response) => {
+      .then(async (response) => {
         dispatch({
           type: DEMOTE_USER,
           payload: response.data
         });
-        dispatch(retrieveAllPromotion());
-        dispatch(retrieveAllProfiles());
+        await dispatch(retrieveAllPromotion());
+        return dispatch(retrieveAllProfiles());
       })
-      .catch((error) => {
-        dispatch({
-          type: PROMOTION_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .catch((error) => dispatch({
+        type: PROMOTION_ERROR,
+        payload: error.response.data
+      }));
 }

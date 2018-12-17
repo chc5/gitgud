@@ -104,7 +104,6 @@ class PromotionManager extends Component{
         </Card>
       );
     }
-    console.log(this.props.profileList);
     return(
       <Card
         title="Profile List"

@@ -35,7 +35,6 @@ class ProfileManager extends Component{
   }
 
   renderProfile(){
-    console.log(this.state.profileVisible);
     return(
       <Profile
         profileId={this.state.selectedProfileId}
@@ -45,7 +44,6 @@ class ProfileManager extends Component{
     );
   }
   render(){
-    console.log(this.props.profileList);
     return(
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />

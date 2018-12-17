@@ -18,14 +18,14 @@ class Signup extends Component{
     super(props);
     this.state = { userName: "", password: "", password_2: "", ordinaryUserSignUp: false };
   }
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     if(this.state.password !== this.state.password_2)
       this.props.makeNotification("Passwords are not identical.");
     else if(this.state.password.length < 8)
       this.props.makeNotification("Password must have at least 8 characters.")
     else
-      this.props.signup(this.state, this.props.history);
+      await this.props.signup(this.state, this.props.history);
   }
   render(){
     return(

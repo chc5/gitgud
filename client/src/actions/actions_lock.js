@@ -33,21 +33,18 @@ export function lockDocument(documentId, history){
 
 export function unlockDocument(documentId, history){
   let url = `/api/docs/unlock/${documentId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
       .then((response) => {
         dispatch({
           type: UNLOCK_DOCUMENT,
           payload: response.data
         });
-        dispatch(retrieveAllDocument());
         history.push(`/docs`);
+        return dispatch(retrieveAllDocument());
       })
-      .catch((error) => {
-        dispatch({
-          type: UNLOCK_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .catch((error) => dispatch({
+        type: UNLOCK_ERROR,
+        payload: error.response.data
+      }));
 }

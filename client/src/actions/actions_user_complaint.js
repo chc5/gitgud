@@ -21,7 +21,7 @@ export function resetUserComplaint(){
 
 export function retrieveAllUserComplaint(){
   let url = `/api/complaints/users/retrieveAll`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
       .then((response) => dispatch({
         type: RETRIEVE_USER_COMPLAINT_LIST,
@@ -31,88 +31,70 @@ export function retrieveAllUserComplaint(){
         type: CRUD_USER_COMPLAINT_ERROR,
         payload: error.response.data
       }));
-  }
 }
 
 export function createUserComplaint(targetUserId, text){
   let url = `/api/complaints/users/create`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { targetUserId, text })
       .then((response) => {
         dispatch({
           type: CREATE_USER_COMPLAINT,
           payload: response.data
         });
-        dispatch(retrieveAllUserComplaint());
+        return dispatch(retrieveAllUserComplaint());
       })
-      .catch((error) => {
-        dispatch({
-          type: CRUD_USER_COMPLAINT_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .catch((error) => dispatch({
+        type: CRUD_USER_COMPLAINT_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function retrieveUserComplaint(complaintId){
   let url = `/api/complaints/users/retrieve/${complaintId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
-      .then((response) => {
-        console.log(response);
-        dispatch({
-          type: RETRIEVE_USER_COMPLAINT,
-          payload: response.data
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: CRUD_USER_COMPLAINT_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .then((response) => dispatch({
+        type: RETRIEVE_USER_COMPLAINT,
+        payload: response.data
+      }))
+      .catch((error) => dispatch({
+        type: CRUD_USER_COMPLAINT_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function retrieveUserComplaintFromUser(userId){
   let url = `/api/complaints/users/retrieveFromUser`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { getProcessed: userId })
       .then((response) => console.log("retrieveUserComplaintFromUser", response))
       .catch((error) => console.log("retrieveUserComplaintFromUser", error));
-  }
 }
 
 export function retrieveUserComplaintForUser(userId){
   let url = `/api/complaints/users/retrieveForUser`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { getProcessed: userId })
       .then((response) => console.log("retrieveUserComplaintForUser", response))
       .catch((error) => console.log("retrieveUserComplaintForUser", error));
-  }
 }
 
 export function processUserComplaint(complaintId){
   let url = `/api/complaints/users/process/${complaintId}`;
   return (dispatch) =>
-    new Promise((resolve, reject) => {
-      axios.post(url)
-        .then((response) => {
-          dispatch({
-            type: PROCESS_USER_COMPLAINT,
-            payload: response.data
-          });
-          dispatch(resetUserComplaint());
-          resolve(true);
-        })
-        .catch((error) => {
-          dispatch({
-            type: CRUD_USER_COMPLAINT_ERROR,
-            payload: error.response.data
-          });
-          reject(false);
+    axios.post(url)
+      .then((response) => {
+        dispatch({
+          type: PROCESS_USER_COMPLAINT,
+          payload: response.data
         });
-    })
+        return dispatch(resetUserComplaint());
+      })
+      .catch((error) => dispatch({
+        type: CRUD_USER_COMPLAINT_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function deleteUserComplaint(complaintId){
@@ -124,13 +106,11 @@ export function deleteUserComplaint(complaintId){
           type: DELETE_USER_COMPLAINT,
           payload: response.data
         });
-        dispatch(retrieveAllUserComplaint());
+        return dispatch(retrieveAllUserComplaint());
       })
-      .catch((error) => {
-        dispatch({
-          type: CRUD_USER_COMPLAINT_ERROR,
-          payload: error.response.data
-        })
-      });
+      .catch((error) => dispatch({
+        type: CRUD_USER_COMPLAINT_ERROR,
+        payload: error.response.data
+      }));
   }
 }
