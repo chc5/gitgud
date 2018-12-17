@@ -14,26 +14,21 @@ import {
 
 export function retrieveAllProfiles(){
   let url = `/api/account/retrieveProfileList`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
-      .then((response) => {
-        dispatch({
-          type: RETRIEVE_PROFILE_LIST,
-          payload: response.data
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: CRUD_PROFILE_ERROR,
-          payload: error.response.data
-        });
-      })
-  }
+      .then((response) => dispatch({
+        type: RETRIEVE_PROFILE_LIST,
+        payload: response.data
+      }))
+      .catch((error) => dispatch({
+        type: CRUD_PROFILE_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function createProfile(summary, img){
   let url = `/api/account/createProfile`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { summary, img })
       .then((response) => dispatch({
         type: CREATE_PROFILE,
@@ -43,29 +38,26 @@ export function createProfile(summary, img){
         type: CRUD_PROFILE_ERROR,
         payload: error.response.data
       }))
-  }
 }
 
 export function retrieveProfile(userId){
   let url = `/api/account/retrieveProfile`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { userId })
-      .then((response) => {
-        dispatch({
-          type: RETRIEVE_PROFILE,
-          payload: response.data
-        });
-      })
+      .then((response) => dispatch({
+        type: RETRIEVE_PROFILE,
+        payload: response.data
+      }))
       .catch((error) => dispatch({
         type: CRUD_PROFILE_ERROR,
         payload: error.response.data
       }))
-  }
+
 }
 
 export function updateProfile(summary, img){
   let url = `/api/account/updateProfile`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { summary, img })
       .then((response) => dispatch({
         type: UPDATE_PROFILE,
@@ -74,13 +66,12 @@ export function updateProfile(summary, img){
       .catch((error) => dispatch({
         type: CRUD_PROFILE_ERROR,
         payload: error.response.data
-      }))
-  }
+      }));
 }
 
 export function deleteProfile(){
   let url = `/api/aacount/deleteProfile`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
       .then((response) => {
         dispatch({
@@ -91,6 +82,5 @@ export function deleteProfile(){
       .catch((error) => dispatch({
         type: CRUD_PROFILE_ERROR,
         payload: error.response.data
-      }))
-  }
+      }));
 }

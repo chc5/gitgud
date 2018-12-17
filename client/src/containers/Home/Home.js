@@ -9,7 +9,6 @@ const { Header, Content } = Layout;
 
 class Home extends Component{
   render(){
-    console.log(this.props.userInfo);
     return(
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />

@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { logout } from '../../actions/actions_account_registration';
 import { updateNavKey, updateNavCollapse } from '../../actions/actions_nav_bar';
 import Notice from '../../components/Notice/Notice';
+import { OU, SU } from '../../constants/types_permission';
 // UI Imports
 import { Layout, Menu, Icon } from 'antd';
 import "./NavBar.css";
@@ -69,8 +70,8 @@ class NavBar extends Component{
             : null
           }
           { this.props.userInfo &&
-            (this.props.userInfo.role === "OU" ||
-              this.props.userInfo.role === "SU")
+            (this.props.userInfo.role === OU ||
+              this.props.userInfo.role === SU)
             ? (
                 <Menu.Item
                   key="4"
@@ -86,8 +87,8 @@ class NavBar extends Component{
             : null
           }
           { this.props.userInfo &&
-            (this.props.userInfo.role === "OU" ||
-              this.props.userInfo.role === "SU")
+            (this.props.userInfo.role === OU ||
+              this.props.userInfo.role === SU)
             ? (
                 <Menu.Item
                   key="5"
@@ -102,13 +103,29 @@ class NavBar extends Component{
               )
             : null
           }
-          { this.props.userInfo && this.props.userInfo.role === "SU"
+          { this.props.userInfo &&
+            this.props.userInfo.role === SU
             ? (
                 <Menu.Item
-                  key="10"
+                  key="6"
+                  onClick={() => {
+                    this.props.history.push(`/complaints/user`);
+                    this.props.updateNavKey("6");
+                  }}
+                  >
+                  <Icon type="customer-service" />
+                  <span>User Complaints</span>
+                </Menu.Item>
+              )
+            : null
+          }
+          { this.props.userInfo && this.props.userInfo.role === SU
+            ? (
+                <Menu.Item
+                  key="7"
                   onClick={() => {
                     this.props.history.push(`/promotion`);
-                    this.props.updateNavKey("10");
+                    this.props.updateNavKey("7");
                   }}
                   >
                   <Icon type="global" />
@@ -120,10 +137,10 @@ class NavBar extends Component{
           { this.props.userInfo
             ? (
               <Menu.Item
-                key="9"
+                key="8"
                 onClick={() => {
                   this.props.history.push(`/setting`);
-                  this.props.updateNavKey("9");
+                  this.props.updateNavKey("8");
                 }}
                 >
                 <Icon type="setting" />
@@ -135,10 +152,10 @@ class NavBar extends Component{
           { !this.props.userInfo
             ? (
                 <Menu.Item
-                  key="6"
+                  key="9"
                   onClick={() => {
                     this.props.history.push(`/login`);
-                    this.props.updateNavKey("6");
+                    this.props.updateNavKey("9");
                   }}
                   >
                   <Icon type="login" />
@@ -150,10 +167,10 @@ class NavBar extends Component{
           { this.props.userInfo
             ? (
                 <Menu.Item
-                  key="7"
+                  key="10"
                   onClick={() => {
                     this.props.logout(this.props.history)
-                    this.props.updateNavKey("7");
+                    this.props.updateNavKey("10");
                   }}
                   >
                   <Icon type="logout" />
@@ -165,10 +182,10 @@ class NavBar extends Component{
           {!this.props.userInfo
             ? (
                 <Menu.Item
-                  key="8"
+                  key="11"
                   onClick={() => {
                     this.props.history.push(`/signup`)
-                    this.props.updateNavKey("8");
+                    this.props.updateNavKey("11");
                   }}
                   >
                   <Icon type="plus" />

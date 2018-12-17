@@ -19,9 +19,9 @@ class Setting extends Component{
   handleSubmit = (e) => {
     e.preventDefault();
   }
-  createPromotion(){
+  createPromotion = async () => {
     const reason = prompt("Provide a reason why you want to be an Ordinary User");
-    this.props.createPromotion(reason);
+    await this.props.createPromotion(reason);
     alert("Your reason will be considered by the Super User");
   }
   renderProfile(){

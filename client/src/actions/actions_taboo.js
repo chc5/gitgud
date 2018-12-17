@@ -14,7 +14,7 @@ import {
 
 export function createTabooWord(word){
   let url = `/api/taboo/create`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { word })
       .then((response) => dispatch({
         type: CREATE_TABOO_WORD,
@@ -24,12 +24,11 @@ export function createTabooWord(word){
         type: TABOO_ERROR,
         payload: error.response.data
       }))
-  }
 }
 
 export function retrieveApprovedTabooWord(){
   let url = `/api/taboo/retrieveApproved`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
       .then((response) => dispatch({
         type: RETRIEVE_APPROVED_TABOO_WORDS,
@@ -39,12 +38,11 @@ export function retrieveApprovedTabooWord(){
         type: TABOO_ERROR,
         payload: error.response.data
       }))
-  }
 }
 
 export function retrieveUnapprovedTabooWord(){
   let url = `/api/taboo/retrieveUnapproved`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
       .then((response) => dispatch({
         type: RETRIEVE_UNAPPROVED_TABOO_WORDS,
@@ -54,12 +52,11 @@ export function retrieveUnapprovedTabooWord(){
         type: TABOO_ERROR,
         payload: error.response.data
       }))
-  }
 }
 
 export function approveTabooWord(tabooId){
   let url = `/api/taboo/approve/${tabooId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
       .then((response) => dispatch({
         type: APPROVE_TABOO_WORD,
@@ -69,12 +66,11 @@ export function approveTabooWord(tabooId){
         type: TABOO_ERROR,
         payload: error.response.data
       }))
-  }
 }
 
 export function deleteTabooWord(tabooId){
   let url = `/api/taboo/delete/${tabooId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
       .then((response) => dispatch({
         type: DELETE_TABOO_WORD,
@@ -84,5 +80,4 @@ export function deleteTabooWord(tabooId){
         type: TABOO_ERROR,
         payload: error.response.data
       }))
-  }
 }

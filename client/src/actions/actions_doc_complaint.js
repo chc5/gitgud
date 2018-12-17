@@ -21,7 +21,7 @@ export function resetDocComplaint(){
 
 export function retrieveAllDocComplaint(){
   let url = `/api/complaints/docs/retrieveAll`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
       .then((response) => dispatch({
         type: RETRIEVE_DOC_COMPLAINT_LIST,
@@ -31,97 +31,78 @@ export function retrieveAllDocComplaint(){
         type: CRUD_DOC_COMPLAINT_ERROR,
         payload: error.response.data
       }));
-  }
 }
 
 export function createDocComplaint(documentId, revisionId, text){
   let url = `/api/complaints/docs/create`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { documentId, revisionId, text })
       .then((response) => {
         dispatch({
           type: CREATE_DOC_COMPLAINT,
           payload: response.data
         });
-        dispatch(retrieveAllDocComplaint());
+        return dispatch(retrieveAllDocComplaint());
       })
-      .catch((error) => {
-        dispatch({
-          type: CRUD_DOC_COMPLAINT_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .catch((error) => dispatch({
+        type: CRUD_DOC_COMPLAINT_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function retrieveDocComplaint(complaintId){
   let url = `/api/complaints/docs/retrieve/${complaintId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
-      .then((response) => {
-        console.log(response);
-        dispatch({
-          type: RETRIEVE_DOC_COMPLAINT,
-          payload: response.data
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: CRUD_DOC_COMPLAINT_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .then((response) => dispatch({
+        type: RETRIEVE_DOC_COMPLAINT,
+        payload: response.data
+      }))
+      .catch((error) => dispatch({
+        type: CRUD_DOC_COMPLAINT_ERROR,
+        payload: error.response.data
+      }));
 }
 
+// Not used in the project.
 export function retrieveDocComplaintForDoc(documentId){
   let url = `/api/complaints/docs/retrieveForDoc`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, { getProcessed: documentId })
       .then((response) => console.log("retrieveDocComplaintForDoc", response))
       .catch((error) => console.log("retrieveDocComplaintForDoc", error));
-  }
 }
 
 export function processDocComplaint(complaintId){
   let url = `/api/complaints/docs/process/${complaintId}`;
   return (dispatch) =>
-    new Promise((resolve, reject) => {
-      axios.post(url)
-        .then((response) => {
-          dispatch({
-            type: PROCESS_DOC_COMPLAINT,
-            payload: response.data
-          });
-          dispatch(resetDocComplaint());
-          resolve(true);
-        })
-        .catch((error) => {
-          dispatch({
-            type: CRUD_DOC_COMPLAINT_ERROR,
-            payload: error.response.data
-          });
-          reject(false);
+    axios.post(url)
+      .then((response) => {
+        dispatch({
+          type: PROCESS_DOC_COMPLAINT,
+          payload: response.data
         });
-    })
+        return dispatch(resetDocComplaint());
+      })
+      .catch((error) => dispatch({
+        type: CRUD_DOC_COMPLAINT_ERROR,
+        payload: error.response.data
+      }));
 }
 
 export function deleteDocComplaint(complaintId){
   let url = `/api/complaints/docs/delete/${complaintId}`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url)
       .then((response) => {
         dispatch({
           type: DELETE_DOC_COMPLAINT,
           payload: response.data
         });
-        dispatch(retrieveAllDocComplaint());
+        return dispatch(retrieveAllDocComplaint());
       })
-      .catch((error) => {
-        dispatch({
-          type: CRUD_DOC_COMPLAINT_ERROR,
-          payload: error.response.data
-        });
-      });
-  }
+      .catch((error) => dispatch({
+        type: CRUD_DOC_COMPLAINT_ERROR,
+        payload: error.response.data
+      }));
 }

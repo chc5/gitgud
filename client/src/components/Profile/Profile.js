@@ -33,7 +33,6 @@ class Profile extends Component{
   }
   handleReport = (e) => {
     const report = prompt("Please specify your reasons to report this user.");
-    console.log(this.props.profile.userId._id);
     this.props.createUserComplaint(this.props.profile.userId._id, report);
     this.props.hideProfile();
   }

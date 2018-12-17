@@ -3,7 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { SU, GU, OU, DO } from '../../constants/types_permission';
+import { SUPER_USER, GUEST_USER, ORDINARY_USER, SU, GU, OU }
+  from '../../constants/types_permission';
 
 import {
   createPromotion,
@@ -83,14 +84,12 @@ class PromotionManager extends Component{
   }
   getRoleName(role){
     switch(role){
-      case "SU":
-        return SU
-      case "OU":
-        return OU
-      case "GU":
-        return GU
-      case "DO":
-        return DO
+      case SU:
+        return SUPER_USER
+      case OU:
+        return ORDINARY_USER
+      case GU:
+        return GUEST_USER
       default:
         return "NO ROLE"
     }
@@ -104,7 +103,6 @@ class PromotionManager extends Component{
         </Card>
       );
     }
-    console.log(this.props.profileList);
     return(
       <Card
         title="Profile List"

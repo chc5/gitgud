@@ -16,7 +16,6 @@ class DocumentList extends Component{
       return null;
     }
 
-    console.log(this.props.documentList);
     return(
       <List
         size="large"

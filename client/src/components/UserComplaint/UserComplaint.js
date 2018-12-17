@@ -23,7 +23,7 @@ class UserComplaint extends Component{
 
   handleProcess = async (e) => {
     const success = await this.props.processUserComplaint(this.props.complaintId);
-    if(success === true){
+    if(success){
       this.props.hideComplaint();
     }
   }
@@ -47,7 +47,6 @@ class UserComplaint extends Component{
   }
 
   render() {
-    console.log(this.props.userComplaint);
     if(!this.props.userComplaint){
       return null;
     }

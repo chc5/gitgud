@@ -35,7 +35,6 @@ class UserComplaintManager extends Component{
   }
 
   renderComplaint(){
-    console.log(this.state.complaintVisible);
     return(
       <UserComplaint
         complaintId={this.state.selectedComplaintId}
@@ -56,7 +55,6 @@ class UserComplaintManager extends Component{
   }
 
   render(){
-    console.log(this.props.userComplaintList)
     return(
       <Layout style={{ minHeight: '100vh' }}>
         <NavBar />

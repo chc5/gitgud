@@ -10,53 +10,50 @@ import {
 
 export function login(data, history){
   const url = `/api/account/login`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, data)
       .then((response) => {
-        dispatch({
+        history.push(`/`);
+        return dispatch({
           type: LOGGED_IN,
           payload: response.data
         });
-        history.push(`/`);
       })
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: LOGIN_FAILED,
-        payload: response.data
-      }))
-  }
+        payload: error.response.data
+      }));
 }
 
 export function signup(data, history){
   const url = `/api/account/signup`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.post(url, data)
       .then((response) => {
-        dispatch({
+        history.push(`/login`);
+        return dispatch({
           type: SIGNED_UP,
           payload: response.data
         });
-        history.push(`/login`);
       })
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: SIGNUP_FAILED,
-        payload: response.data
-      }))
-  }
+        payload: error.response.data
+      }));
 }
 export function logout(history){
   const url = `/api/account/logout`;
-  return (dispatch) => {
+  return (dispatch) =>
     axios.get(url)
       .then((response) => {
-        dispatch({
+        history.push(`/`);
+        return dispatch({
           type: LOGGED_OUT,
           payload: response.data
         });
-        history.push(`/`);
       })
-      .catch((response) => dispatch({
+      .catch((error) => dispatch({
         type: LOGOUT_FAILED,
-        payload: response.data
-      }))
-  }
+        payload: error.response.data
+      }));
 }

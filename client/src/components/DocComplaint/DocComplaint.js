@@ -23,7 +23,7 @@ class DocComplaint extends Component{
 
   handleProcess = async (e) => {
     const success = await this.props.processDocComplaint(this.props.complaintId);
-    if(success === true){
+    if(success){
       this.props.hideComplaint();
     }
   }
